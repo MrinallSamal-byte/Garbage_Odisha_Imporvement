@@ -5,6 +5,7 @@ import { SafaOdishaLogo } from "@/components/branding/safa-odisha-logo";
 const footerLinks = [
   { href: "/report", label: "Report a cleanliness issue" },
   { href: "/dashboard", label: "Browse public dashboard" },
+  { href: "/leaderboard", label: "District accountability leaderboard" },
   { href: "/admin", label: "Admin workspace" },
 ];
 

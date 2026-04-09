@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Camera, MapPinned, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Camera, MapPinned, ShieldCheck, Sparkles, Trophy, Rss } from "lucide-react";
 
 import { LazyReportsMap } from "@/components/maps/lazy-reports-map";
 import { ReportCard } from "@/components/report/report-card";

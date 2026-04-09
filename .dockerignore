@@ -16,3 +16,5 @@ eslint.config.mjs
 .vscode
 *.test.ts
 *.spec.ts
+prisma.config.ts
+prisma.config.ts.bak

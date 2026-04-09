@@ -8,6 +8,8 @@ import { ModerationBadge, StatusBadge } from "@/components/report/status-badge";
 import { SupportButton } from "@/components/report/support-button";
 import { TrustScoreBadge } from "@/components/report/trust-score-badge";
 import { ShareReportButton } from "@/components/report/share-report-button";
+import { NearbyReports } from "@/components/report/nearby-reports";
+import { ReopenButton } from "@/components/report/reopen-button";
 import { Card } from "@/components/ui/card";
 import { env } from "@/lib/env";
 import { getReportRepository } from "@/server/repositories/repository-factory";
@@ -158,6 +160,12 @@ export default async function ReportDetailPage({ params }: PageProps) {
               ))}
             </div>
           </Card>
+
+          {report.report.status === "RESOLVED" && (
+            <ReopenButton reportId={report.report.id} />
+          )}
+
+          <NearbyReports reportId={report.report.id} />
         </div>
       </div>
     </main>

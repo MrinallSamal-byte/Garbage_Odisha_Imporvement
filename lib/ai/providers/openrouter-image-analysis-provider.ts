@@ -27,10 +27,6 @@ export class OpenRouterImageAnalysisProvider implements ImageAnalysisProvider {
       throw new AppError("OPENROUTER_API_KEY is required when AI_PROVIDER=openrouter.", 500);
     }
 
-    if (!env.OPENROUTER_MODEL.endsWith(":free")) {
-      throw new AppError("OPENROUTER_MODEL must use a free-tag model when AI_PROVIDER=openrouter.", 500);
-    }
-
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
