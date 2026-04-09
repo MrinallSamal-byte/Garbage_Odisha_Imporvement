@@ -7,6 +7,7 @@ RUN apt-get update \
 
 FROM base AS deps
 COPY package.json package-lock.json ./
+COPY prisma ./prisma
 RUN npm config set fetch-retries 5 \
   && npm config set fetch-retry-factor 2 \
   && npm config set fetch-retry-mintimeout 20000 \
