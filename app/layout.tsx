@@ -19,8 +19,16 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
 });
 
+function getMetadataBase() {
+  try {
+    return new URL(env.NEXT_PUBLIC_APP_URL);
+  } catch {
+    return new URL("http://localhost:3000");
+  }
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: getMetadataBase(),
   title: {
     default: "SafaOdisha",
     template: "%s | SafaOdisha",

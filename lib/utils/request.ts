@@ -25,7 +25,18 @@ export function assertSameOrigin(request: NextRequest) {
     return;
   }
 
-  const allowedOrigins = new Set([env.NEXT_PUBLIC_APP_URL, request.nextUrl.origin]);
+  const allowedOrigins = new Set(
+    [env.NEXT_PUBLIC_APP_URL, request.nextUrl.origin]
+      .map((value) => {
+        try {
+          return new URL(value).origin;
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean) as string[],
+  );
+
   if (!allowedOrigins.has(origin)) {
     throw new Error("Origin mismatch.");
   }

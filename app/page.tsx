@@ -29,6 +29,29 @@ const steps = [
   },
 ];
 
+const reportFlowChecklist = [
+  {
+    eyebrow: "Capture",
+    title: "Take a live photo first",
+    description: "Live camera capture is the default, trust-first source path for public complaints.",
+  },
+  {
+    eyebrow: "Locate",
+    title: "Use device GPS for exact routing",
+    description: "Latitude, longitude, timestamp, and GPS accuracy are captured from the device, not inferred from the image.",
+  },
+  {
+    eyebrow: "Review",
+    title: "See the mapped MLA and MP",
+    description: "The preview screen shows reverse-geocoded location, constituencies, representative cards, and AI consistency notes.",
+  },
+  {
+    eyebrow: "Submit",
+    title: "Publish to the public dashboard",
+    description: "Once confirmed, the report appears in the live dashboard and can move through moderation and status updates.",
+  },
+];
+
 export default async function HomePage() {
   let stats = emptyDashboardStats;
   let reports: Awaited<ReturnType<typeof getDashboardData>>["reports"] = [];
@@ -124,6 +147,49 @@ export default async function HomePage() {
                 </Card>
               </div>
             </div>
+          </Card>
+        </div>
+      </section>
+
+      <section className="container py-16">
+        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+          <div className="space-y-5">
+            <div className="section-label">Report from your phone</div>
+            <h2 className="text-3xl font-black tracking-tight text-ink md:text-4xl">
+              Capture, review, and submit with GPS-backed area verification.
+            </h2>
+            <p className="max-w-xl text-base leading-8 text-slateblue-700">
+              The report flow is built for a real field submission: live camera, exact device GPS,
+              constituency mapping, representative preview, and final confirmation before publishing.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/report">
+                <Button size="lg">
+                  Start live report
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/dashboard">
+                <Button variant="secondary" size="lg">
+                  See current reports
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          <Card className="grid gap-4 p-5 sm:grid-cols-2">
+            {reportFlowChecklist.map((item, index) => (
+              <div
+                key={item.title}
+                className="rounded-[1.5rem] border border-slateblue-100 bg-white/70 p-4"
+              >
+                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-civic-700">
+                  {item.eyebrow} {String(index + 1).padStart(2, "0")}
+                </div>
+                <h3 className="mt-3 text-lg font-bold text-ink">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slateblue-700">{item.description}</p>
+              </div>
+            ))}
           </Card>
         </div>
       </section>

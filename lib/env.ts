@@ -4,7 +4,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   APP_MODE: z.enum(["mock", "real"]).default("mock"),
   DATABASE_URL: z.string().optional(),
-  NEXT_PUBLIC_APP_URL: z.string().url().default("http://localhost:3000"),
+  NEXT_PUBLIC_APP_URL: z.string().optional(),
   STORAGE_PROVIDER: z.enum(["local", "s3"]).default("local"),
   LOCAL_UPLOAD_DIR: z.string().default("public/uploads"),
   S3_BUCKET: z.string().optional(),
@@ -37,4 +37,22 @@ if (!parsed.success) {
   throw new Error("Invalid environment variables for SafaOdisha");
 }
 
-export const env = parsed.data;
+function normalizeAppUrl(value?: string) {
+  const fallback = "http://localhost:3000";
+
+  if (!value) {
+    return fallback;
+  }
+
+  try {
+    return new URL(value).toString().replace(/\/$/, "");
+  } catch {
+    console.warn(`Invalid NEXT_PUBLIC_APP_URL "${value}" provided. Falling back to ${fallback}.`);
+    return fallback;
+  }
+}
+
+export const env = {
+  ...parsed.data,
+  NEXT_PUBLIC_APP_URL: normalizeAppUrl(parsed.data.NEXT_PUBLIC_APP_URL),
+};
