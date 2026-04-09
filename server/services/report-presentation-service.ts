@@ -1,26 +1,31 @@
 import { getStorageAdapter } from "@/lib/storage/storage-adapter";
 import type { ReportDetail, ReportListItem } from "@/types/domain";
 
-export function serializeReportListItem(item: ReportListItem) {
-  const storage = getStorageAdapter();
+function getSafePreviewUrl(storageKey: string) {
+  try {
+    return getStorageAdapter().getPublicUrl(storageKey);
+  } catch (error) {
+    console.error("Could not resolve media preview URL", error);
+    return null;
+  }
+}
 
+export function serializeReportListItem(item: ReportListItem) {
   return {
     ...item,
     media: item.media.map((asset) => ({
       ...asset,
-      previewUrl: storage.getPublicUrl(asset.storageKey),
+      previewUrl: getSafePreviewUrl(asset.storageKey),
     })),
   };
 }
 
 export function serializeReportDetail(detail: ReportDetail) {
-  const storage = getStorageAdapter();
-
   return {
     ...detail,
     media: detail.media.map((asset) => ({
       ...asset,
-      previewUrl: storage.getPublicUrl(asset.storageKey),
+      previewUrl: getSafePreviewUrl(asset.storageKey),
     })),
   };
 }
