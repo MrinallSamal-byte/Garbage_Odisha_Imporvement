@@ -12,6 +12,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d safa_odisha"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   app:
     build:
@@ -19,7 +25,8 @@ services:
       dockerfile: Dockerfile
     container_name: safa-odisha-app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       NODE_ENV: production
       APP_MODE: real
@@ -32,8 +39,8 @@ services:
       OPENROUTER_MODEL: google/gemma-4-31b-it:free
       ADMIN_EMAIL: admin@safaodisha.local
       ADMIN_PASSWORD: ChangeThis123!
-      ADMIN_SESSION_SECRET: replace-with-a-32-character-secret
-      PREVIEW_TOKEN_SECRET: replace-with-a-32-character-secret
+      ADMIN_SESSION_SECRET: change-this-to-a-random-32-char-secret!
+      PREVIEW_TOKEN_SECRET: change-this-to-a-random-32-char-secret!
       MAX_UPLOAD_MB: 8
       GPS_ACCURACY_WARN_THRESHOLD: 35
       GPS_ACCURACY_BLOCK_THRESHOLD: 150
@@ -43,6 +50,8 @@ services:
       - "3000:3000"
     volumes:
       - ./public/uploads:/app/public/uploads
+      - preview-sessions:/app/data/preview-sessions
 
 volumes:
   postgres-data:
+  preview-sessions:

@@ -32,5 +32,8 @@ COPY --from=builder /app/next.config.ts ./next.config.ts
 COPY --from=builder /app/postcss.config.mjs ./postcss.config.mjs
 COPY --from=builder /app/tailwind.config.ts ./tailwind.config.ts
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+RUN mkdir -p data/preview-sessions public/uploads
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+ENTRYPOINT ["./entrypoint.sh"]

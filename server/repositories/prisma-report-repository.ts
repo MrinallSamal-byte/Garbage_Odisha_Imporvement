@@ -595,63 +595,106 @@ export class PrismaReportRepository implements ReportRepository {
     nearbyMatches: Array<ReportListItem & { distanceMeters: number }>;
     sessionMatches: ReportListItem[];
   }> {
-    const items = await this.listAdminReports();
-    const windowStart = Date.now() - (input.timeWindowHours ?? 72) * 60 * 60 * 1000;
-
-    const sameImageMatches = items.filter((item) =>
-      item.media.some((media) => media.sha256Hash === input.sha256Hash),
+    const windowStart = new Date(
+      Date.now() - (input.timeWindowHours ?? 72) * 60 * 60 * 1000,
     );
 
-    const nearbyMatches = items
-      .map((item) => ({
-        ...item,
+    // Query only the reports we actually need, not all reports
+    const [sameImageRows, nearbyRows, sessionRows] = await Promise.all([
+      prisma.report.findMany({
+        where: { mediaAssets: { some: { sha256Hash: input.sha256Hash } } },
+        include: reportInclude,
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.report.findMany({
+        where: {
+          createdAt: { gte: windowStart },
+          latitude: {
+            gte: input.latitude - 0.002,
+            lte: input.latitude + 0.002,
+          },
+          longitude: {
+            gte: input.longitude - 0.002,
+            lte: input.longitude + 0.002,
+          },
+        },
+        include: reportInclude,
+        orderBy: { createdAt: "desc" },
+      }),
+      input.sessionFingerprintHash
+        ? prisma.report.findMany({
+            where: {
+              deviceFingerprintHash: input.sessionFingerprintHash,
+              createdAt: { gte: windowStart },
+            },
+            include: reportInclude,
+            orderBy: { createdAt: "desc" },
+          })
+        : Promise.resolve([]),
+    ]);
+
+    const toItem = (row: (typeof sameImageRows)[number]): ReportListItem => ({
+      report: mapReport(row),
+      district: mapDistrict(row.district),
+      assemblyConstituency: mapConstituency(row.assemblyConstituency),
+      parliamentConstituency: mapConstituency(row.parliamentConstituency),
+      mla: mapRepresentative(row.mlaRepresentative),
+      mp: mapRepresentative(row.mpRepresentative),
+      media: row.mediaAssets.map(mapMedia),
+      votes: row.votes.length,
+      comments: row.comments.length,
+    });
+
+    const nearbyMatches = nearbyRows
+      .map((row) => ({
+        ...toItem(row),
         distanceMeters: haversineDistanceMeters(
           input.latitude,
           input.longitude,
-          item.report.latitude,
-          item.report.longitude,
+          row.latitude,
+          row.longitude,
         ),
       }))
-      .filter(
-        (item) =>
-          item.distanceMeters <= 120 &&
-          Date.parse(item.report.createdAt) >= windowStart,
-      );
-
-    const sessionMatches = input.sessionFingerprintHash
-      ? items.filter(
-          (item) =>
-            item.report.deviceFingerprintHash === input.sessionFingerprintHash &&
-            Date.parse(item.report.createdAt) >= windowStart,
-        )
-      : [];
+      .filter((item) => item.distanceMeters <= 120);
 
     return {
-      sameImageMatches,
+      sameImageMatches: sameImageRows.map(toItem),
       nearbyMatches,
-      sessionMatches,
+      sessionMatches: sessionRows.map(toItem),
     };
   }
 
   async getDashboardStats(): Promise<DashboardStats> {
-    const items = await this.listPublicReports();
+    const [totals, avg] = await Promise.all([
+      prisma.report.groupBy({
+        by: ["status", "severity", "moderationStatus"],
+        _count: { _all: true },
+      }),
+      prisma.report.aggregate({
+        where: { moderationStatus: { not: "REJECTED" } },
+        _avg: { trustScore: true },
+        _count: { _all: true },
+      }),
+    ]);
+
+    const visibleRows = totals.filter((r) => r.moderationStatus !== "REJECTED");
+    const unresolvedStatuses = new Set(["REPORTED", "VERIFIED", "FORWARDED", "IN_PROGRESS"]);
+    const highSeverities = new Set(["HIGH", "CRITICAL"]);
+
     return {
-      totalReports: items.length,
-      unresolvedReports: items.filter((item) =>
-        ["REPORTED", "VERIFIED", "FORWARDED", "IN_PROGRESS"].includes(item.report.status),
-      ).length,
-      resolvedReports: items.filter((item) => item.report.status === "RESOLVED").length,
-      averageTrustScore:
-        items.length > 0
-          ? Number(
-              (
-                items.reduce((sum, item) => sum + item.report.trustScore, 0) / items.length
-              ).toFixed(1),
-            )
-          : 0,
-      highSeverityReports: items.filter(
-        (item) => item.report.severity === "HIGH" || item.report.severity === "CRITICAL",
-      ).length,
+      totalReports: avg._count._all,
+      unresolvedReports: visibleRows
+        .filter((r) => unresolvedStatuses.has(r.status))
+        .reduce((sum, r) => sum + r._count._all, 0),
+      resolvedReports: visibleRows
+        .filter((r) => r.status === "RESOLVED")
+        .reduce((sum, r) => sum + r._count._all, 0),
+      averageTrustScore: avg._avg.trustScore
+        ? Number(avg._avg.trustScore.toFixed(1))
+        : 0,
+      highSeverityReports: visibleRows
+        .filter((r) => highSeverities.has(r.severity))
+        .reduce((sum, r) => sum + r._count._all, 0),
     };
   }
 

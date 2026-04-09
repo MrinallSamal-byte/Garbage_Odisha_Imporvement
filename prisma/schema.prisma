@@ -292,6 +292,7 @@ model ReportVote {
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
 
+  @@unique([reportId, sessionKey])
   @@index([reportId, createdAt(sort: Desc)])
   @@map("report_votes")
 }
