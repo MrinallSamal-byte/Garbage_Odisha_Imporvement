@@ -81,6 +81,8 @@ const config: Config = {
       animation: {
         "fade-up": "fade-up 0.8s ease-out forwards",
         "pulse-ring": "pulse-ring 2.4s ease-out infinite",
+        "page-enter": "page-enter 0.25s ease-out both",
+        shimmer: "shimmer 1.4s ease-in-out infinite",
       },
       backgroundImage: {
         "civic-grid":

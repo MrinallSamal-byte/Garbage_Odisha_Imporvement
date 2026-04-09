@@ -21,18 +21,26 @@ COPY . .
 RUN npx prisma generate
 RUN npm run build
 
+# ── Lean production image ────────────────────────────────────────────────────
+# output: "standalone" gives us a self-contained server.js + a trimmed
+# node_modules copy (~120 MB vs ~600 MB for the full tree).
+# We add only the Prisma CLI on top so entrypoint can run migrations.
 FROM base AS runner
 ENV NODE_ENV=production
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
+# Standalone Next.js server + its auto-bundled node_modules
+COPY --from=builder /app/.next/standalone ./
+# Static assets must sit at .next/static relative to CWD
+COPY --from=builder /app/.next/static ./.next/static
+# Public directory
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
+# Prisma schema (needed by migrate deploy)
 COPY --from=builder /app/prisma ./prisma
+# Prisma CLI binary + package (needed for migrate deploy in entrypoint)
+COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+# Static data files (mock seed data, etc.)
 COPY --from=builder /app/data ./data
-COPY --from=builder /app/next.config.ts ./next.config.ts
-COPY --from=builder /app/postcss.config.mjs ./postcss.config.mjs
-COPY --from=builder /app/tailwind.config.ts ./tailwind.config.ts
-COPY --from=builder /app/tsconfig.json ./tsconfig.json
+# Entrypoint
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 RUN mkdir -p data/preview-sessions public/uploads

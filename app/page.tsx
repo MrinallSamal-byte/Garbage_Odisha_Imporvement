@@ -9,7 +9,9 @@ import { getDashboardData } from "@/server/services/report-query-service";
 import { emptyDashboardStats } from "@/server/services/report-query-service";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
-export const dynamic = "force-dynamic";
+// ISR: serve cached HTML instantly; regenerate in the background every 60 s.
+// The try/catch in the component already handles a missing DB gracefully.
+export const revalidate = 60;
 
 const steps = [
   {
