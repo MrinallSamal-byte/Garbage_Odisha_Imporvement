@@ -1,0 +1,49 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "44440000-0000-4000-8000-111111111111",
+        "code": "PC-BHUBANESWAR",
+        "name": "Bhubaneswar"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.54, 19.90],
+              [86.20, 19.90],
+              [86.20, 20.60],
+              [85.54, 20.60],
+              [85.54, 19.90]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "44440000-0000-4000-8000-222222222222",
+        "code": "PC-CUTTACK",
+        "name": "Cuttack"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [84.98, 20.30],
+              [85.56, 20.30],
+              [85.56, 20.92],
+              [84.98, 20.92],
+              [84.98, 20.30]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

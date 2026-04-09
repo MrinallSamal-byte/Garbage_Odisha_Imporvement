@@ -1,0 +1,97 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "33330000-0000-4000-8000-111111111111",
+        "code": "AC-BBSR-CENTRAL",
+        "name": "Bhubaneswar Central",
+        "district_name": "Khordha"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.78, 20.24],
+              [85.96, 20.24],
+              [85.96, 20.38],
+              [85.78, 20.38],
+              [85.78, 20.24]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "33330000-0000-4000-8000-222222222222",
+        "code": "AC-JATNI",
+        "name": "Jatni",
+        "district_name": "Khordha"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.60, 20.08],
+              [85.79, 20.08],
+              [85.79, 20.27],
+              [85.60, 20.27],
+              [85.60, 20.08]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "33330000-0000-4000-8000-333333333333",
+        "code": "AC-CUTTACK-SADAR",
+        "name": "Cuttack Sadar",
+        "district_name": "Cuttack"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.02, 20.40],
+              [85.30, 20.40],
+              [85.30, 20.64],
+              [85.02, 20.64],
+              [85.02, 20.40]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "33330000-0000-4000-8000-444444444444",
+        "code": "AC-PURI-SADAR",
+        "name": "Puri Sadar",
+        "district_name": "Puri"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.80, 19.90],
+              [86.06, 19.90],
+              [86.06, 20.08],
+              [85.80, 20.08],
+              [85.80, 19.90]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

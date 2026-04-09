@@ -1,0 +1,19 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#DDEEE8"/>
+  <rect y="520" width="1200" height="380" fill="#7C8C61"/>
+  <rect y="440" width="1200" height="120" fill="#626B77"/>
+  <line x1="0" y1="500" x2="1200" y2="500" stroke="#D6DCE1" stroke-width="10" stroke-dasharray="36 22"/>
+  <rect x="110" y="218" width="290" height="182" rx="18" fill="#F7FAFC"/>
+  <rect x="150" y="255" width="210" height="32" rx="8" fill="#113D3D" fill-opacity="0.14"/>
+  <rect x="150" y="310" width="170" height="22" rx="8" fill="#FD7414" fill-opacity="0.18"/>
+  <path d="M540 528C540 500.386 562.386 478 590 478H725C752.614 478 775 500.386 775 528V560H540V528Z" fill="#4E5D67"/>
+  <path d="M504 570C504 540.729 527.729 517 557 517H761C790.271 517 814 540.729 814 570V668H504V570Z" fill="#6F7B85"/>
+  <ellipse cx="659" cy="659" rx="210" ry="84" fill="#3B4B4B"/>
+  <ellipse cx="619" cy="646" rx="128" ry="61" fill="#A78859"/>
+  <ellipse cx="722" cy="624" rx="104" ry="58" fill="#6B4F39"/>
+  <ellipse cx="676" cy="608" rx="72" ry="41" fill="#4B8C67"/>
+  <ellipse cx="560" cy="620" rx="61" ry="38" fill="#C65133"/>
+  <circle cx="940" cy="170" r="82" fill="#FDE2BA"/>
+  <text x="152" y="288" fill="#113D3D" font-family="Arial, sans-serif" font-size="36" font-weight="700">NAYAPALLI</text>
+  <text x="152" y="334" fill="#415C7D" font-family="Arial, sans-serif" font-size="26">Roadside overflow zone</text>
+</svg>

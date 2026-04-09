@@ -1,0 +1,319 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CITIZEN
+  ADMIN
+  MODERATOR
+}
+
+enum SourceType {
+  LIVE_CAPTURE
+  GALLERY_UPLOAD
+  MANUAL_PIN_ONLY
+}
+
+enum ReportCategory {
+  garbage
+  overflow
+  drain
+  roadside_dump
+  mixed_waste
+  litter
+  other
+}
+
+enum ReportSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ReportStatus {
+  REPORTED
+  VERIFIED
+  FORWARDED
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+  DUPLICATE
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_REVIEW
+}
+
+enum RepresentativeType {
+  MLA
+  MP
+}
+
+enum ConstituencyType {
+  ASSEMBLY
+  PARLIAMENT
+}
+
+enum PartyLevelScope {
+  STATE
+  NATIONAL
+  BOTH
+}
+
+model User {
+  id              String                @id @default(uuid()) @db.Uuid
+  name            String
+  email           String?               @unique
+  phone           String?
+  passwordHash    String?               @map("password_hash")
+  role            UserRole
+  isActive        Boolean               @default(true) @map("is_active")
+  createdAt       DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  reports         Report[]              @relation("CreatedReports")
+  statusChanges   ReportStatusHistory[]
+  comments        ReportComment[]
+  moderationLogs  ModerationLog[]
+
+  @@map("users")
+}
+
+model District {
+  id                     String                @id @default(uuid()) @db.Uuid
+  name                   String                @unique
+  code                   String                @unique
+  geometry               Unsupported("geometry(MultiPolygon, 4326)")?
+  createdAt              DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  reports                Report[]
+
+  @@map("districts")
+}
+
+model AssemblyConstituency {
+  id                     String                @id @default(uuid()) @db.Uuid
+  code                   String                @unique
+  name                   String
+  districtName           String?               @map("district_name")
+  geometry               Unsupported("geometry(MultiPolygon, 4326)")
+  metadataJson           Json?                 @map("metadata_json")
+  createdAt              DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  reports                Report[]
+  representatives        Representative[]      @relation("AssemblyRepresentative")
+
+  @@index([name])
+  @@map("assembly_constituencies")
+}
+
+model ParliamentConstituency {
+  id                     String                @id @default(uuid()) @db.Uuid
+  code                   String                @unique
+  name                   String
+  geometry               Unsupported("geometry(MultiPolygon, 4326)")
+  metadataJson           Json?                 @map("metadata_json")
+  createdAt              DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+  reports                Report[]
+  representatives        Representative[]      @relation("ParliamentRepresentative")
+
+  @@index([name])
+  @@map("parliament_constituencies")
+}
+
+model Party {
+  id                           String         @id @default(uuid()) @db.Uuid
+  name                         String         @unique
+  abbreviation                 String
+  levelScope                   PartyLevelScope @map("level_scope")
+  isStateRulingPartyDefault    Boolean        @default(false) @map("is_state_ruling_party_default")
+  isCentralRulingPartyDefault  Boolean        @default(false) @map("is_central_ruling_party_default")
+  active                       Boolean        @default(true)
+  createdAt                    DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                    DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("parties")
+}
+
+model Representative {
+  id                         String                  @id @default(uuid()) @db.Uuid
+  representativeType         RepresentativeType      @map("representative_type")
+  name                       String
+  constituencyType           ConstituencyType        @map("constituency_type")
+  assemblyConstituencyId     String?                 @map("assembly_constituency_id") @db.Uuid
+  parliamentConstituencyId   String?                 @map("parliament_constituency_id") @db.Uuid
+  partyName                  String                  @map("party_name")
+  isStateRulingParty         Boolean                 @default(false) @map("is_state_ruling_party")
+  isCentralRulingParty       Boolean                 @default(false) @map("is_central_ruling_party")
+  oppositionLabel            String?                 @map("opposition_label")
+  photoUrl                   String?                 @map("photo_url")
+  officialRoleTitle          String?                 @map("official_role_title")
+  contactEmail               String?                 @map("contact_email")
+  contactPhone               String?                 @map("contact_phone")
+  websiteUrl                 String?                 @map("website_url")
+  socialLinksJson            Json?                   @map("social_links_json")
+  termStart                  DateTime?               @map("term_start") @db.Timestamptz(6)
+  termEnd                    DateTime?               @map("term_end") @db.Timestamptz(6)
+  active                     Boolean                 @default(true)
+  lastVerifiedAt             DateTime?               @map("last_verified_at") @db.Timestamptz(6)
+  createdAt                  DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                  DateTime                @updatedAt @map("updated_at") @db.Timestamptz(6)
+  assemblyConstituency       AssemblyConstituency?   @relation("AssemblyRepresentative", fields: [assemblyConstituencyId], references: [id])
+  parliamentConstituency     ParliamentConstituency? @relation("ParliamentRepresentative", fields: [parliamentConstituencyId], references: [id])
+  mlaReports                 Report[]                @relation("MlaReports")
+  mpReports                  Report[]                @relation("MpReports")
+
+  @@index([representativeType, active])
+  @@index([assemblyConstituencyId])
+  @@index([parliamentConstituencyId])
+  @@map("representatives")
+}
+
+model Report {
+  id                        String                  @id @default(uuid()) @db.Uuid
+  reportCode                String                  @unique @map("report_code")
+  sourceType                SourceType              @map("source_type")
+  description               String
+  category                  ReportCategory
+  severity                  ReportSeverity
+  status                    ReportStatus            @default(REPORTED)
+  moderationStatus          ModerationStatus        @default(PENDING) @map("moderation_status")
+  trustScore                Float                   @default(0) @map("trust_score")
+  gpsAccuracyMeters         Float                   @map("gps_accuracy_meters")
+  latitude                  Float
+  longitude                 Float
+  locationPoint             Unsupported("geometry(Point, 4326)") @map("location_point")
+  addressLine               String                  @map("address_line")
+  locality                  String?
+  wardName                  String?                 @map("ward_name")
+  blockName                 String?                 @map("block_name")
+  districtId                String?                 @map("district_id") @db.Uuid
+  assemblyConstituencyId    String?                 @map("assembly_constituency_id") @db.Uuid
+  parliamentConstituencyId  String?                 @map("parliament_constituency_id") @db.Uuid
+  mlaRepresentativeId       String?                 @map("mla_representative_id") @db.Uuid
+  mpRepresentativeId        String?                 @map("mp_representative_id") @db.Uuid
+  aiIssueDetected           Boolean                 @default(false) @map("ai_issue_detected")
+  aiIssueType               ReportCategory          @default(other) @map("ai_issue_type")
+  aiConfidenceScore         Float                   @default(0) @map("ai_confidence_score")
+  aiGpsImageConsistency     String                  @default("low") @map("ai_gps_image_consistency")
+  aiSuspiciousFlag          Boolean                 @default(false) @map("ai_suspicious_flag")
+  aiSummaryJson             Json                    @map("ai_summary_json")
+  anonymousFlag             Boolean                 @default(true) @map("anonymous_flag")
+  createdByUserId           String?                 @map("created_by_user_id") @db.Uuid
+  deviceFingerprintHash     String?                 @map("device_fingerprint_hash")
+  createdAt                 DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt                 DateTime                @updatedAt @map("updated_at") @db.Timestamptz(6)
+  district                  District?               @relation(fields: [districtId], references: [id])
+  assemblyConstituency      AssemblyConstituency?   @relation(fields: [assemblyConstituencyId], references: [id])
+  parliamentConstituency    ParliamentConstituency? @relation(fields: [parliamentConstituencyId], references: [id])
+  mlaRepresentative         Representative?         @relation("MlaReports", fields: [mlaRepresentativeId], references: [id])
+  mpRepresentative          Representative?         @relation("MpReports", fields: [mpRepresentativeId], references: [id])
+  createdByUser             User?                   @relation("CreatedReports", fields: [createdByUserId], references: [id])
+  mediaAssets               MediaAsset[]
+  comments                  ReportComment[]
+  votes                     ReportVote[]
+  statusHistory             ReportStatusHistory[]
+  moderationLogs            ModerationLog[]
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([category, severity])
+  @@index([districtId])
+  @@index([assemblyConstituencyId])
+  @@index([parliamentConstituencyId])
+  @@index([sourceType])
+  @@map("reports")
+}
+
+model MediaAsset {
+  id                String   @id @default(uuid()) @db.Uuid
+  reportId          String   @map("report_id") @db.Uuid
+  storageKey        String   @map("storage_key")
+  originalFilename  String   @map("original_filename")
+  mimeType          String   @map("mime_type")
+  fileSize          Int      @map("file_size")
+  width             Int?
+  height            Int?
+  sha256Hash        String   @map("sha256_hash")
+  exifJson          Json?    @map("exif_json")
+  capturedAt        DateTime? @map("captured_at") @db.Timestamptz(6)
+  uploadedAt        DateTime  @default(now()) @map("uploaded_at") @db.Timestamptz(6)
+  report            Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([sha256Hash])
+  @@map("media_assets")
+}
+
+model ReportStatusHistory {
+  id               String      @id @default(uuid()) @db.Uuid
+  reportId         String      @map("report_id") @db.Uuid
+  oldStatus        ReportStatus? @map("old_status")
+  newStatus        ReportStatus  @map("new_status")
+  note             String
+  changedByUserId  String?     @map("changed_by_user_id") @db.Uuid
+  createdAt        DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  report           Report      @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  changedByUser    User?       @relation(fields: [changedByUserId], references: [id])
+
+  @@index([reportId, createdAt(sort: Desc)])
+  @@map("report_status_history")
+}
+
+model ReportComment {
+  id                String            @id @default(uuid()) @db.Uuid
+  reportId          String            @map("report_id") @db.Uuid
+  userId            String?           @map("user_id") @db.Uuid
+  displayName       String            @map("display_name")
+  body              String
+  moderationStatus  ModerationStatus  @default(PENDING) @map("moderation_status")
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  report            Report            @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user              User?             @relation(fields: [userId], references: [id])
+
+  @@index([reportId, createdAt(sort: Desc)])
+  @@map("report_comments")
+}
+
+model ReportVote {
+  id          String   @id @default(uuid()) @db.Uuid
+  reportId    String   @map("report_id") @db.Uuid
+  userId      String?  @map("user_id") @db.Uuid
+  sessionKey  String?  @map("session_key")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  report      Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId, createdAt(sort: Desc)])
+  @@map("report_votes")
+}
+
+model ModerationLog {
+  id           String   @id @default(uuid()) @db.Uuid
+  reportId     String   @map("report_id") @db.Uuid
+  moderatorId  String?  @map("moderator_id") @db.Uuid
+  actionType   String   @map("action_type")
+  reason       String
+  metadataJson Json?    @map("metadata_json")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  report       Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  moderator    User?    @relation(fields: [moderatorId], references: [id])
+
+  @@index([reportId, createdAt(sort: Desc)])
+  @@map("moderation_logs")
+}
+
+model OdishaBoundary {
+  id       String                                   @id @default(uuid()) @db.Uuid
+  name     String                                   @unique
+  geometry Unsupported("geometry(MultiPolygon, 4326)")
+
+  @@map("odisha_boundary")
+}

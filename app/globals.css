@@ -1,0 +1,61 @@
+@import "leaflet/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f7fbfa;
+  --foreground: #16324f;
+  --surface: rgba(255, 255, 255, 0.82);
+  --border: rgba(22, 50, 79, 0.1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(33, 140, 128, 0.08), transparent 38%),
+    radial-gradient(circle at top right, rgba(253, 116, 20, 0.08), transparent 30%),
+    var(--background);
+  color: var(--foreground);
+}
+
+::selection {
+  background: rgba(33, 140, 128, 0.22);
+}
+
+.surface-card {
+  @apply rounded-3xl border border-white/60 bg-white/85 shadow-card backdrop-blur;
+}
+
+.section-label {
+  @apply inline-flex items-center rounded-full border border-civic-200 bg-civic-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-civic-700;
+}
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(33, 140, 128, 0.3), rgba(253, 116, 20, 0.22));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.leaflet-container {
+  @apply z-0 rounded-[1.5rem];
+  min-height: 240px;
+}

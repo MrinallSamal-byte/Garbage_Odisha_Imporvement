@@ -1,0 +1,28 @@
+import { NextRequest } from "next/server";
+
+import { requireAdminSession } from "@/lib/auth/admin-session";
+import { adminModerationSchema } from "@/lib/validation/schemas";
+import { fail, ok } from "@/lib/utils/http";
+import { getReportRepository } from "@/server/repositories/repository-factory";
+import { serializeReportDetail } from "@/server/services/report-presentation-service";
+
+type Params = {
+  params: Promise<{ id: string }>;
+};
+
+export async function PATCH(request: NextRequest, { params }: Params) {
+  try {
+    const session = await requireAdminSession();
+    const { id } = await params;
+    const body = adminModerationSchema.parse(await request.json());
+    const detail = await getReportRepository().updateModeration(
+      id,
+      body.moderationStatus,
+      body.reason,
+      session.userId,
+    );
+    return ok({ report: serializeReportDetail(detail) });
+  } catch (error) {
+    return fail(error);
+  }
+}

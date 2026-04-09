@@ -1,0 +1,31 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bbbbbbbb-bbbb-4bbb-8bbb-111111111111",
+        "name": "Mock Odisha Boundary"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [84.78, 19.82],
+              [85.18, 20.02],
+              [85.68, 19.86],
+              [86.26, 20.02],
+              [86.36, 20.56],
+              [86.16, 20.88],
+              [85.72, 20.98],
+              [85.12, 20.92],
+              [84.78, 20.52],
+              [84.78, 19.82]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,1020 @@
+{
+  "users": [
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "name": "SafaOdisha Admin",
+      "email": "admin@safaodisha.local",
+      "phone": "+91-9000000001",
+      "passwordHash": null,
+      "role": "ADMIN",
+      "isActive": true,
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "11111111-1111-4111-8111-222222222222",
+      "name": "District Moderator",
+      "email": "moderator@safaodisha.local",
+      "phone": "+91-9000000002",
+      "passwordHash": null,
+      "role": "MODERATOR",
+      "isActive": true,
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    }
+  ],
+  "parties": [
+    {
+      "id": "12121212-1212-4121-8121-121212121212",
+      "name": "Biju Janata Dal",
+      "abbreviation": "BJD",
+      "levelScope": "STATE",
+      "isStateRulingPartyDefault": true,
+      "isCentralRulingPartyDefault": false,
+      "active": true,
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "13131313-1313-4131-8131-131313131313",
+      "name": "Bharatiya Janata Party",
+      "abbreviation": "BJP",
+      "levelScope": "BOTH",
+      "isStateRulingPartyDefault": false,
+      "isCentralRulingPartyDefault": true,
+      "active": true,
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "14141414-1414-4141-8141-141414141414",
+      "name": "Indian National Congress",
+      "abbreviation": "INC",
+      "levelScope": "NATIONAL",
+      "isStateRulingPartyDefault": false,
+      "isCentralRulingPartyDefault": false,
+      "active": true,
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    }
+  ],
+  "districts": [
+    {
+      "id": "22220000-0000-4000-8000-111111111111",
+      "name": "Khordha",
+      "code": "KHORDHA",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "22220000-0000-4000-8000-111111111111",
+          "name": "Khordha",
+          "code": "KHORDHA"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.52,
+                  19.96
+                ],
+                [
+                  86.16,
+                  19.96
+                ],
+                [
+                  86.16,
+                  20.56
+                ],
+                [
+                  85.52,
+                  20.56
+                ],
+                [
+                  85.52,
+                  19.96
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "22220000-0000-4000-8000-222222222222",
+      "name": "Cuttack",
+      "code": "CUTTACK",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "22220000-0000-4000-8000-222222222222",
+          "name": "Cuttack",
+          "code": "CUTTACK"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  84.96,
+                  20.34
+                ],
+                [
+                  85.54,
+                  20.34
+                ],
+                [
+                  85.54,
+                  20.9
+                ],
+                [
+                  84.96,
+                  20.9
+                ],
+                [
+                  84.96,
+                  20.34
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "22220000-0000-4000-8000-333333333333",
+      "name": "Puri",
+      "code": "PURI",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "22220000-0000-4000-8000-333333333333",
+          "name": "Puri",
+          "code": "PURI"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.62,
+                  19.82
+                ],
+                [
+                  86.24,
+                  19.82
+                ],
+                [
+                  86.24,
+                  20.14
+                ],
+                [
+                  85.62,
+                  20.14
+                ],
+                [
+                  85.62,
+                  19.82
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    }
+  ],
+  "assemblyConstituencies": [
+    {
+      "id": "33330000-0000-4000-8000-111111111111",
+      "code": "AC-BBSR-CENTRAL",
+      "name": "Bhubaneswar Central",
+      "districtName": "Khordha",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "33330000-0000-4000-8000-111111111111",
+          "code": "AC-BBSR-CENTRAL",
+          "name": "Bhubaneswar Central",
+          "district_name": "Khordha"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.78,
+                  20.24
+                ],
+                [
+                  85.96,
+                  20.24
+                ],
+                [
+                  85.96,
+                  20.38
+                ],
+                [
+                  85.78,
+                  20.38
+                ],
+                [
+                  85.78,
+                  20.24
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "metadataJson": {
+        "localityHints": [
+          "Nayapalli",
+          "Old Town"
+        ]
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "33330000-0000-4000-8000-222222222222",
+      "code": "AC-JATNI",
+      "name": "Jatni",
+      "districtName": "Khordha",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "33330000-0000-4000-8000-222222222222",
+          "code": "AC-JATNI",
+          "name": "Jatni",
+          "district_name": "Khordha"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.6,
+                  20.08
+                ],
+                [
+                  85.79,
+                  20.08
+                ],
+                [
+                  85.79,
+                  20.27
+                ],
+                [
+                  85.6,
+                  20.27
+                ],
+                [
+                  85.6,
+                  20.08
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "metadataJson": {
+        "localityHints": [
+          "Jatni"
+        ]
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "33330000-0000-4000-8000-333333333333",
+      "code": "AC-CUTTACK-SADAR",
+      "name": "Cuttack Sadar",
+      "districtName": "Cuttack",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "33330000-0000-4000-8000-333333333333",
+          "code": "AC-CUTTACK-SADAR",
+          "name": "Cuttack Sadar",
+          "district_name": "Cuttack"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.02,
+                  20.4
+                ],
+                [
+                  85.3,
+                  20.4
+                ],
+                [
+                  85.3,
+                  20.64
+                ],
+                [
+                  85.02,
+                  20.64
+                ],
+                [
+                  85.02,
+                  20.4
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "metadataJson": {
+        "localityHints": [
+          "Cuttack Sadar"
+        ]
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "33330000-0000-4000-8000-444444444444",
+      "code": "AC-PURI-SADAR",
+      "name": "Puri Sadar",
+      "districtName": "Puri",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "33330000-0000-4000-8000-444444444444",
+          "code": "AC-PURI-SADAR",
+          "name": "Puri Sadar",
+          "district_name": "Puri"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.8,
+                  19.9
+                ],
+                [
+                  86.06,
+                  19.9
+                ],
+                [
+                  86.06,
+                  20.08
+                ],
+                [
+                  85.8,
+                  20.08
+                ],
+                [
+                  85.8,
+                  19.9
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "metadataJson": {
+        "localityHints": [
+          "Puri Town"
+        ]
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    }
+  ],
+  "parliamentConstituencies": [
+    {
+      "id": "44440000-0000-4000-8000-111111111111",
+      "code": "PC-BHUBANESWAR",
+      "name": "Bhubaneswar",
+      "districtName": null,
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "44440000-0000-4000-8000-111111111111",
+          "code": "PC-BHUBANESWAR",
+          "name": "Bhubaneswar"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.54,
+                  19.9
+                ],
+                [
+                  86.2,
+                  19.9
+                ],
+                [
+                  86.2,
+                  20.6
+                ],
+                [
+                  85.54,
+                  20.6
+                ],
+                [
+                  85.54,
+                  19.9
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "metadataJson": {
+        "localityHints": [
+          "Nayapalli",
+          "Old Town",
+          "Jatni",
+          "Puri Town"
+        ]
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "44440000-0000-4000-8000-222222222222",
+      "code": "PC-CUTTACK",
+      "name": "Cuttack",
+      "districtName": null,
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "44440000-0000-4000-8000-222222222222",
+          "code": "PC-CUTTACK",
+          "name": "Cuttack"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  84.98,
+                  20.3
+                ],
+                [
+                  85.56,
+                  20.3
+                ],
+                [
+                  85.56,
+                  20.92
+                ],
+                [
+                  84.98,
+                  20.92
+                ],
+                [
+                  84.98,
+                  20.3
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "metadataJson": {
+        "localityHints": [
+          "Cuttack Sadar"
+        ]
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    }
+  ],
+  "representatives": [
+    {
+      "id": "55550000-0000-4000-8000-111111111111",
+      "representativeType": "MLA",
+      "name": "Ananya Das",
+      "constituencyType": "ASSEMBLY",
+      "assemblyConstituencyId": "33330000-0000-4000-8000-111111111111",
+      "parliamentConstituencyId": null,
+      "partyName": "Biju Janata Dal",
+      "isStateRulingParty": true,
+      "isCentralRulingParty": false,
+      "oppositionLabel": null,
+      "photoUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80",
+      "officialRoleTitle": "Member of Legislative Assembly",
+      "contactEmail": "ananya.das@safaodisha.local",
+      "contactPhone": "+91-9000001001",
+      "websiteUrl": "https://example.org/ananya-das",
+      "socialLinksJson": {
+        "x": "https://example.org/ananya-das/x"
+      },
+      "termStart": "2024-06-01T00:00:00.000Z",
+      "termEnd": null,
+      "active": true,
+      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "55550000-0000-4000-8000-222222222222",
+      "representativeType": "MLA",
+      "name": "Ritwick Sahoo",
+      "constituencyType": "ASSEMBLY",
+      "assemblyConstituencyId": "33330000-0000-4000-8000-222222222222",
+      "parliamentConstituencyId": null,
+      "partyName": "Bharatiya Janata Party",
+      "isStateRulingParty": false,
+      "isCentralRulingParty": true,
+      "oppositionLabel": "Opposition",
+      "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80",
+      "officialRoleTitle": "Member of Legislative Assembly",
+      "contactEmail": "ritwick.sahoo@safaodisha.local",
+      "contactPhone": "+91-9000001002",
+      "websiteUrl": "https://example.org/ritwick-sahoo",
+      "socialLinksJson": {
+        "facebook": "https://example.org/ritwick-sahoo/facebook"
+      },
+      "termStart": "2024-06-01T00:00:00.000Z",
+      "termEnd": null,
+      "active": true,
+      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "55550000-0000-4000-8000-333333333333",
+      "representativeType": "MLA",
+      "name": "Madhabi Rout",
+      "constituencyType": "ASSEMBLY",
+      "assemblyConstituencyId": "33330000-0000-4000-8000-333333333333",
+      "parliamentConstituencyId": null,
+      "partyName": "Indian National Congress",
+      "isStateRulingParty": false,
+      "isCentralRulingParty": false,
+      "oppositionLabel": "Opposition",
+      "photoUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=500&q=80",
+      "officialRoleTitle": "Member of Legislative Assembly",
+      "contactEmail": "madhabi.rout@safaodisha.local",
+      "contactPhone": "+91-9000001003",
+      "websiteUrl": "https://example.org/madhabi-rout",
+      "socialLinksJson": {
+        "instagram": "https://example.org/madhabi-rout/instagram"
+      },
+      "termStart": "2024-06-01T00:00:00.000Z",
+      "termEnd": null,
+      "active": true,
+      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "55550000-0000-4000-8000-444444444444",
+      "representativeType": "MLA",
+      "name": "Subhranshu Pattnaik",
+      "constituencyType": "ASSEMBLY",
+      "assemblyConstituencyId": "33330000-0000-4000-8000-444444444444",
+      "parliamentConstituencyId": null,
+      "partyName": "Biju Janata Dal",
+      "isStateRulingParty": true,
+      "isCentralRulingParty": false,
+      "oppositionLabel": null,
+      "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80",
+      "officialRoleTitle": "Member of Legislative Assembly",
+      "contactEmail": "subhranshu.pattnaik@safaodisha.local",
+      "contactPhone": "+91-9000001004",
+      "websiteUrl": "https://example.org/subhranshu-pattnaik",
+      "socialLinksJson": {
+        "linkedin": "https://example.org/subhranshu-pattnaik/linkedin"
+      },
+      "termStart": "2024-06-01T00:00:00.000Z",
+      "termEnd": null,
+      "active": true,
+      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "55550000-0000-4000-8000-555555555555",
+      "representativeType": "MP",
+      "name": "Ayan Pradhan",
+      "constituencyType": "PARLIAMENT",
+      "assemblyConstituencyId": null,
+      "parliamentConstituencyId": "44440000-0000-4000-8000-111111111111",
+      "partyName": "Bharatiya Janata Party",
+      "isStateRulingParty": false,
+      "isCentralRulingParty": true,
+      "oppositionLabel": null,
+      "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80",
+      "officialRoleTitle": "Member of Parliament",
+      "contactEmail": "ayan.pradhan@safaodisha.local",
+      "contactPhone": "+91-9000002001",
+      "websiteUrl": "https://example.org/ayan-pradhan",
+      "socialLinksJson": {
+        "x": "https://example.org/ayan-pradhan/x"
+      },
+      "termStart": "2024-06-15T00:00:00.000Z",
+      "termEnd": null,
+      "active": true,
+      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "55550000-0000-4000-8000-666666666666",
+      "representativeType": "MP",
+      "name": "Pallavi Mohanty",
+      "constituencyType": "PARLIAMENT",
+      "assemblyConstituencyId": null,
+      "parliamentConstituencyId": "44440000-0000-4000-8000-222222222222",
+      "partyName": "Biju Janata Dal",
+      "isStateRulingParty": true,
+      "isCentralRulingParty": false,
+      "oppositionLabel": null,
+      "photoUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=500&q=80",
+      "officialRoleTitle": "Member of Parliament",
+      "contactEmail": "pallavi.mohanty@safaodisha.local",
+      "contactPhone": "+91-9000002002",
+      "websiteUrl": "https://example.org/pallavi-mohanty",
+      "socialLinksJson": {
+        "facebook": "https://example.org/pallavi-mohanty/facebook"
+      },
+      "termStart": "2024-06-15T00:00:00.000Z",
+      "termEnd": null,
+      "active": true,
+      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    }
+  ],
+  "reports": [
+    {
+      "id": "66666666-6666-4666-8666-111111111111",
+      "reportCode": "SOD-20260409-001",
+      "sourceType": "LIVE_CAPTURE",
+      "description": "Overflowing garbage pile beside Nayapalli market road and pedestrian edge.",
+      "category": "overflow",
+      "severity": "HIGH",
+      "status": "IN_PROGRESS",
+      "moderationStatus": "APPROVED",
+      "trustScore": 88,
+      "gpsAccuracyMeters": 8,
+      "latitude": 20.2963,
+      "longitude": 85.8192,
+      "locationPoint": {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            85.8192,
+            20.2963
+          ]
+        }
+      },
+      "addressLine": "Nayapalli Market Road, Bhubaneswar, Khordha, Odisha 751012, India",
+      "locality": "Nayapalli",
+      "wardName": "Ward 31",
+      "blockName": "Bhubaneswar Municipal Corporation",
+      "districtId": "22220000-0000-4000-8000-111111111111",
+      "assemblyConstituencyId": "33330000-0000-4000-8000-111111111111",
+      "parliamentConstituencyId": "44440000-0000-4000-8000-111111111111",
+      "mlaRepresentativeId": "55550000-0000-4000-8000-111111111111",
+      "mpRepresentativeId": "55550000-0000-4000-8000-555555555555",
+      "aiIssueDetected": true,
+      "aiIssueType": "overflow",
+      "aiConfidenceScore": 0.91,
+      "aiGpsImageConsistency": "high",
+      "aiSuspiciousFlag": false,
+      "aiSummaryJson": {
+        "issueDetected": true,
+        "issueType": "overflow",
+        "confidenceScore": 0.91,
+        "visibleLandmarks": [
+          "market frontage",
+          "road divider"
+        ],
+        "detectedText": [
+          "Nayapalli"
+        ],
+        "languageDetected": "mixed",
+        "likelyEnvironment": "market",
+        "garbageSeverity": "high",
+        "gpsImageConsistency": "high",
+        "suspiciousFlag": false,
+        "moderationNotes": "Garbage overflow appears consistent with dense roadside market surroundings.",
+        "localityClues": [
+          "Nayapalli",
+          "Bhubaneswar"
+        ]
+      },
+      "anonymousFlag": true,
+      "createdByUserId": null,
+      "deviceFingerprintHash": "mock-session-1",
+      "createdAt": "2026-04-09T08:10:00.000Z",
+      "updatedAt": "2026-04-09T16:28:20.518Z"
+    },
+    {
+      "id": "66666666-6666-4666-8666-222222222222",
+      "reportCode": "SOD-20260409-002",
+      "sourceType": "GALLERY_UPLOAD",
+      "description": "Roadside litter and drain obstruction near Cuttack Sadar service lane.",
+      "category": "litter",
+      "severity": "MEDIUM",
+      "status": "RESOLVED",
+      "moderationStatus": "APPROVED",
+      "trustScore": 63,
+      "gpsAccuracyMeters": 24,
+      "latitude": 20.4624,
+      "longitude": 85.1788,
+      "locationPoint": {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            85.1788,
+            20.4624
+          ]
+        }
+      },
+      "addressLine": "Cuttack Sadar Main Road, Cuttack, Odisha 753003, India",
+      "locality": "Cuttack Sadar",
+      "wardName": null,
+      "blockName": "Cuttack Municipal Corporation",
+      "districtId": "22220000-0000-4000-8000-222222222222",
+      "assemblyConstituencyId": "33330000-0000-4000-8000-333333333333",
+      "parliamentConstituencyId": "44440000-0000-4000-8000-222222222222",
+      "mlaRepresentativeId": "55550000-0000-4000-8000-333333333333",
+      "mpRepresentativeId": "55550000-0000-4000-8000-666666666666",
+      "aiIssueDetected": true,
+      "aiIssueType": "litter",
+      "aiConfidenceScore": 0.82,
+      "aiGpsImageConsistency": "medium",
+      "aiSuspiciousFlag": false,
+      "aiSummaryJson": {
+        "issueDetected": true,
+        "issueType": "litter",
+        "confidenceScore": 0.82,
+        "visibleLandmarks": [
+          "drain edge",
+          "shop shutters"
+        ],
+        "detectedText": [
+          "Cuttack Sadar"
+        ],
+        "languageDetected": "mixed",
+        "likelyEnvironment": "roadside",
+        "garbageSeverity": "medium",
+        "gpsImageConsistency": "high",
+        "suspiciousFlag": false,
+        "moderationNotes": "Seeded mock analysis summary for local testing.",
+        "localityClues": [
+          "Cuttack Sadar"
+        ]
+      },
+      "anonymousFlag": false,
+      "createdByUserId": null,
+      "deviceFingerprintHash": "mock-session-2",
+      "createdAt": "2026-04-08T16:45:00.000Z",
+      "updatedAt": "2026-04-09T09:40:00.000Z"
+    }
+  ],
+  "mediaAssets": [
+    {
+      "id": "77777777-7777-4777-8777-111111111111",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "storageKey": "seed/mock-report-1.svg",
+      "originalFilename": "mock-report-1.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 2240,
+      "width": 1200,
+      "height": 900,
+      "sha256Hash": "seed-hash-1",
+      "exifJson": {
+        "mock": true
+      },
+      "capturedAt": "2026-04-09T08:09:00.000Z",
+      "uploadedAt": "2026-04-09T08:10:00.000Z"
+    },
+    {
+      "id": "77777777-7777-4777-8777-222222222222",
+      "reportId": "66666666-6666-4666-8666-222222222222",
+      "storageKey": "seed/mock-report-2.svg",
+      "originalFilename": "mock-report-2.svg",
+      "mimeType": "image/svg+xml",
+      "fileSize": 2160,
+      "width": 1200,
+      "height": 900,
+      "sha256Hash": "seed-hash-2",
+      "exifJson": {
+        "mock": true
+      },
+      "capturedAt": "2026-04-08T16:40:00.000Z",
+      "uploadedAt": "2026-04-08T16:45:00.000Z"
+    }
+  ],
+  "reportStatusHistory": [
+    {
+      "id": "88888888-8888-4888-8888-111111111111",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "oldStatus": null,
+      "newStatus": "REPORTED",
+      "note": "Citizen report received.",
+      "changedByUserId": null,
+      "createdAt": "2026-04-09T08:10:00.000Z"
+    },
+    {
+      "id": "88888888-8888-4888-8888-222222222222",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "oldStatus": "REPORTED",
+      "newStatus": "VERIFIED",
+      "note": "Moderator verified visible garbage accumulation and accurate GPS match.",
+      "changedByUserId": "11111111-1111-4111-8111-222222222222",
+      "createdAt": "2026-04-09T10:30:00.000Z"
+    },
+    {
+      "id": "88888888-8888-4888-8888-333333333333",
+      "reportId": "66666666-6666-4666-8666-222222222222",
+      "oldStatus": null,
+      "newStatus": "REPORTED",
+      "note": "Gallery complaint logged for review.",
+      "changedByUserId": null,
+      "createdAt": "2026-04-08T16:45:00.000Z"
+    },
+    {
+      "id": "88888888-8888-4888-8888-444444444444",
+      "reportId": "66666666-6666-4666-8666-222222222222",
+      "oldStatus": "REPORTED",
+      "newStatus": "RESOLVED",
+      "note": "Local team uploaded cleanup proof and marked as resolved.",
+      "changedByUserId": "11111111-1111-4111-8111-111111111111",
+      "createdAt": "2026-04-09T09:40:00.000Z"
+    },
+    {
+      "id": "badd73d9-1543-4e52-a6d4-c2bfc93b503e",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "oldStatus": "VERIFIED",
+      "newStatus": "IN_PROGRESS",
+      "note": "Forwarded to the local sanitation team.",
+      "changedByUserId": "11111111-1111-4111-8111-111111111111",
+      "createdAt": "2026-04-09T16:28:20.518Z"
+    }
+  ],
+  "reportComments": [
+    {
+      "id": "99999999-9999-4999-8999-111111111111",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "userId": null,
+      "displayName": "Resident watcher",
+      "body": "This stretch has been unmanaged for the last three mornings.",
+      "moderationStatus": "APPROVED",
+      "createdAt": "2026-04-09T11:15:00.000Z"
+    },
+    {
+      "id": "99999999-9999-4999-8999-222222222222",
+      "reportId": "66666666-6666-4666-8666-222222222222",
+      "userId": null,
+      "displayName": "Local volunteer",
+      "body": "Cleanup van came the same evening and the drain edge was cleared.",
+      "moderationStatus": "APPROVED",
+      "createdAt": "2026-04-09T09:55:00.000Z"
+    }
+  ],
+  "reportVotes": [
+    {
+      "id": "aaaaaaaa-aaaa-4aaa-8aaa-111111111111",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "userId": null,
+      "sessionKey": "support-session-1",
+      "createdAt": "2026-04-09T11:20:00.000Z"
+    },
+    {
+      "id": "aaaaaaaa-aaaa-4aaa-8aaa-222222222222",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "userId": null,
+      "sessionKey": "support-session-2",
+      "createdAt": "2026-04-09T11:22:00.000Z"
+    },
+    {
+      "id": "aaaaaaaa-aaaa-4aaa-8aaa-333333333333",
+      "reportId": "66666666-6666-4666-8666-222222222222",
+      "userId": null,
+      "sessionKey": "support-session-3",
+      "createdAt": "2026-04-09T10:00:00.000Z"
+    }
+  ],
+  "moderationLogs": [
+    {
+      "id": "abababab-abab-4aba-8aba-111111111111",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "moderatorId": "11111111-1111-4111-8111-222222222222",
+      "actionType": "VERIFY",
+      "reason": "Location and issue reviewed successfully.",
+      "metadataJson": {
+        "trustScore": 88
+      },
+      "createdAt": "2026-04-09T10:30:00.000Z"
+    },
+    {
+      "id": "abababab-abab-4aba-8aba-222222222222",
+      "reportId": "66666666-6666-4666-8666-222222222222",
+      "moderatorId": "11111111-1111-4111-8111-111111111111",
+      "actionType": "RESOLVE",
+      "reason": "Cleanup proof accepted.",
+      "metadataJson": {
+        "status": "RESOLVED"
+      },
+      "createdAt": "2026-04-09T09:40:00.000Z"
+    },
+    {
+      "id": "35e62363-e6fe-47bc-aa0b-b8e87c19a313",
+      "reportId": "66666666-6666-4666-8666-111111111111",
+      "moderatorId": "11111111-1111-4111-8111-111111111111",
+      "actionType": "STATUS_CHANGE",
+      "reason": "Forwarded to the local sanitation team.",
+      "metadataJson": {
+        "previousStatus": "VERIFIED",
+        "status": "IN_PROGRESS"
+      },
+      "createdAt": "2026-04-09T16:28:20.518Z"
+    }
+  ],
+  "odishaBoundary": [
+    {
+      "id": "bbbbbbbb-bbbb-4bbb-8bbb-111111111111",
+      "name": "Mock Odisha Boundary",
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "bbbbbbbb-bbbb-4bbb-8bbb-111111111111",
+          "name": "Mock Odisha Boundary"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  84.78,
+                  19.82
+                ],
+                [
+                  85.18,
+                  20.02
+                ],
+                [
+                  85.68,
+                  19.86
+                ],
+                [
+                  86.26,
+                  20.02
+                ],
+                [
+                  86.36,
+                  20.56
+                ],
+                [
+                  86.16,
+                  20.88
+                ],
+                [
+                  85.72,
+                  20.98
+                ],
+                [
+                  85.12,
+                  20.92
+                ],
+                [
+                  84.78,
+                  20.52
+                ],
+                [
+                  84.78,
+                  19.82
+                ]
+              ]
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

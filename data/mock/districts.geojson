@@ -1,0 +1,71 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "22220000-0000-4000-8000-111111111111",
+        "name": "Khordha",
+        "code": "KHORDHA"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.52, 19.96],
+              [86.16, 19.96],
+              [86.16, 20.56],
+              [85.52, 20.56],
+              [85.52, 19.96]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "22220000-0000-4000-8000-222222222222",
+        "name": "Cuttack",
+        "code": "CUTTACK"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [84.96, 20.34],
+              [85.54, 20.34],
+              [85.54, 20.90],
+              [84.96, 20.90],
+              [84.96, 20.34]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "22220000-0000-4000-8000-333333333333",
+        "name": "Puri",
+        "code": "PURI"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.62, 19.82],
+              [86.24, 19.82],
+              [86.24, 20.14],
+              [85.62, 20.14],
+              [85.62, 19.82]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

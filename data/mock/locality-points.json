@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Nayapalli",
+    "districtName": "Khordha",
+    "assemblyCode": "AC-BBSR-CENTRAL",
+    "parliamentCode": "PC-BHUBANESWAR",
+    "lat": 20.2963,
+    "lng": 85.8192
+  },
+  {
+    "name": "Old Town",
+    "districtName": "Khordha",
+    "assemblyCode": "AC-BBSR-CENTRAL",
+    "parliamentCode": "PC-BHUBANESWAR",
+    "lat": 20.2388,
+    "lng": 85.8331
+  },
+  {
+    "name": "Jatni",
+    "districtName": "Khordha",
+    "assemblyCode": "AC-JATNI",
+    "parliamentCode": "PC-BHUBANESWAR",
+    "lat": 20.1591,
+    "lng": 85.7076
+  },
+  {
+    "name": "Cuttack Sadar",
+    "districtName": "Cuttack",
+    "assemblyCode": "AC-CUTTACK-SADAR",
+    "parliamentCode": "PC-CUTTACK",
+    "lat": 20.4624,
+    "lng": 85.1788
+  },
+  {
+    "name": "Puri Town",
+    "districtName": "Puri",
+    "assemblyCode": "AC-PURI-SADAR",
+    "parliamentCode": "PC-BHUBANESWAR",
+    "lat": 19.981,
+    "lng": 85.895
+  }
+]
