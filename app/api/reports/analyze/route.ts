@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 
 import { env } from "@/lib/env";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
-import { getClientIp, getSessionFingerprint } from "@/lib/utils/request";
+import { assertSameOrigin, getClientIp, getSessionFingerprint } from "@/lib/utils/request";
 import { fail, ok } from "@/lib/utils/http";
 import { AppError } from "@/lib/utils/errors";
 import { analyzeRequestSchema } from "@/lib/validation/schemas";
@@ -11,6 +11,7 @@ import { processImageFile } from "@/server/workflows/media-processing";
 
 export async function POST(request: NextRequest) {
   try {
+    assertSameOrigin(request);
     const ip = getClientIp(request);
     const rateLimit = checkRateLimit(
       `analyze:${ip}`,

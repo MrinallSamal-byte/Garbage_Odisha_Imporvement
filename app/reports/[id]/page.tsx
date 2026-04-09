@@ -7,7 +7,9 @@ import { RepresentativeCard } from "@/components/report/representative-card";
 import { ModerationBadge, StatusBadge } from "@/components/report/status-badge";
 import { SupportButton } from "@/components/report/support-button";
 import { TrustScoreBadge } from "@/components/report/trust-score-badge";
+import { ShareReportButton } from "@/components/report/share-report-button";
 import { Card } from "@/components/ui/card";
+import { env } from "@/lib/env";
 import { getReportRepository } from "@/server/repositories/repository-factory";
 import { serializeReportDetail } from "@/server/services/report-presentation-service";
 
@@ -107,6 +109,11 @@ export default async function ReportDetailPage({ params }: PageProps) {
               </div>
             </div>
             <SupportButton reportId={report.report.id} initialCount={report.votes} />
+            <ShareReportButton
+              reportCode={report.report.reportCode}
+              addressLine={report.report.addressLine}
+              reportUrl={`${env.NEXT_PUBLIC_APP_URL}/reports/${report.report.id}`}
+            />
           </Card>
 
           <RepresentativeCard

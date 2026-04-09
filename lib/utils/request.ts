@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 
 import { env } from "@/lib/env";
+import { AppError } from "@/lib/utils/errors";
 import { sha256 } from "@/lib/utils/hash";
 
 export function getClientIp(request: NextRequest) {
@@ -38,6 +39,6 @@ export function assertSameOrigin(request: NextRequest) {
   );
 
   if (!allowedOrigins.has(origin)) {
-    throw new Error("Origin mismatch.");
+    throw new AppError("Cross-origin request blocked.", 403);
   }
 }

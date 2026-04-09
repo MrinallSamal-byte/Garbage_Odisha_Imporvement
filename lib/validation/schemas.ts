@@ -33,6 +33,8 @@ export const reportFiltersSchema = z.object({
   sourceType: z.enum(sourceTypes).optional(),
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
 });
 
 export const commentSchema = z.object({

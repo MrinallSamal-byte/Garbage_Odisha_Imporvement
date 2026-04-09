@@ -1,3 +1,6 @@
+// NOTE: This is an in-memory rate limiter scoped to a single process. It resets
+// on restart and does NOT share state across multiple container instances.
+// For multi-instance deployments, replace with a Redis-backed sliding-window adapter.
 type RateLimitBucket = {
   hits: number[];
   lastAccess: number;

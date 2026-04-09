@@ -4,13 +4,14 @@ import { env } from "@/lib/env";
 import { AppError } from "@/lib/utils/errors";
 import { fail, ok } from "@/lib/utils/http";
 import { checkRateLimit } from "@/lib/utils/rate-limit";
-import { getClientIp } from "@/lib/utils/request";
+import { assertSameOrigin, getClientIp } from "@/lib/utils/request";
 import { submitReportSchema } from "@/lib/validation/schemas";
 import { serializeReportDetail } from "@/server/services/report-presentation-service";
 import { submitPreviewedReport } from "@/server/services/report-submission-service";
 
 export async function POST(request: NextRequest) {
   try {
+    assertSameOrigin(request);
     const ip = getClientIp(request);
     const rateLimit = checkRateLimit(
       `submit:${ip}`,

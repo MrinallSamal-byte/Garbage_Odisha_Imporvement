@@ -30,16 +30,20 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     status: typeof rawSearchParams.status === "string" ? rawSearchParams.status : undefined,
     severity: typeof rawSearchParams.severity === "string" ? rawSearchParams.severity : undefined,
     sourceType: typeof rawSearchParams.sourceType === "string" ? rawSearchParams.sourceType : undefined,
+    page: typeof rawSearchParams.page === "string" ? rawSearchParams.page : "1",
+    pageSize: "20",
   });
 
   let stats = emptyDashboardStats;
   let items: ReturnType<typeof serializeReportListItem>[] = [];
   let feedWarning: string | null = null;
+  let totalPages = 1;
 
   try {
     const data = await getDashboardData(filters);
     stats = data.stats;
     items = data.reports.map(serializeReportListItem);
+    totalPages = Math.ceil(data.total / 20);
   } catch (error) {
     console.error("Dashboard feed unavailable", error);
     feedWarning =
@@ -186,6 +190,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <EmptyDashboardState />
           )}
         </div>
+
+        {totalPages > 1 && (
+          <PaginationControls
+            currentPage={filters.page}
+            totalPages={totalPages}
+            searchParams={rawSearchParams}
+          />
+        )}
       </div>
     </main>
   );
@@ -250,5 +262,67 @@ function ListReportRow({
         </div>
       </Card>
     </Link>
+  );
+}
+
+function PaginationControls({
+  currentPage,
+  totalPages,
+  searchParams,
+}: {
+  currentPage: number;
+  totalPages: number;
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  function buildPageHref(page: number) {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (typeof value === "string" && value.length > 0 && key !== "page") {
+        params.set(key, value);
+      }
+    }
+    params.set("page", String(page));
+    return `/dashboard?${params.toString()}`;
+  }
+
+  const pages = Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+    if (totalPages <= 7) return i + 1;
+    if (currentPage <= 4) return i + 1;
+    if (currentPage >= totalPages - 3) return totalPages - 6 + i;
+    return currentPage - 3 + i;
+  });
+
+  return (
+    <div className="flex items-center justify-center gap-2 pt-4">
+      {currentPage > 1 && (
+        <Link
+          href={buildPageHref(currentPage - 1)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slateblue-100 bg-white text-sm font-semibold text-slateblue-700 transition hover:bg-slateblue-50"
+        >
+          ←
+        </Link>
+      )}
+      {pages.map((page) => (
+        <Link
+          key={page}
+          href={buildPageHref(page)}
+          className={`inline-flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition ${
+            page === currentPage
+              ? "bg-ink text-white"
+              : "border border-slateblue-100 bg-white text-slateblue-700 hover:bg-slateblue-50"
+          }`}
+        >
+          {page}
+        </Link>
+      ))}
+      {currentPage < totalPages && (
+        <Link
+          href={buildPageHref(currentPage + 1)}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slateblue-100 bg-white text-sm font-semibold text-slateblue-700 transition hover:bg-slateblue-50"
+        >
+          →
+        </Link>
+      )}
+    </div>
   );
 }

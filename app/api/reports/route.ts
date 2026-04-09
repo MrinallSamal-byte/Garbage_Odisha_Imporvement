@@ -11,11 +11,17 @@ export async function GET(request: NextRequest) {
   try {
     const query = Object.fromEntries(request.nextUrl.searchParams.entries());
     const filters = reportFiltersSchema.parse(query);
-    const { reports, stats } = await getDashboardData(filters);
+    const { reports, stats, total } = await getDashboardData(filters);
 
     return ok({
       stats,
       items: reports.map(serializeReportListItem),
+      pagination: {
+        page: filters.page,
+        pageSize: filters.pageSize,
+        total,
+        totalPages: Math.ceil(total / filters.pageSize),
+      },
     });
   } catch (error) {
     return fail(error);

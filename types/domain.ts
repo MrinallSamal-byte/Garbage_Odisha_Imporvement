@@ -316,6 +316,8 @@ export interface ReportFilters {
   sourceType?: SourceType;
   startDate?: string;
   endDate?: string;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface ReportListItem {

@@ -1,5 +1,5 @@
 import { getReportRepository, getRepresentativeRepository } from "@/server/repositories/repository-factory";
-import type { DashboardStats } from "@/types/domain";
+import type { DashboardStats, ReportFilters } from "@/types/domain";
 
 export const emptyDashboardStats: DashboardStats = {
   totalReports: 0,
@@ -9,14 +9,20 @@ export const emptyDashboardStats: DashboardStats = {
   highSeverityReports: 0,
 };
 
-export async function getDashboardData(filters?: Parameters<ReturnType<typeof getReportRepository>["listPublicReports"]>[0]) {
+export async function getDashboardData(filters?: ReportFilters) {
   const reportRepository = getReportRepository();
-  const [stats, reports] = await Promise.all([
+  const [stats, allReports] = await Promise.all([
     reportRepository.getDashboardStats(),
     reportRepository.listPublicReports(filters),
   ]);
 
-  return { stats, reports };
+  const page = filters?.page ?? 1;
+  const pageSize = filters?.pageSize ?? 20;
+  const total = allReports.length;
+  const start = (page - 1) * pageSize;
+  const reports = allReports.slice(start, start + pageSize);
+
+  return { stats, reports, total };
 }
 
 export async function getRepresentativeProfileData(representativeId: string) {
