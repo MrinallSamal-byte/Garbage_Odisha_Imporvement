@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { SafaOdishaLogo } from "@/components/branding/safa-odisha-logo";
+
 const footerLinks = [
   { href: "/report", label: "Report a cleanliness issue" },
   { href: "/dashboard", label: "Browse public dashboard" },
@@ -11,7 +13,11 @@ export function SiteFooter() {
     <footer className="border-t border-white/60 bg-white/80 backdrop-blur">
       <div className="container grid gap-8 py-10 md:grid-cols-[1.2fr_1fr_1fr]">
         <div className="space-y-4">
-          <p className="section-label">SafaOdisha</p>
+          <SafaOdishaLogo
+            className="items-start"
+            eyebrow="Odisha accountability platform"
+            tagline="GPS-first cleanliness reporting with GIS-based routing."
+          />
           <h2 className="max-w-md text-2xl font-extrabold tracking-tight text-ink">
             Built for public cleanliness reporting with GPS, GIS, and accountable routing.
           </h2>

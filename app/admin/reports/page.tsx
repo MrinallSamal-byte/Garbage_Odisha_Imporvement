@@ -7,6 +7,8 @@ import { getAdminSession } from "@/lib/auth/admin-session";
 import { getReportRepository } from "@/server/repositories/repository-factory";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminReportsPage() {
   const session = await getAdminSession();
 

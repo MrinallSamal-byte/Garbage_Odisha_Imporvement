@@ -11,6 +11,8 @@ import { Card } from "@/components/ui/card";
 import { getReportRepository } from "@/server/repositories/repository-factory";
 import { serializeReportDetail } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{ id: string }>;
 };

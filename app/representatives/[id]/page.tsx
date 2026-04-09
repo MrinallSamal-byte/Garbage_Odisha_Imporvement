@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { getRepresentativeProfileData } from "@/server/services/report-query-service";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 type PageProps = {
   params: Promise<{ id: string }>;
 };

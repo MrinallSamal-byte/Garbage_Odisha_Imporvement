@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { getAdminSession } from "@/lib/auth/admin-session";
 
+export const dynamic = "force-dynamic";
+
 const commands = [
   "npm run import:odisha-boundary -- data/imports/odisha-boundary.geojson",
   "npm run import:assembly -- data/imports/assembly.geojson",

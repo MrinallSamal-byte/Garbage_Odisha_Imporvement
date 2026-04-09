@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Manrope } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { env } from "@/lib/env";
 
 import "./globals.css";
 
@@ -18,7 +19,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://safaodisha.local"),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
     default: "SafaOdisha",
     template: "%s | SafaOdisha",
@@ -39,6 +40,10 @@ export const metadata: Metadata = {
       "Capture live civic cleanliness issues in Odisha, geolocate them, and route public accountability to the correct representatives.",
     siteName: "SafaOdisha",
     type: "website",
+  },
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: "/icon.svg",
   },
 };
 

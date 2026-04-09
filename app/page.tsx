@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import { getDashboardData } from "@/server/services/report-query-service";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 const steps = [
   {
     title: "Capture live evidence",

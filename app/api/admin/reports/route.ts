@@ -5,6 +5,8 @@ import { fail, ok } from "@/lib/utils/http";
 import { getReportRepository } from "@/server/repositories/repository-factory";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     void request;

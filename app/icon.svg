@@ -1,0 +1,41 @@
+<svg width="256" height="256" viewBox="0 0 176 176" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shell" x1="24" y1="20" x2="152" y2="156" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F8B81" />
+      <stop offset="0.52" stop-color="#16726E" />
+      <stop offset="1" stop-color="#102F47" />
+    </linearGradient>
+    <linearGradient id="pin" x1="88" y1="32" x2="88" y2="152" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F59F44" />
+      <stop offset="0.42" stop-color="#F37F2F" />
+      <stop offset="1" stop-color="#E45C2C" />
+    </linearGradient>
+    <linearGradient id="sweep" x1="57" y1="64" x2="119" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F3147" />
+      <stop offset="1" stop-color="#1F8B81" />
+    </linearGradient>
+  </defs>
+
+  <rect width="176" height="176" rx="44" fill="url(#shell)" />
+  <path
+    d="M28 46C47 28 72 20 98 20C124 20 147 29 160 43V68C144 49 121 38 96 38C70 38 46 49 28 68V46Z"
+    fill="#FFF6DF"
+    fill-opacity="0.12"
+  />
+  <circle cx="134" cy="42" r="12" fill="#FFF6DF" fill-opacity="0.16" />
+  <path
+    d="M88 30C55.4 30 29 56.4 29 89C29 108.6 38.5 126.6 54.4 138L88 162L121.6 138C137.5 126.6 147 108.6 147 89C147 56.4 120.6 30 88 30Z"
+    fill="url(#pin)"
+  />
+  <circle cx="88" cy="89" r="31" fill="#FFF7EA" />
+  <path
+    d="M123 84C116.2 75.4 104.7 71.1 93.9 72.6C101.9 75.6 108.7 81.7 112.2 89.7C106.8 99.8 95.3 106.2 83.7 105.5C75.9 105.1 68.5 101.4 63.2 95.9C64.1 110 75.7 121.2 90 121.2C107.2 121.2 121.2 107.2 121.2 90C121.2 88 120.9 86 120.5 84.1L123 84Z"
+    fill="url(#sweep)"
+  />
+  <path
+    d="M58.6 92.8C62.8 82 73.2 74.5 84.8 74.5C91.4 74.5 97.6 76.9 102.4 81C95.3 80 88 82 82.4 86.4C77.8 89.9 74.4 94.9 72.8 100.5C67.1 99.7 61.9 97.1 58.6 92.8Z"
+    fill="#FFF7EA"
+    fill-opacity="0.9"
+  />
+  <circle cx="118" cy="62" r="6" fill="#FFF7EA" fill-opacity="0.88" />
+</svg>

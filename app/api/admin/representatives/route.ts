@@ -6,6 +6,8 @@ import { representativeUpsertSchema } from "@/lib/validation/schemas";
 import { fail, ok } from "@/lib/utils/http";
 import { getRepresentativeRepository } from "@/server/repositories/repository-factory";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     void request;

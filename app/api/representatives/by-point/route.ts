@@ -4,6 +4,8 @@ import { byPointSchema } from "@/lib/validation/schemas";
 import { fail, ok } from "@/lib/utils/http";
 import { isPointInsideOdisha, lookupRepresentativesByPoint } from "@/server/services/spatial-lookup-service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const parsed = byPointSchema.parse({

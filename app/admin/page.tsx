@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import { getAdminSession } from "@/lib/auth/admin-session";
 import { getAdminOverview } from "@/server/services/admin-service";
 
+export const dynamic = "force-dynamic";
+
 const links = [
   { href: "/admin/reports", label: "Moderation queue" },
   { href: "/admin/representatives", label: "Representative records" },

@@ -9,6 +9,8 @@ import { reportFiltersSchema } from "@/lib/validation/schemas";
 import { getDashboardData } from "@/server/services/report-query-service";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 type DashboardPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };

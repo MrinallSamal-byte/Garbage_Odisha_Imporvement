@@ -1,5 +1,6 @@
 import { env } from "@/lib/env";
 import { createAdminSession } from "@/lib/auth/admin-session";
+import { prisma } from "@/lib/db/prisma";
 import { readMockState } from "@/lib/mock/runtime-store";
 import { AppError } from "@/lib/utils/errors";
 import type { Representative } from "@/types/domain";
@@ -10,22 +11,50 @@ export async function loginAdmin(email: string, password: string) {
     throw new AppError("Invalid admin credentials.", 401);
   }
 
-  const state = await readMockState();
   const user =
+    env.APP_MODE === "real"
+      ? await prisma.user.upsert({
+          where: { email },
+          create: {
+            name: "SafaOdisha Admin",
+            email,
+            role: "ADMIN",
+            isActive: true,
+          },
+          update: {
+            name: "SafaOdisha Admin",
+            role: "ADMIN",
+            isActive: true,
+          },
+        })
+      : (() => undefined)();
+
+  if (user) {
+    await createAdminSession({
+      userId: user.id,
+      email: user.email ?? email,
+      role: user.role === "MODERATOR" ? "MODERATOR" : "ADMIN",
+    });
+
+    return user;
+  }
+
+  const state = await readMockState();
+  const mockUser =
     state.users.find((entry) => entry.email === email && (entry.role === "ADMIN" || entry.role === "MODERATOR")) ??
     null;
 
-  if (!user) {
+  if (!mockUser) {
     throw new AppError("Admin user record is missing from the seeded data.", 500);
   }
 
   await createAdminSession({
-    userId: user.id,
-    email: user.email ?? email,
-    role: user.role === "ADMIN" ? "ADMIN" : "MODERATOR",
+    userId: mockUser.id,
+    email: mockUser.email ?? email,
+    role: mockUser.role === "ADMIN" ? "ADMIN" : "MODERATOR",
   });
 
-  return user;
+  return mockUser;
 }
 
 export async function getAdminOverview() {

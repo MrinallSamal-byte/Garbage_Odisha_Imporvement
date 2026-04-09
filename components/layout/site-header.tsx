@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { MapPinned, ShieldCheck, Sparkles } from "lucide-react";
+import { ShieldCheck, Sparkles } from "lucide-react";
 
+import { SafaOdishaLogo } from "@/components/branding/safa-odisha-logo";
 import { cn } from "@/lib/utils/cn";
 
 const links = [
@@ -14,19 +15,8 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-white/60 bg-white/75 backdrop-blur-xl">
       <div className="container flex items-center justify-between gap-4 py-4">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-ink text-white shadow-civic">
-            <MapPinned className="h-5 w-5" />
-            <span className="absolute inset-0 rounded-2xl border border-white/15" />
-          </div>
-          <div>
-            <div className="font-mono text-xs uppercase tracking-[0.28em] text-civic-700">
-              Odisha Civic Tech
-            </div>
-            <div className="text-lg font-extrabold tracking-tight text-ink">
-              SafaOdisha
-            </div>
-          </div>
+        <Link href="/" className="transition hover:opacity-95">
+          <SafaOdishaLogo />
         </Link>
 
         <nav className="hidden items-center gap-2 md:flex">

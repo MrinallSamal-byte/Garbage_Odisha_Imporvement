@@ -4,6 +4,8 @@ import { fail, ok } from "@/lib/utils/http";
 import { getReportRepository } from "@/server/repositories/repository-factory";
 import { serializeReportDetail } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 type Params = {
   params: Promise<{ id: string }>;
 };

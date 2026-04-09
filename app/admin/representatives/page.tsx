@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { getAdminSession } from "@/lib/auth/admin-session";
 import { getRepresentativeRepository } from "@/server/repositories/repository-factory";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminRepresentativesPage() {
   const session = await getAdminSession();
 

@@ -5,6 +5,8 @@ import { reportFiltersSchema } from "@/lib/validation/schemas";
 import { getDashboardData } from "@/server/services/report-query-service";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const query = Object.fromEntries(request.nextUrl.searchParams.entries());
