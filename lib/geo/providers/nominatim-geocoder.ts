@@ -1,5 +1,3 @@
-import "server-only";
-
 import { AppError } from "@/lib/utils/errors";
 import type { ReverseGeocodeResult } from "@/types/domain";
 

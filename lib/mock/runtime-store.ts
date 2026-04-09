@@ -1,5 +1,3 @@
-import "server-only";
-
 import path from "path";
 
 import { buildMockSeedState } from "@/lib/mock/seed-data";

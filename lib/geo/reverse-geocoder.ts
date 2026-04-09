@@ -1,5 +1,3 @@
-import "server-only";
-
 import { env } from "@/lib/env";
 import { MockReverseGeocoder } from "@/lib/geo/providers/mock-geocoder";
 import { NominatimReverseGeocoder } from "@/lib/geo/providers/nominatim-geocoder";

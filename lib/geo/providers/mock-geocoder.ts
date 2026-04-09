@@ -1,5 +1,3 @@
-import "server-only";
-
 import localityPoints from "@/data/mock/locality-points.json";
 import { haversineDistanceMeters } from "@/lib/utils/geo";
 import type { ReverseGeocodeResult } from "@/types/domain";

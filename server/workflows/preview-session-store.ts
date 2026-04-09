@@ -1,5 +1,3 @@
-import "server-only";
-
 import { readFile, unlink, writeFile } from "fs/promises";
 import path from "path";
 

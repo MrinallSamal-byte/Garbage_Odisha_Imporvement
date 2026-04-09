@@ -1,5 +1,3 @@
-import "server-only";
-
 import { readFileSync } from "fs";
 import path from "path";
 import type { Feature, FeatureCollection, MultiPolygon, Point } from "geojson";

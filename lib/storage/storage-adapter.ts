@@ -1,5 +1,3 @@
-import "server-only";
-
 import { env } from "@/lib/env";
 import { LocalStorageAdapter } from "@/lib/storage/providers/local-storage";
 import { S3StorageAdapter } from "@/lib/storage/providers/s3-storage";

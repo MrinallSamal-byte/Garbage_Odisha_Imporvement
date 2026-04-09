@@ -1,5 +1,3 @@
-import "server-only";
-
 import { env } from "@/lib/env";
 import { reportAiSummarySchema } from "@/lib/ai/schema";
 import { AppError } from "@/lib/utils/errors";

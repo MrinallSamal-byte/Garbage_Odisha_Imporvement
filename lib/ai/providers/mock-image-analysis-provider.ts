@@ -1,5 +1,3 @@
-import "server-only";
-
 import { env } from "@/lib/env";
 import { normalizeForMatch } from "@/lib/utils/text";
 import type { ReportAiSummary } from "@/types/domain";

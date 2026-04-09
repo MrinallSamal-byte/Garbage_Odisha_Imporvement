@@ -1,5 +1,3 @@
-import "server-only";
-
 import exifr from "exifr";
 import { fileTypeFromBuffer } from "file-type";
 import sharp from "sharp";
