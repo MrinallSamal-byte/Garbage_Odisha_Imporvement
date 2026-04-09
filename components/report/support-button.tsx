@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { readApiResponse } from "@/lib/utils/api-client";
 
 function getSessionKey() {
   if (typeof window === "undefined") {
@@ -38,7 +39,7 @@ export function SupportButton({ reportId, initialCount }: { reportId: string; in
         },
         body: JSON.stringify({ sessionKey }),
       });
-      const payload = await response.json();
+      const payload = await readApiResponse<{ count: number; error?: string }>(response);
       if (response.ok) {
         setCount(payload.count);
       }

@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Manrope } from "next/font/google";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { MobilePrimaryCta } from "@/components/layout/mobile-primary-cta";
 import { env } from "@/lib/env";
 
 import "./globals.css";
@@ -57,11 +58,12 @@ export default function RootLayout({
       <body
         className={`${manrope.variable} ${ibmPlexMono.variable} bg-transparent font-sans antialiased`}
       >
-        <div className="relative flex min-h-screen flex-col">
+        <div className="relative flex min-h-screen flex-col pb-24 md:pb-0">
           <div className="absolute inset-0 -z-10 bg-civic-grid bg-grid-sm opacity-50" />
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
+          <MobilePrimaryCta />
         </div>
       </body>
     </html>

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { readApiResponse } from "@/lib/utils/api-client";
 
 export function RepresentativeForm() {
   const router = useRouter();
@@ -32,7 +33,7 @@ export function RepresentativeForm() {
           active: true,
         }),
       });
-      const payload = await response.json();
+      const payload = await readApiResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not create representative.");
       }

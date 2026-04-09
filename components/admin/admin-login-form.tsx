@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { readApiResponse } from "@/lib/utils/api-client";
 
 export function AdminLoginForm() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export function AdminLoginForm() {
         },
         body: JSON.stringify({ email, password }),
       });
-      const payload = await response.json();
+      const payload = await readApiResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? "Login failed.");
       }

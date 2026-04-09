@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { readApiResponse } from "@/lib/utils/api-client";
 
 export function CommentComposer({ reportId }: { reportId: string }) {
   const router = useRouter();
@@ -30,7 +31,7 @@ export function CommentComposer({ reportId }: { reportId: string }) {
         }),
       });
 
-      const payload = await response.json();
+      const payload = await readApiResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not post comment.");
       }

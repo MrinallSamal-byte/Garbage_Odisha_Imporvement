@@ -1,4 +1,5 @@
 import { env } from "@/lib/env";
+import { OpenRouterImageAnalysisProvider } from "@/lib/ai/providers/openrouter-image-analysis-provider";
 import { reportAiSummarySchema } from "@/lib/ai/schema";
 import { MockImageAnalysisProvider } from "@/lib/ai/providers/mock-image-analysis-provider";
 import { OpenAiImageAnalysisProvider } from "@/lib/ai/providers/openai-image-analysis-provider";
@@ -37,7 +38,11 @@ function mapPayloadToDomain(payload: ReturnType<typeof reportAiSummarySchema.par
 function getProvider() {
   if (!provider) {
     provider =
-      env.AI_PROVIDER === "openai" ? new OpenAiImageAnalysisProvider() : new MockImageAnalysisProvider();
+      env.AI_PROVIDER === "openai"
+        ? new OpenAiImageAnalysisProvider()
+        : env.AI_PROVIDER === "openrouter"
+          ? new OpenRouterImageAnalysisProvider()
+          : new MockImageAnalysisProvider();
   }
 
   return provider;

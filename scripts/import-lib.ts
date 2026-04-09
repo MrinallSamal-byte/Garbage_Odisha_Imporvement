@@ -193,14 +193,14 @@ export async function seedRepresentativeRecords() {
       name: "Biju Janata Dal",
       abbreviation: "BJD",
       levelScope: "STATE",
-      isStateRulingPartyDefault: true,
+      isStateRulingPartyDefault: false,
       isCentralRulingPartyDefault: false,
     },
     {
       name: "Bharatiya Janata Party",
       abbreviation: "BJP",
       levelScope: "BOTH",
-      isStateRulingPartyDefault: false,
+      isStateRulingPartyDefault: true,
       isCentralRulingPartyDefault: true,
     },
     {

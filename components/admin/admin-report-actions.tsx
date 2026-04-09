@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { readApiResponse } from "@/lib/utils/api-client";
 import type { ModerationStatus, ReportStatus } from "@/types/domain";
 
 const reportStatuses: ReportStatus[] = [
@@ -46,7 +47,7 @@ export function AdminReportActions({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status, note }),
       });
-      const payload = await response.json();
+      const payload = await readApiResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not update status.");
       }
@@ -67,7 +68,7 @@ export function AdminReportActions({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ moderationStatus, reason }),
       });
-      const payload = await response.json();
+      const payload = await readApiResponse<{ error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not update moderation.");
       }

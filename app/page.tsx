@@ -6,6 +6,7 @@ import { ReportCard } from "@/components/report/report-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getDashboardData } from "@/server/services/report-query-service";
+import { emptyDashboardStats } from "@/server/services/report-query-service";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +30,20 @@ const steps = [
 ];
 
 export default async function HomePage() {
-  const { stats, reports } = await getDashboardData();
+  let stats = emptyDashboardStats;
+  let reports: Awaited<ReturnType<typeof getDashboardData>>["reports"] = [];
+  let feedWarning: string | null = null;
+
+  try {
+    const data = await getDashboardData();
+    stats = data.stats;
+    reports = data.reports;
+  } catch (error) {
+    console.error("Homepage dashboard feed unavailable", error);
+    feedWarning =
+      "The public report feed is temporarily unavailable. The app shell is still live, but the database-backed dashboard data could not be loaded.";
+  }
+
   const featuredReports = reports.slice(0, 2).map(serializeReportListItem);
 
   return (
@@ -66,6 +80,11 @@ export default async function HomePage() {
               <StatCard label="Unresolved" value={String(stats.unresolvedReports)} />
               <StatCard label="Average trust" value={`${stats.averageTrustScore}`} />
             </div>
+            {feedWarning ? (
+              <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm leading-6 text-amber-900">
+                {feedWarning}
+              </div>
+            ) : null}
           </div>
 
           <Card className="relative overflow-hidden bg-white/88 p-4 sm:p-5">
@@ -143,9 +162,16 @@ export default async function HomePage() {
           </Link>
         </div>
         <div className="mt-10 grid gap-5">
-          {featuredReports.map((report) => (
-            <ReportCard key={report.report.id} item={report} />
-          ))}
+          {featuredReports.length > 0 ? (
+            featuredReports.map((report) => <ReportCard key={report.report.id} item={report} />)
+          ) : (
+            <Card className="border-dashed">
+              <p className="text-sm leading-6 text-slateblue-700">
+                No public reports are visible yet. Once the database is seeded and reports are submitted,
+                the live dashboard feed will appear here.
+              </p>
+            </Card>
+          )}
         </div>
       </section>
     </main>

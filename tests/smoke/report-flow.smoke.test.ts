@@ -42,7 +42,7 @@ describe("mock mode report flow smoke", () => {
     const analyzePayload = await analyzeResponse.json();
     expect(analyzePayload.previewToken).toBeTruthy();
     expect(analyzePayload.assemblyConstituency.name).toBe("Jatni");
-    expect(analyzePayload.mla.name).toBe("Ritwick Sahoo");
+    expect(analyzePayload.mla.name).toBe("Bibhuti Bhusan Balabantaray");
 
     const submitResponse = await submitPost(
       new NextRequest("http://localhost:3000/api/reports/submit", {

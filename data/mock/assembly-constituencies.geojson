@@ -74,8 +74,8 @@
       "type": "Feature",
       "properties": {
         "id": "33330000-0000-4000-8000-444444444444",
-        "code": "AC-PURI-SADAR",
-        "name": "Puri Sadar",
+        "code": "AC-PURI",
+        "name": "Puri",
         "district_name": "Puri"
       },
       "geometry": {

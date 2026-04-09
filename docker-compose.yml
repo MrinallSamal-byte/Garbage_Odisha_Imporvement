@@ -29,6 +29,7 @@ services:
       LOCAL_UPLOAD_DIR: public/uploads
       GEOCODER_PROVIDER: mock
       AI_PROVIDER: mock
+      OPENROUTER_MODEL: google/gemma-4-31b-it:free
       ADMIN_EMAIL: admin@safaodisha.local
       ADMIN_PASSWORD: ChangeThis123!
       ADMIN_SESSION_SECRET: replace-with-a-32-character-secret

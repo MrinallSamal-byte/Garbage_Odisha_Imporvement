@@ -22,7 +22,7 @@ describe("spatial lookup service", () => {
     expect(result.district?.name).toBe("Khordha");
     expect(result.assemblyConstituency?.name).toBe("Bhubaneswar Central");
     expect(result.parliamentConstituency?.name).toBe("Bhubaneswar");
-    expect(result.mla?.name).toBe("Ananya Das");
-    expect(result.mp?.name).toBe("Ayan Pradhan");
+    expect(result.mla?.name).toBe("Ananta Narayan Jena");
+    expect(result.mp?.name).toBe("Aparajita Sarangi");
   });
 });

@@ -23,6 +23,7 @@ import { TrustScoreBadge } from "@/components/report/trust-score-badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { readApiResponse } from "@/lib/utils/api-client";
 import { AppError } from "@/lib/utils/errors";
 import type { AnalyzeReportResult, SourceType } from "@/types/domain";
 
@@ -218,7 +219,7 @@ export function LiveReportExperience() {
         body: formData,
       });
 
-      const payload = await response.json();
+      const payload = await readApiResponse<AnalyzeReportResult & { error?: string }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? "Analysis failed.");
       }
@@ -253,7 +254,14 @@ export function LiveReportExperience() {
         }),
       });
 
-      const payload = await response.json();
+      const payload = await readApiResponse<{
+        error?: string;
+        report: {
+          report: {
+            id: string;
+          };
+        };
+      }>(response);
       if (!response.ok) {
         throw new Error(payload.error ?? "Could not submit report.");
       }

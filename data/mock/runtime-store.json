@@ -349,15 +349,15 @@
     },
     {
       "id": "33330000-0000-4000-8000-444444444444",
-      "code": "AC-PURI-SADAR",
-      "name": "Puri Sadar",
+      "code": "AC-PURI",
+      "name": "Puri",
       "districtName": "Puri",
       "geometry": {
         "type": "Feature",
         "properties": {
           "id": "33330000-0000-4000-8000-444444444444",
-          "code": "AC-PURI-SADAR",
-          "name": "Puri Sadar",
+          "code": "AC-PURI",
+          "name": "Puri",
           "district_name": "Puri"
         },
         "geometry": {
@@ -419,11 +419,11 @@
               [
                 [
                   85.54,
-                  19.9
+                  20.1
                 ],
                 [
                   86.2,
-                  19.9
+                  20.1
                 ],
                 [
                   86.2,
@@ -435,7 +435,7 @@
                 ],
                 [
                   85.54,
-                  19.9
+                  20.1
                 ]
               ]
             ]
@@ -446,8 +446,7 @@
         "localityHints": [
           "Nayapalli",
           "Old Town",
-          "Jatni",
-          "Puri Town"
+          "Jatni"
         ]
       },
       "createdAt": "2026-04-09T12:00:00.000Z",
@@ -502,162 +501,224 @@
       },
       "createdAt": "2026-04-09T12:00:00.000Z",
       "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "44440000-0000-4000-8000-333333333333",
+      "code": "PC-PURI",
+      "name": "Puri",
+      "districtName": null,
+      "geometry": {
+        "type": "Feature",
+        "properties": {
+          "id": "44440000-0000-4000-8000-333333333333",
+          "code": "PC-PURI",
+          "name": "Puri"
+        },
+        "geometry": {
+          "type": "MultiPolygon",
+          "coordinates": [
+            [
+              [
+                [
+                  85.7,
+                  19.86
+                ],
+                [
+                  86.14,
+                  19.86
+                ],
+                [
+                  86.14,
+                  20.1
+                ],
+                [
+                  85.7,
+                  20.1
+                ],
+                [
+                  85.7,
+                  19.86
+                ]
+              ]
+            ]
+          ]
+        }
+      },
+      "metadataJson": {
+        "localityHints": [
+          "Puri Town"
+        ]
+      },
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
     }
   ],
   "representatives": [
     {
       "id": "55550000-0000-4000-8000-111111111111",
       "representativeType": "MLA",
-      "name": "Ananya Das",
+      "name": "Ananta Narayan Jena",
       "constituencyType": "ASSEMBLY",
       "assemblyConstituencyId": "33330000-0000-4000-8000-111111111111",
       "parliamentConstituencyId": null,
       "partyName": "Biju Janata Dal",
-      "isStateRulingParty": true,
+      "isStateRulingParty": false,
       "isCentralRulingParty": false,
-      "oppositionLabel": null,
-      "photoUrl": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80",
+      "oppositionLabel": "Opposition",
+      "photoUrl": null,
       "officialRoleTitle": "Member of Legislative Assembly",
-      "contactEmail": "ananya.das@safaodisha.local",
-      "contactPhone": "+91-9000001001",
-      "websiteUrl": "https://example.org/ananya-das",
-      "socialLinksJson": {
-        "x": "https://example.org/ananya-das/x"
-      },
+      "contactEmail": null,
+      "contactPhone": null,
+      "websiteUrl": null,
+      "socialLinksJson": {},
       "termStart": "2024-06-01T00:00:00.000Z",
       "termEnd": null,
       "active": true,
-      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "lastVerifiedAt": "2026-04-09T00:00:00.000Z",
       "createdAt": "2026-04-09T12:00:00.000Z",
       "updatedAt": "2026-04-09T12:00:00.000Z"
     },
     {
       "id": "55550000-0000-4000-8000-222222222222",
       "representativeType": "MLA",
-      "name": "Ritwick Sahoo",
+      "name": "Bibhuti Bhusan Balabantaray",
       "constituencyType": "ASSEMBLY",
       "assemblyConstituencyId": "33330000-0000-4000-8000-222222222222",
       "parliamentConstituencyId": null,
-      "partyName": "Bharatiya Janata Party",
+      "partyName": "Biju Janata Dal",
       "isStateRulingParty": false,
-      "isCentralRulingParty": true,
+      "isCentralRulingParty": false,
       "oppositionLabel": "Opposition",
-      "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=500&q=80",
+      "photoUrl": null,
       "officialRoleTitle": "Member of Legislative Assembly",
-      "contactEmail": "ritwick.sahoo@safaodisha.local",
-      "contactPhone": "+91-9000001002",
-      "websiteUrl": "https://example.org/ritwick-sahoo",
-      "socialLinksJson": {
-        "facebook": "https://example.org/ritwick-sahoo/facebook"
-      },
+      "contactEmail": null,
+      "contactPhone": null,
+      "websiteUrl": null,
+      "socialLinksJson": {},
       "termStart": "2024-06-01T00:00:00.000Z",
       "termEnd": null,
       "active": true,
-      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "lastVerifiedAt": "2026-04-09T00:00:00.000Z",
       "createdAt": "2026-04-09T12:00:00.000Z",
       "updatedAt": "2026-04-09T12:00:00.000Z"
     },
     {
       "id": "55550000-0000-4000-8000-333333333333",
       "representativeType": "MLA",
-      "name": "Madhabi Rout",
+      "name": "Prakash Chandra Sethi",
       "constituencyType": "ASSEMBLY",
       "assemblyConstituencyId": "33330000-0000-4000-8000-333333333333",
       "parliamentConstituencyId": null,
-      "partyName": "Indian National Congress",
-      "isStateRulingParty": false,
-      "isCentralRulingParty": false,
-      "oppositionLabel": "Opposition",
-      "photoUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=500&q=80",
+      "partyName": "Bharatiya Janata Party",
+      "isStateRulingParty": true,
+      "isCentralRulingParty": true,
+      "oppositionLabel": null,
+      "photoUrl": null,
       "officialRoleTitle": "Member of Legislative Assembly",
-      "contactEmail": "madhabi.rout@safaodisha.local",
-      "contactPhone": "+91-9000001003",
-      "websiteUrl": "https://example.org/madhabi-rout",
-      "socialLinksJson": {
-        "instagram": "https://example.org/madhabi-rout/instagram"
-      },
+      "contactEmail": null,
+      "contactPhone": null,
+      "websiteUrl": null,
+      "socialLinksJson": {},
       "termStart": "2024-06-01T00:00:00.000Z",
       "termEnd": null,
       "active": true,
-      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "lastVerifiedAt": "2026-04-09T00:00:00.000Z",
       "createdAt": "2026-04-09T12:00:00.000Z",
       "updatedAt": "2026-04-09T12:00:00.000Z"
     },
     {
       "id": "55550000-0000-4000-8000-444444444444",
       "representativeType": "MLA",
-      "name": "Subhranshu Pattnaik",
+      "name": "Sunil Kumar Mohanty",
       "constituencyType": "ASSEMBLY",
       "assemblyConstituencyId": "33330000-0000-4000-8000-444444444444",
       "parliamentConstituencyId": null,
       "partyName": "Biju Janata Dal",
-      "isStateRulingParty": true,
+      "isStateRulingParty": false,
       "isCentralRulingParty": false,
-      "oppositionLabel": null,
-      "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80",
+      "oppositionLabel": "Opposition",
+      "photoUrl": null,
       "officialRoleTitle": "Member of Legislative Assembly",
-      "contactEmail": "subhranshu.pattnaik@safaodisha.local",
-      "contactPhone": "+91-9000001004",
-      "websiteUrl": "https://example.org/subhranshu-pattnaik",
-      "socialLinksJson": {
-        "linkedin": "https://example.org/subhranshu-pattnaik/linkedin"
-      },
+      "contactEmail": null,
+      "contactPhone": null,
+      "websiteUrl": null,
+      "socialLinksJson": {},
       "termStart": "2024-06-01T00:00:00.000Z",
       "termEnd": null,
       "active": true,
-      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "lastVerifiedAt": "2026-04-09T00:00:00.000Z",
       "createdAt": "2026-04-09T12:00:00.000Z",
       "updatedAt": "2026-04-09T12:00:00.000Z"
     },
     {
       "id": "55550000-0000-4000-8000-555555555555",
       "representativeType": "MP",
-      "name": "Ayan Pradhan",
+      "name": "Aparajita Sarangi",
       "constituencyType": "PARLIAMENT",
       "assemblyConstituencyId": null,
       "parliamentConstituencyId": "44440000-0000-4000-8000-111111111111",
       "partyName": "Bharatiya Janata Party",
-      "isStateRulingParty": false,
+      "isStateRulingParty": true,
       "isCentralRulingParty": true,
       "oppositionLabel": null,
-      "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80",
-      "officialRoleTitle": "Member of Parliament",
-      "contactEmail": "ayan.pradhan@safaodisha.local",
-      "contactPhone": "+91-9000002001",
-      "websiteUrl": "https://example.org/ayan-pradhan",
-      "socialLinksJson": {
-        "x": "https://example.org/ayan-pradhan/x"
-      },
+      "photoUrl": null,
+      "officialRoleTitle": "Member of Parliament, Lok Sabha",
+      "contactEmail": null,
+      "contactPhone": null,
+      "websiteUrl": null,
+      "socialLinksJson": {},
       "termStart": "2024-06-15T00:00:00.000Z",
       "termEnd": null,
       "active": true,
-      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "lastVerifiedAt": "2026-04-09T00:00:00.000Z",
       "createdAt": "2026-04-09T12:00:00.000Z",
       "updatedAt": "2026-04-09T12:00:00.000Z"
     },
     {
       "id": "55550000-0000-4000-8000-666666666666",
       "representativeType": "MP",
-      "name": "Pallavi Mohanty",
+      "name": "Bhartruhari Mahtab",
       "constituencyType": "PARLIAMENT",
       "assemblyConstituencyId": null,
       "parliamentConstituencyId": "44440000-0000-4000-8000-222222222222",
-      "partyName": "Biju Janata Dal",
+      "partyName": "Bharatiya Janata Party",
       "isStateRulingParty": true,
-      "isCentralRulingParty": false,
+      "isCentralRulingParty": true,
       "oppositionLabel": null,
-      "photoUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=500&q=80",
-      "officialRoleTitle": "Member of Parliament",
-      "contactEmail": "pallavi.mohanty@safaodisha.local",
-      "contactPhone": "+91-9000002002",
-      "websiteUrl": "https://example.org/pallavi-mohanty",
-      "socialLinksJson": {
-        "facebook": "https://example.org/pallavi-mohanty/facebook"
-      },
+      "photoUrl": null,
+      "officialRoleTitle": "Member of Parliament, Lok Sabha",
+      "contactEmail": null,
+      "contactPhone": null,
+      "websiteUrl": null,
+      "socialLinksJson": {},
       "termStart": "2024-06-15T00:00:00.000Z",
       "termEnd": null,
       "active": true,
-      "lastVerifiedAt": "2026-04-01T00:00:00.000Z",
+      "lastVerifiedAt": "2026-04-09T00:00:00.000Z",
+      "createdAt": "2026-04-09T12:00:00.000Z",
+      "updatedAt": "2026-04-09T12:00:00.000Z"
+    },
+    {
+      "id": "55550000-0000-4000-8000-777777777777",
+      "representativeType": "MP",
+      "name": "Sambit Patra",
+      "constituencyType": "PARLIAMENT",
+      "assemblyConstituencyId": null,
+      "parliamentConstituencyId": "44440000-0000-4000-8000-333333333333",
+      "partyName": "Bharatiya Janata Party",
+      "isStateRulingParty": true,
+      "isCentralRulingParty": true,
+      "oppositionLabel": null,
+      "photoUrl": null,
+      "officialRoleTitle": "Member of Parliament, Lok Sabha",
+      "contactEmail": null,
+      "contactPhone": null,
+      "websiteUrl": null,
+      "socialLinksJson": {},
+      "termStart": "2024-06-15T00:00:00.000Z",
+      "termEnd": null,
+      "active": true,
+      "lastVerifiedAt": "2026-04-09T00:00:00.000Z",
       "createdAt": "2026-04-09T12:00:00.000Z",
       "updatedAt": "2026-04-09T12:00:00.000Z"
     }
@@ -670,7 +731,7 @@
       "description": "Overflowing garbage pile beside Nayapalli market road and pedestrian edge.",
       "category": "overflow",
       "severity": "HIGH",
-      "status": "IN_PROGRESS",
+      "status": "VERIFIED",
       "moderationStatus": "APPROVED",
       "trustScore": 88,
       "gpsAccuracyMeters": 8,
@@ -727,7 +788,7 @@
       "createdByUserId": null,
       "deviceFingerprintHash": "mock-session-1",
       "createdAt": "2026-04-09T08:10:00.000Z",
-      "updatedAt": "2026-04-09T16:34:42.631Z"
+      "updatedAt": "2026-04-09T10:30:00.000Z"
     },
     {
       "id": "66666666-6666-4666-8666-222222222222",
@@ -865,15 +926,6 @@
       "note": "Local team uploaded cleanup proof and marked as resolved.",
       "changedByUserId": "11111111-1111-4111-8111-111111111111",
       "createdAt": "2026-04-09T09:40:00.000Z"
-    },
-    {
-      "id": "41c95cd2-b598-4cc2-9e11-e614d6116603",
-      "reportId": "66666666-6666-4666-8666-111111111111",
-      "oldStatus": "VERIFIED",
-      "newStatus": "IN_PROGRESS",
-      "note": "Forwarded to the local sanitation team.",
-      "changedByUserId": "11111111-1111-4111-8111-111111111111",
-      "createdAt": "2026-04-09T16:34:42.631Z"
     }
   ],
   "reportComments": [
@@ -941,18 +993,6 @@
         "status": "RESOLVED"
       },
       "createdAt": "2026-04-09T09:40:00.000Z"
-    },
-    {
-      "id": "09c22d96-1a1f-49ee-a5ae-622ce75ef033",
-      "reportId": "66666666-6666-4666-8666-111111111111",
-      "moderatorId": "11111111-1111-4111-8111-111111111111",
-      "actionType": "STATUS_CHANGE",
-      "reason": "Forwarded to the local sanitation team.",
-      "metadataJson": {
-        "previousStatus": "VERIFIED",
-        "status": "IN_PROGRESS"
-      },
-      "createdAt": "2026-04-09T16:34:42.631Z"
     }
   ],
   "odishaBoundary": [
