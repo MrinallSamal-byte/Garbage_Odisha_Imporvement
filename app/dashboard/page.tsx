@@ -137,6 +137,13 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <option value="IN_PROGRESS">In progress</option>
               <option value="RESOLVED">Resolved</option>
             </Select>
+            <Select name="severity" defaultValue={filters.severity ?? ""}>
+              <option value="">All severities</option>
+              <option value="CRITICAL">🔴 Critical</option>
+              <option value="HIGH">🟠 High</option>
+              <option value="MEDIUM">🟡 Medium</option>
+              <option value="LOW">🟢 Low</option>
+            </Select>
             <Select name="category" defaultValue={filters.category ?? ""}>
               <option value="">All categories</option>
               <option value="garbage">Garbage</option>

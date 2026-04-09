@@ -12,3 +12,7 @@ README.md
 *.md
 vitest.config.ts
 eslint.config.mjs
+.github
+.vscode
+*.test.ts
+*.spec.ts

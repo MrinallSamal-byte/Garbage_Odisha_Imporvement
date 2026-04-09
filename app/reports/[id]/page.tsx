@@ -69,22 +69,27 @@ export default async function ReportDetailPage({ params }: PageProps) {
           </Card>
           <Card className="space-y-4">
             <h2 className="text-xl font-bold text-ink">Status timeline</h2>
-            <div className="space-y-4">
-              {report.timeline.map((entry) => (
-                <div key={entry.id} className="rounded-[1.25rem] border border-slateblue-100 bg-slateblue-50/60 px-4 py-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="font-semibold text-ink">{entry.newStatus.replaceAll("_", " ")}</div>
-                    <div className="text-xs uppercase tracking-[0.18em] text-slateblue-500">
-                      {new Date(entry.createdAt).toLocaleString("en-IN", {
-                        dateStyle: "medium",
-                        timeStyle: "short",
-                      })}
+            <ol className="relative border-l border-slateblue-100 pl-6 space-y-0">
+              {report.timeline.map((entry, index) => (
+                <li key={entry.id} className="relative pb-6 last:pb-0">
+                  <span className="absolute -left-[1.1rem] flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-slateblue-100 text-xs font-bold text-slateblue-600 ring-2 ring-slateblue-50">
+                    {index + 1}
+                  </span>
+                  <div className="rounded-[1.25rem] border border-slateblue-100 bg-white px-4 py-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-semibold text-ink">{entry.newStatus.replaceAll("_", " ")}</span>
+                      <span className="text-xs uppercase tracking-[0.16em] text-slateblue-400">
+                        {new Date(entry.createdAt).toLocaleString("en-IN", {
+                          dateStyle: "medium",
+                          timeStyle: "short",
+                        })}
+                      </span>
                     </div>
+                    <p className="mt-1.5 text-sm leading-6 text-slateblue-700">{entry.note}</p>
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-slateblue-700">{entry.note}</p>
-                </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </Card>
         </div>
 
