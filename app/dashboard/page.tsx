@@ -38,11 +38,13 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   let items: ReturnType<typeof serializeReportListItem>[] = [];
   let feedWarning: string | null = null;
   let totalPages = 1;
+  let allDistricts: string[] = [];
 
   try {
     const data = await getDashboardData(filters);
     stats = data.stats;
     items = data.reports.map(serializeReportListItem);
+    allDistricts = data.allDistricts;
     totalPages = Math.ceil(data.total / 20);
   } catch (error) {
     console.error("Dashboard feed unavailable", error);
@@ -50,7 +52,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       "The dashboard is live, but the database-backed report feed could not be loaded right now.";
   }
 
-  const districts = Array.from(new Set(items.map((item) => item.district?.name).filter(Boolean))) as string[];
+  // allDistricts is computed from ALL matching reports before pagination,
+  // so the dropdown stays consistent regardless of which page the user is on.
+  const districts = allDistricts;
   const nextSearchParams = new URLSearchParams();
 
   for (const [key, value] of Object.entries(rawSearchParams)) {
@@ -153,6 +157,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <option value="mixed_waste">Mixed waste</option>
               <option value="litter">Litter</option>
             </Select>
+            <Select name="sourceType" defaultValue={filters.sourceType ?? ""}>
+              <option value="">All sources</option>
+              <option value="LIVE_CAPTURE">📷 Live capture</option>
+              <option value="GALLERY_UPLOAD">🖼 Gallery upload</option>
+              <option value="MANUAL_PIN_ONLY">📍 Manual pin</option>
+            </Select>
             <button
               type="submit"
               className="inline-flex h-11 w-full items-center justify-center rounded-full bg-ink px-5 text-sm font-semibold text-white"
@@ -196,15 +206,15 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           ) : (
             <EmptyDashboardState />
           )}
-        </div>
 
-        {totalPages > 1 && (
-          <PaginationControls
-            currentPage={filters.page}
-            totalPages={totalPages}
-            searchParams={rawSearchParams}
-          />
-        )}
+          {totalPages > 1 && (
+            <PaginationControls
+              currentPage={filters.page}
+              totalPages={totalPages}
+              searchParams={rawSearchParams}
+            />
+          )}
+        </div>
       </div>
     </main>
   );

@@ -484,23 +484,24 @@ export class PrismaReportRepository implements ReportRepository {
     sessionKey: string,
     userId?: string | null,
   ): Promise<{ count: number; created: boolean }> {
-    let created = true;
-
-    try {
-      await prisma.$executeRawUnsafe(
-        `
-          INSERT INTO "report_votes" ("id", "report_id", "user_id", "session_key", "created_at")
-          VALUES ($1, $2, $3, $4, NOW())
-          ON CONFLICT ("report_id", "session_key") WHERE "session_key" IS NOT NULL DO NOTHING
-        `,
-        randomUUID(),
-        reportId,
-        userId ?? null,
-        sessionKey,
-      );
-    } catch {
-      created = false;
-    }
+    // $executeRawUnsafe returns the number of rows affected.
+    // ON CONFLICT DO NOTHING inserts 0 rows on a duplicate (no exception thrown),
+    // so we check the return value instead of relying on a catch block.
+    // The partial-index WHERE clause has been removed because Prisma creates a
+    // standard unique constraint (not a partial index), and sessionKey is always
+    // non-null when coming from the validated API schema.
+    const affectedRows = await prisma.$executeRawUnsafe(
+      `
+        INSERT INTO "report_votes" ("id", "report_id", "user_id", "session_key", "created_at")
+        VALUES ($1, $2, $3, $4, NOW())
+        ON CONFLICT ("report_id", "session_key") DO NOTHING
+      `,
+      randomUUID(),
+      reportId,
+      userId ?? null,
+      sessionKey,
+    );
+    const created = affectedRows > 0;
 
     const count = await prisma.reportVote.count({
       where: { reportId },

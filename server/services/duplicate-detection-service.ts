@@ -28,7 +28,7 @@ export async function detectDuplicateReports(input: {
     suspicious:
       candidates.sameImageMatches.length > 0 ||
       candidates.nearbyMatches.length > 0 ||
-      candidates.sessionMatches.length > 3,
+      candidates.sessionMatches.length > 2,
     sameImageMatches: candidates.sameImageMatches.map((item) => ({
       reportId: item.report.id,
       reportCode: item.report.reportCode,
