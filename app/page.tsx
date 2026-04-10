@@ -9,9 +9,9 @@ import { getDashboardData } from "@/server/services/report-query-service";
 import { emptyDashboardStats } from "@/server/services/report-query-service";
 import { serializeReportListItem } from "@/server/services/report-presentation-service";
 
-// ISR: serve cached HTML instantly; regenerate in the background every 60 s.
-// The try/catch in the component already handles a missing DB gracefully.
-export const revalidate = 60;
+// Render on demand so image builds do not depend on the database schema
+// being ready before the container entrypoint runs Prisma migrations.
+export const dynamic = "force-dynamic";
 
 const steps = [
   {

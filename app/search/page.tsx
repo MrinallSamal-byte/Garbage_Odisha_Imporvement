@@ -170,11 +170,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             <h2 className="font-bold text-ink">Search tips</h2>
             <ul className="space-y-2 text-sm text-slateblue-700">
               {[
-                "Type a locality name like "Nayapalli" or "Cuttack Sadar"",
-                "Search a district name like "Khordha" or "Puri"",
+                'Type a locality name like "Nayapalli" or "Cuttack Sadar"',
+                'Search a district name like "Khordha" or "Puri"',
                 "Look up an MLA or MP by name",
-                "Use an issue type like "drain", "overflow", or "roadside dump"",
-                "Paste a report code like "SOD-20260409-001"",
+                'Use an issue type like "drain", "overflow", or "roadside dump"',
+                'Paste a report code like "SOD-20260409-001"',
               ].map((tip) => (
                 <li key={tip} className="flex items-start gap-2">
                   <span className="mt-0.5 text-civic-400">→</span>
