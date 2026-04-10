@@ -11,7 +11,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: "standalone",
   compress: true,
-  serverExternalPackages: ["sharp", "prisma"],
+  serverExternalPackages: ["sharp"],
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 86400,
