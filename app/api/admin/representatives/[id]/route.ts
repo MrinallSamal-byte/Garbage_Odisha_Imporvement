@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import { requireAdminSession } from "@/lib/auth/admin-session";
 import { representativeUpsertSchema } from "@/lib/validation/schemas";
 import { fail, ok } from "@/lib/utils/http";
+import { assertSameOrigin } from "@/lib/utils/request";
 import { getRepresentativeRepository } from "@/server/repositories/repository-factory";
 
 type Params = {
@@ -11,6 +12,7 @@ type Params = {
 
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
+    assertSameOrigin(request);
     await requireAdminSession();
     const { id } = await params;
     const body = representativeUpsertSchema.parse(await request.json());
@@ -21,15 +23,23 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     }
 
     const now = new Date().toISOString();
+    const representativeType = body.representativeType;
+    const constituencyType = representativeType === "MLA" ? "ASSEMBLY" : "PARLIAMENT";
+    const assemblyConstituencyId =
+      representativeType === "MLA" ? body.assemblyConstituencyId ?? null : null;
+    const parliamentConstituencyId =
+      representativeType === "MP" ? body.parliamentConstituencyId ?? null : null;
+
     const representative = await getRepresentativeRepository().upsertRepresentative({
       ...existing,
-      representativeType: body.representativeType,
+      representativeType,
+      constituencyType,
       name: body.name,
       partyName: body.partyName,
       isStateRulingParty: body.isStateRulingParty,
       isCentralRulingParty: body.isCentralRulingParty,
-      assemblyConstituencyId: body.assemblyConstituencyId ?? null,
-      parliamentConstituencyId: body.parliamentConstituencyId ?? null,
+      assemblyConstituencyId,
+      parliamentConstituencyId,
       officialRoleTitle: body.officialRoleTitle ?? null,
       contactEmail: body.contactEmail ?? null,
       contactPhone: body.contactPhone ?? null,

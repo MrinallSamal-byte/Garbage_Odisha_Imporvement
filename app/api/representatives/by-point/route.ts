@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     const lookup = await lookupRepresentativesByPoint(parsed.lat, parsed.lng);
     return ok({
       insideOdisha: true,
-      ...lookup,
+      lookup,
     });
   } catch (error) {
     return fail(error);

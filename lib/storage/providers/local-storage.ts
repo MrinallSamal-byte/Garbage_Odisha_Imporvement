@@ -7,12 +7,33 @@ import { ensureDirectory } from "@/lib/utils/files";
 import type { SaveBufferInput, StorageAdapter } from "@/lib/storage/storage-adapter";
 
 export class LocalStorageAdapter implements StorageAdapter {
+  private readonly uploadRoot = path.resolve(process.cwd(), env.LOCAL_UPLOAD_DIR);
+  private readonly publicBasePath = this.resolvePublicBasePath();
+
+  private resolvePublicBasePath() {
+    const publicRoot = path.resolve(process.cwd(), "public");
+    const relativePublicPath = path.relative(publicRoot, this.uploadRoot);
+
+    if (
+      relativePublicPath.startsWith("..") ||
+      path.isAbsolute(relativePublicPath)
+    ) {
+      throw new Error("LOCAL_UPLOAD_DIR must be inside the public directory when using local storage.");
+    }
+
+    if (!relativePublicPath || relativePublicPath === ".") {
+      return "/";
+    }
+
+    return `/${relativePublicPath.split(path.sep).join("/")}`;
+  }
+
   private resolveDiskPath(storageKey: string) {
-    return path.join(process.cwd(), env.LOCAL_UPLOAD_DIR, storageKey);
+    return path.join(this.uploadRoot, storageKey);
   }
 
   getPublicUrl(storageKey: string) {
-    return `/uploads/${storageKey}`;
+    return path.posix.join(this.publicBasePath, storageKey.replaceAll("\\", "/"));
   }
 
   async saveBuffer(input: SaveBufferInput) {

@@ -280,6 +280,15 @@ export class MockReportRepository implements ReportRepository {
     };
   }
 
+  async hasVote(reportId: string, sessionKey: string, userId?: string | null) {
+    const { state } = await this.getReportOrThrow(reportId);
+    return state.reportVotes.some(
+      (vote) =>
+        vote.reportId === reportId &&
+        ((userId && vote.userId === userId) || (!userId && vote.sessionKey === sessionKey)),
+    );
+  }
+
   async updateStatus(reportId: string, status: ReportStatus, note: string, changedByUserId?: string | null) {
     const { state, report } = await this.getReportOrThrow(reportId);
     const previousStatus = report.status;

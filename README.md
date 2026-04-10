@@ -108,6 +108,8 @@ public/
 
 ## Local setup
 
+This project targets Node.js 20+, which matches the production Docker image and current dependency set.
+
 ### Option A: quick local run with mock mode
 
 1. Install dependencies:
@@ -255,7 +257,7 @@ Available providers:
 - `local`
 - `s3`
 
-Local mode stores files beneath `public/uploads`. The S3 adapter is included for production readiness.
+Local mode stores files beneath `public/uploads` by default. If you override `LOCAL_UPLOAD_DIR`, keep it inside the `public/` tree so uploaded media remains web-accessible. The S3 adapter is included for production readiness.
 
 ## Import scripts
 

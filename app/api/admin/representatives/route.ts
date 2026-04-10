@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 import { requireAdminSession } from "@/lib/auth/admin-session";
 import { representativeUpsertSchema } from "@/lib/validation/schemas";
 import { fail, ok } from "@/lib/utils/http";
+import { assertSameOrigin } from "@/lib/utils/request";
 import { getRepresentativeRepository } from "@/server/repositories/repository-factory";
 
 export const dynamic = "force-dynamic";
@@ -21,16 +22,24 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    assertSameOrigin(request);
     await requireAdminSession();
     const body = representativeUpsertSchema.parse(await request.json());
     const now = new Date().toISOString();
+    const representativeType = body.representativeType;
+    const constituencyType = representativeType === "MLA" ? "ASSEMBLY" : "PARLIAMENT";
+    const assemblyConstituencyId =
+      representativeType === "MLA" ? body.assemblyConstituencyId ?? null : null;
+    const parliamentConstituencyId =
+      representativeType === "MP" ? body.parliamentConstituencyId ?? null : null;
+
     const representative = await getRepresentativeRepository().upsertRepresentative({
       id: randomUUID(),
-      representativeType: body.representativeType,
+      representativeType,
       name: body.name,
-      constituencyType: body.representativeType === "MLA" ? "ASSEMBLY" : "PARLIAMENT",
-      assemblyConstituencyId: body.assemblyConstituencyId ?? null,
-      parliamentConstituencyId: body.parliamentConstituencyId ?? null,
+      constituencyType,
+      assemblyConstituencyId,
+      parliamentConstituencyId,
       partyName: body.partyName,
       isStateRulingParty: body.isStateRulingParty,
       isCentralRulingParty: body.isCentralRulingParty,

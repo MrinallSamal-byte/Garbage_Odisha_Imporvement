@@ -484,29 +484,42 @@ export class PrismaReportRepository implements ReportRepository {
     sessionKey: string,
     userId?: string | null,
   ): Promise<{ count: number; created: boolean }> {
-    let created = true;
+    const result = await prisma.reportVote.createMany({
+      data: [
+        {
+          id: randomUUID(),
+          reportId,
+          userId: userId ?? null,
+          sessionKey,
+          createdAt: new Date(),
+        },
+      ],
+      skipDuplicates: true,
+    });
 
-    try {
-      await prisma.$executeRawUnsafe(
-        `
-          INSERT INTO "report_votes" ("id", "report_id", "user_id", "session_key", "created_at")
-          VALUES ($1, $2, $3, $4, NOW())
-          ON CONFLICT ("report_id", "session_key") WHERE "session_key" IS NOT NULL DO NOTHING
-        `,
-        randomUUID(),
-        reportId,
-        userId ?? null,
-        sessionKey,
-      );
-    } catch {
-      created = false;
-    }
+    const created = result.count > 0;
 
     const count = await prisma.reportVote.count({
       where: { reportId },
     });
 
     return { count, created };
+  }
+
+  async hasVote(reportId: string, sessionKey: string, userId?: string | null): Promise<boolean> {
+    const count = await prisma.reportVote.count({
+      where: userId
+        ? {
+            reportId,
+            userId,
+          }
+        : {
+            reportId,
+            sessionKey,
+          },
+    });
+
+    return count > 0;
   }
 
   async updateStatus(

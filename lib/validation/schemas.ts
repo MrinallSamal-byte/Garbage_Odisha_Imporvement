@@ -20,7 +20,7 @@ export const analyzeRequestSchema = z.object({
 
 export const submitReportSchema = z.object({
   previewToken: z.string().min(24),
-  description: z.string().trim().min(5).max(2500),
+  description: z.string().trim().max(2500).default(""),
   anonymousFlag: z.coerce.boolean().default(true),
 });
 

@@ -38,19 +38,24 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   let items: ReturnType<typeof serializeReportListItem>[] = [];
   let feedWarning: string | null = null;
   let totalPages = 1;
+  let districtOptions: string[] = [];
 
   try {
     const data = await getDashboardData(filters);
     stats = data.stats;
     items = data.reports.map(serializeReportListItem);
     totalPages = Math.ceil(data.total / 20);
+    districtOptions = data.availableDistricts;
   } catch (error) {
     console.error("Dashboard feed unavailable", error);
     feedWarning =
       "The dashboard is live, but the database-backed report feed could not be loaded right now.";
   }
 
-  const districts = Array.from(new Set(items.map((item) => item.district?.name).filter(Boolean))) as string[];
+  if (districtOptions.length === 0) {
+    districtOptions = Array.from(new Set(items.map((item) => item.district?.name).filter(Boolean))) as string[];
+  }
+
   const nextSearchParams = new URLSearchParams();
 
   for (const [key, value] of Object.entries(rawSearchParams)) {
@@ -122,7 +127,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <input type="hidden" name="view" value={view} />
             <Select name="district" defaultValue={filters.district ?? ""}>
               <option value="">All districts</option>
-              {districts.map((district) => (
+              {districtOptions.map((district) => (
                 <option key={district} value={district}>
                   {district}
                 </option>

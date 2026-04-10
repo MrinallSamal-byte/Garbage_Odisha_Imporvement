@@ -74,7 +74,8 @@ export function ReopenButton({ reportId }: { reportId: string }) {
         <div className="space-y-3 pt-1">
           <p className="text-xs leading-5 text-amber-600">
             If the issue has not actually been fixed, describe what you still see. This will
-            change the status back to Reported and notify moderators.
+            change the status back to Reported and notify moderators. Use the same browser session
+            that supported this complaint.
           </p>
           <Textarea
             placeholder="e.g. The garbage is still here — no cleanup has happened since the report was marked resolved."

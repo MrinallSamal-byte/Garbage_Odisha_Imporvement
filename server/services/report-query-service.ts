@@ -15,6 +15,9 @@ export async function getDashboardData(filters?: ReportFilters) {
     reportRepository.getDashboardStats(),
     reportRepository.listPublicReports(filters),
   ]);
+  const availableDistricts = Array.from(
+    new Set(allReports.map((item) => item.district?.name).filter(Boolean)),
+  ) as string[];
 
   const page = filters?.page ?? 1;
   const pageSize = filters?.pageSize ?? 20;
@@ -22,7 +25,7 @@ export async function getDashboardData(filters?: ReportFilters) {
   const start = (page - 1) * pageSize;
   const reports = allReports.slice(start, start + pageSize);
 
-  return { stats, reports, total };
+  return { stats, reports, total, availableDistricts };
 }
 
 export async function getRepresentativeProfileData(representativeId: string) {

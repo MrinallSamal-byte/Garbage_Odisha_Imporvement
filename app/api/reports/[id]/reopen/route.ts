@@ -31,6 +31,14 @@ export async function POST(request: NextRequest, { params }: Params) {
       throw new AppError("Only resolved reports can be reopened.", 400);
     }
 
+    const hasSupportedReport = await repo.hasVote(id, body.sessionKey, null);
+    if (!hasSupportedReport) {
+      throw new AppError(
+        "Support this complaint from the same browser session before reopening it.",
+        403,
+      );
+    }
+
     const updated = await repo.updateStatus(
       id,
       "REPORTED",

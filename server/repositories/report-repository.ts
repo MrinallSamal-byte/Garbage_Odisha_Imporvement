@@ -23,6 +23,7 @@ export interface ReportRepository {
   createReportFromPreview(input: CreateReportFromPreviewInput): Promise<ReportDetail>;
   addComment(reportId: string, displayName: string, body: string, userId?: string | null): Promise<ReportComment>;
   addVote(reportId: string, sessionKey: string, userId?: string | null): Promise<{ count: number; created: boolean }>;
+  hasVote(reportId: string, sessionKey: string, userId?: string | null): Promise<boolean>;
   updateStatus(
     reportId: string,
     status: ReportStatus,
