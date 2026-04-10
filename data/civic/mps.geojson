@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "87a24cab-932d-461b-bcf4-7066d8d78001",
+        "name": "Aparajita Sarangi",
+        "party": "Bharatiya Janata Party",
+        "party_acronym": "BJP",
+        "party_logo_url": "/party-logos/bjp.svg",
+        "constituency_name": "Bhubaneswar",
+        "contact_email": "mp.bhubaneswar@example.in",
+        "contact_phone": "+91-94370-00100",
+        "profile_url": "https://sansad.in/ls/members"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.796, 20.316],
+              [85.873, 20.316],
+              [85.873, 20.225],
+              [85.796, 20.225],
+              [85.796, 20.316]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

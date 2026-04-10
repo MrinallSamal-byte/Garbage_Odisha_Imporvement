@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Aam Aadmi Party",
+    "short_name": "AAP",
+    "logo_url": "/party-logos/aap.svg",
+    "color_hex": "#60A5FA"
+  },
+  {
+    "name": "Bharatiya Janata Party",
+    "short_name": "BJP",
+    "logo_url": "/party-logos/bjp.svg",
+    "color_hex": "#EA580C"
+  },
+  {
+    "name": "Indian National Congress",
+    "short_name": "INC",
+    "logo_url": "/party-logos/inc.svg",
+    "color_hex": "#1D4ED8"
+  },
+  {
+    "name": "Independent",
+    "short_name": "IND",
+    "logo_url": "/party-logos/unknown.svg",
+    "color_hex": "#475569"
+  }
+]

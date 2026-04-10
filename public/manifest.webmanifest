@@ -1,0 +1,24 @@
+{
+  "name": "Delhi Garbage Watch",
+  "short_name": "DGW",
+  "description": "Mobile-first civic garbage reporting for Delhi with GIS-based civic authority, ward, MLA, and MP mapping.",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "background_color": "#f7fbfa",
+  "theme_color": "#16324f",
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/icon.svg?v=2",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg?v=2",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

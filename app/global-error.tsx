@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { SafaOdishaLogo } from "@/components/branding/safa-odisha-logo";
+import { SiteMark } from "@/components/branding/site-mark";
 import { Button } from "@/components/ui/button";
 
 export default function GlobalError({
@@ -16,11 +16,11 @@ export default function GlobalError({
     <html lang="en-IN">
       <body className="bg-[#f5fbfa] text-ink">
         <main className="container flex min-h-screen flex-col items-center justify-center gap-8 py-16 text-center">
-          <SafaOdishaLogo iconOnly />
+          <SiteMark iconOnly />
           <div className="space-y-4">
             <div className="section-label">Temporary service issue</div>
             <h1 className="text-4xl font-extrabold tracking-tight text-ink md:text-5xl">
-              SafaOdisha could not load this page.
+              Delhi Garbage Watch could not load this page.
             </h1>
             <p className="mx-auto max-w-2xl text-sm leading-7 text-slateblue-700 md:text-base">
               A server-side dependency may be unavailable right now. The app can usually recover after
@@ -34,7 +34,7 @@ export default function GlobalError({
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button onClick={reset}>Try again</Button>
             <Link
-              href="/report"
+              href="/report/new"
               className="inline-flex h-11 items-center justify-center rounded-full border border-civic-200 bg-white px-5 text-sm font-semibold text-civic-700"
             >
               Open report flow

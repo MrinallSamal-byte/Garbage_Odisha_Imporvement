@@ -20,8 +20,8 @@ const steps = [
     icon: Camera,
   },
   {
-    title: "Resolve exact Odisha location",
-    description: "Use browser GPS, reverse geocoding, and Odisha constituency mapping to identify the correct area.",
+    title: "Resolve the exact Delhi location",
+    description: "Use browser GPS, reverse geocoding, and Delhi jurisdiction mapping to identify the correct civic area.",
     icon: MapPinned,
   },
   {
@@ -76,27 +76,27 @@ export default async function HomePage() {
       <section className="relative overflow-hidden border-b border-white/50 bg-hero-wash">
         <div className="container grid gap-10 py-16 md:grid-cols-[1.05fr_0.95fr] md:py-24">
           <div className="space-y-7">
-            <div className="section-label animate-fade-up">Civic cleanliness reporting for Odisha</div>
+            <div className="section-label animate-fade-up">Delhi civic garbage reporting</div>
             <div className="space-y-5">
               <h1 className="max-w-3xl text-5xl font-black tracking-tight text-ink md:text-6xl">
-                GPS-first garbage reporting with constituency-aware accountability.
+                Photograph roadside garbage and route it to the right Delhi authority.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-slateblue-700">
-                SafaOdisha helps citizens capture live evidence of public cleanliness issues, map
-                them to the correct Odisha constituencies, and publish them with representative
-                context and transparent moderation.
+                Delhi Garbage Watch is being upgraded into a city-wide civic reporting platform
+                where every complaint is tied to location, mapped to the correct authority, ward or
+                equivalent, MLA, and MP, and surfaced for public follow-up.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/report">
+              <Link href="/report/new">
                 <Button size="lg">
-                  Report now
+                  Report garbage
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/dashboard">
+              <Link href="/stats">
                 <Button variant="secondary" size="lg">
-                  Explore dashboard
+                  View stats
                 </Button>
               </Link>
             </div>
@@ -119,7 +119,7 @@ export default async function HomePage() {
             <div className="relative space-y-4">
               <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.22em] text-civic-700">
                 <Sparkles className="h-4 w-4" />
-                Odisha public dashboard snapshot
+                Delhi public snapshot
               </div>
               <LazyReportsMap
                 height={340}
@@ -137,7 +137,7 @@ export default async function HomePage() {
                     GIS routing
                   </div>
                   <p className="mt-2 text-sm leading-6 text-civic-800">
-                    Reports are mapped to assembly and parliamentary constituencies using spatial lookup.
+                    Reports are being migrated to Delhi civic authority, ward, assembly, and parliamentary routing.
                   </p>
                 </Card>
                 <Card className="border border-saffron-100 bg-saffron-50/80 p-4">
@@ -163,18 +163,18 @@ export default async function HomePage() {
             </h2>
             <p className="max-w-xl text-base leading-8 text-slateblue-700">
               The report flow is built for a real field submission: live camera, exact device GPS,
-              constituency mapping, representative preview, and final confirmation before publishing.
+              jurisdiction mapping, representative preview, and final confirmation before publishing.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/report">
+              <Link href="/report/new">
                 <Button size="lg">
                   Start live report
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/dashboard">
+              <Link href="/">
                 <Button variant="secondary" size="lg">
-                  See current reports
+                  Stay on the public feed
                 </Button>
               </Link>
             </div>
@@ -223,18 +223,18 @@ export default async function HomePage() {
       {/* Leaderboard + digest teaser */}
       <section className="border-y border-white/60 bg-white/60 backdrop-blur">
         <div className="container grid gap-5 py-12 md:grid-cols-2">
-          <Link href="/leaderboard" className="group flex items-start gap-4 rounded-[1.75rem] border border-amber-100 bg-amber-50/80 p-6 transition hover:bg-amber-50">
+          <Link href="/stats" className="group flex items-start gap-4 rounded-[1.75rem] border border-amber-100 bg-amber-50/80 p-6 transition hover:bg-amber-50">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
               <Trophy className="h-6 w-6" />
             </div>
             <div>
-              <div className="font-bold text-ink">District accountability leaderboard</div>
+              <div className="font-bold text-ink">Delhi hotspot stats</div>
               <p className="mt-1 text-sm leading-6 text-slateblue-700">
-                See which Odisha districts are resolving complaints fastest — and which have the most
-                unresolved HIGH and CRITICAL reports.
+                See which areas are carrying the highest active complaint load and which severity
+                bands need the fastest attention.
               </p>
               <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-amber-700">
-                View leaderboard <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                View stats <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </span>
             </div>
           </Link>
@@ -250,8 +250,8 @@ export default async function HomePage() {
             <div>
               <div className="font-bold text-ink">RSS digest — top unresolved reports</div>
               <p className="mt-1 text-sm leading-6 text-slateblue-700">
-                Subscribe via any RSS reader to receive the top HIGH and CRITICAL unresolved complaints
-                across Odisha. Useful for journalists, RTI activists, and local monitoring groups.
+                Subscribe via any RSS reader to receive the highest-priority unresolved complaints
+                from the public feed while the Delhi-wide reporting layer is rolled out.
               </p>
               <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-civic-700">
                 Open RSS feed <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
@@ -265,10 +265,10 @@ export default async function HomePage() {
         <div className="flex items-center justify-between gap-6">
           <div>
             <div className="section-label">Recent reports</div>
-            <h2 className="mt-4 text-3xl font-black tracking-tight text-ink">Public issues already visible on the dashboard.</h2>
+            <h2 className="mt-4 text-3xl font-black tracking-tight text-ink">Public issues already visible in the feed.</h2>
           </div>
-          <Link href="/dashboard" className="text-sm font-semibold text-civic-700 underline decoration-civic-300 underline-offset-4">
-            Open full dashboard
+          <Link href="/report/new" className="text-sm font-semibold text-civic-700 underline decoration-civic-300 underline-offset-4">
+            Create a report
           </Link>
         </div>
         <div className="mt-10 grid gap-5">

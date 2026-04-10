@@ -1,0 +1,97 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "6a2cbdaf-4af4-4f28-9ee7-ec8e4e85a001",
+        "number": 30,
+        "name": "Nayapalli West",
+        "zone": "Central"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.804, 20.307],
+              [85.821, 20.307],
+              [85.821, 20.296],
+              [85.804, 20.296],
+              [85.804, 20.307]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "6a2cbdaf-4af4-4f28-9ee7-ec8e4e85a002",
+        "number": 31,
+        "name": "Nayapalli Market",
+        "zone": "Central"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.821, 20.307],
+              [85.834, 20.307],
+              [85.834, 20.292],
+              [85.821, 20.292],
+              [85.821, 20.307]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "6a2cbdaf-4af4-4f28-9ee7-ec8e4e85a003",
+        "number": 32,
+        "name": "Old Town",
+        "zone": "South"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.824, 20.249],
+              [85.843, 20.249],
+              [85.843, 20.231],
+              [85.824, 20.231],
+              [85.824, 20.249]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "6a2cbdaf-4af4-4f28-9ee7-ec8e4e85a004",
+        "number": 33,
+        "name": "Rasulgarh",
+        "zone": "East"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.848, 20.287],
+              [85.868, 20.287],
+              [85.868, 20.268],
+              [85.848, 20.268],
+              [85.848, 20.287]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

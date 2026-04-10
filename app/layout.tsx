@@ -4,6 +4,7 @@ import { IBM_Plex_Mono, Manrope } from "next/font/google";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MobilePrimaryCta } from "@/components/layout/mobile-primary-cta";
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { env } from "@/lib/env";
 
 import "./globals.css";
@@ -30,25 +31,31 @@ function getMetadataBase() {
 export const metadata: Metadata = {
   metadataBase: getMetadataBase(),
   title: {
-    default: "SafaOdisha",
-    template: "%s | SafaOdisha",
+    default: "Delhi Garbage Watch",
+    template: "%s | Delhi Garbage Watch",
   },
   description:
-    "Odisha's civic cleanliness reporting platform with GPS-based constituency mapping, representative lookup, and public accountability workflows.",
-  applicationName: "SafaOdisha",
+    "Delhi-wide civic garbage reporting with GPS capture, public map/list views, and GIS-based civic authority, ward, MLA, and MP mapping.",
+  applicationName: "Delhi Garbage Watch",
+  manifest: "/manifest.webmanifest",
   keywords: [
-    "Odisha civic reporting",
-    "garbage complaint Odisha",
-    "MLA lookup Odisha",
-    "MP lookup Odisha",
-    "public cleanliness dashboard",
+    "Delhi civic reporting",
+    "garbage complaint Delhi",
+    "Delhi ward map",
+    "MLA lookup Delhi",
+    "MP lookup Delhi",
   ],
   openGraph: {
-    title: "SafaOdisha",
+    title: "Delhi Garbage Watch",
     description:
-      "Capture live civic cleanliness issues in Odisha, geolocate them, and route public accountability to the correct representatives.",
-    siteName: "SafaOdisha",
+      "Photograph roadside garbage in Delhi, map it to the correct civic authority and elected representatives, and track public cleanup progress.",
+    siteName: "Delhi Garbage Watch",
     type: "website",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Delhi Garbage Watch",
   },
   icons: {
     icon: [
@@ -60,7 +67,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#102F47",
+  themeColor: "#16324f",
 };
 
 export default function RootLayout({
@@ -73,6 +80,7 @@ export default function RootLayout({
       <body
         className={`${manrope.variable} ${ibmPlexMono.variable} bg-transparent font-sans antialiased`}
       >
+        <ServiceWorkerRegister />
         <div className="relative flex min-h-screen flex-col pb-24 md:pb-0">
           <div className="absolute inset-0 -z-10 bg-civic-grid bg-grid-sm opacity-50" />
           <SiteHeader />

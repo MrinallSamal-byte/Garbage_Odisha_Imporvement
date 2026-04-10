@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <rect width="120" height="120" rx="28" fill="#EA580C"/>
+  <path d="M60 24C74 38 81 51 81 64C81 79 71 88 60 96C49 88 39 79 39 64C39 51 46 38 60 24Z" fill="#FFF7ED"/>
+  <path d="M60 42V86" stroke="#EA580C" stroke-width="7"/>
+  <text x="60" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#FFF7ED">BJP</text>
+</svg>

@@ -4,6 +4,12 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   APP_MODE: z.enum(["mock", "real"]).default("mock"),
   DATABASE_URL: z.string().optional(),
+  PGHOST: z.string().optional(),
+  PGPORT: z.string().optional(),
+  PGUSER: z.string().optional(),
+  PGPASSWORD: z.string().optional(),
+  PGDATABASE: z.string().optional(),
+  PGSSLMODE: z.string().default("require"),
   NEXT_PUBLIC_APP_URL: z.string().optional(),
   STORAGE_PROVIDER: z.enum(["local", "s3"]).default("local"),
   LOCAL_UPLOAD_DIR: z.string().default("public/uploads"),
@@ -28,6 +34,9 @@ const envSchema = z.object({
   GPS_ACCURACY_BLOCK_THRESHOLD: z.coerce.number().default(150),
   RATE_LIMIT_ANALYZE_PER_HOUR: z.coerce.number().default(25),
   RATE_LIMIT_SUBMIT_PER_HOUR: z.coerce.number().default(15),
+  NEXT_PUBLIC_COMMUNITY_LINK: z.string().url().default("https://t.me/garbagewatchdelhi"),
+  NEXT_PUBLIC_COMPLAINT_WHATSAPP: z.string().default("https://wa.me/919999999999"),
+  NEXT_PUBLIC_MAPBOX_TOKEN: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

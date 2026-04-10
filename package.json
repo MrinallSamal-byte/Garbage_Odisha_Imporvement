@@ -20,6 +20,10 @@
     "db:seed": "tsx prisma/seed.ts",
     "seed:mock": "tsx scripts/seed-mock.ts",
     "seed:representatives": "tsx scripts/seed-representatives.ts",
+    "db:health": "tsx -e \"import { healthCheckDb } from './lib/db/health'; healthCheckDb().then((result) => { console.log(JSON.stringify(result, null, 2)); process.exit(result.ok ? 0 : 1); });\"",
+    "import:delhi:boundaries": "tsx scripts/import-delhi-boundaries.ts",
+    "import:delhi:parties": "tsx scripts/import-delhi-parties.ts",
+    "import:delhi:leaders": "tsx scripts/import-delhi-leaders.ts",
     "import:odisha-boundary": "tsx scripts/import-odisha-boundary.ts",
     "import:assembly": "tsx scripts/import-assembly.ts",
     "import:parliament": "tsx scripts/import-parliament.ts"
@@ -28,6 +32,8 @@
     "@aws-sdk/client-s3": "^3.1028.0",
     "@hookform/resolvers": "^3.10.0",
     "@prisma/client": "^6.6.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-slot": "^1.2.4",
     "@turf/turf": "^7.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -45,8 +51,10 @@
     "react-hook-form": "^7.56.4",
     "react-leaflet": "^5.0.0",
     "server-only": "^0.0.1",
+    "supercluster": "^8.0.1",
     "tailwind-merge": "^3.3.1",
-    "zod": "^3.24.2"
+    "zod": "^3.24.2",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

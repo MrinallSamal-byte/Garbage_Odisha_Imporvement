@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Camera, LayoutDashboard } from "lucide-react";
+import { BarChart3, Camera } from "lucide-react";
 
 export function MobilePrimaryCta() {
   const pathname = usePathname();
@@ -11,7 +11,8 @@ export function MobilePrimaryCta() {
     !pathname ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/api") ||
-    pathname === "/report"
+    pathname === "/report" ||
+    pathname === "/report/new"
   ) {
     return null;
   }
@@ -21,18 +22,18 @@ export function MobilePrimaryCta() {
       <div className="pointer-events-auto rounded-[1.75rem] border border-white/80 bg-white/90 p-3 shadow-[0_-12px_30px_rgba(15,49,71,0.12)] backdrop-blur-xl">
         <div className="grid grid-cols-[1.45fr_0.8fr] gap-3">
           <Link
-            href="/report"
+            href="/report/new"
             className="inline-flex h-14 items-center justify-center rounded-full bg-[#d62828] px-5 text-base font-semibold text-white shadow-[0_14px_30px_rgba(214,40,40,0.28)] transition active:scale-[0.99]"
           >
             <Camera className="mr-2 h-4 w-4" />
-            Report now
+            Report Garbage
           </Link>
           <Link
-            href="/dashboard"
+            href="/stats"
             className="inline-flex h-14 items-center justify-center rounded-full border border-slateblue-200 bg-white text-sm font-semibold text-slateblue-700 transition active:scale-[0.99]"
           >
-            <LayoutDashboard className="mr-2 h-4 w-4" />
-            Dashboard
+            <BarChart3 className="mr-2 h-4 w-4" />
+            Stats
           </Link>
         </div>
       </div>

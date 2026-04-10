@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { SafaOdishaLogo } from "@/components/branding/safa-odisha-logo";
+import { SiteMark } from "@/components/branding/site-mark";
 import { Button } from "@/components/ui/button";
 
 export default function RouteError({
@@ -14,7 +14,7 @@ export default function RouteError({
 }) {
   return (
     <main className="container flex min-h-[70vh] flex-col items-center justify-center gap-7 py-16 text-center">
-      <SafaOdishaLogo iconOnly />
+      <SiteMark iconOnly />
       <div className="space-y-4">
         <div className="section-label">Something broke</div>
         <h1 className="text-4xl font-extrabold tracking-tight text-ink">

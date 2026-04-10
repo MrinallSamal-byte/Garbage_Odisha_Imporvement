@@ -1,0 +1,61 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "7c39d9a2-aeb4-4812-b302-f1ae5b90d001",
+        "name": "Ananta Narayan Jena",
+        "party": "Biju Janata Dal",
+        "party_acronym": "BJD",
+        "party_logo_url": "/party-logos/bjd.svg",
+        "constituency_name": "Bhubaneswar Central",
+        "contact_email": "mla.central@example.in",
+        "contact_phone": "+91-94370-00030",
+        "profile_url": "https://odishaassembly.nic.in/"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.801, 20.311],
+              [85.845, 20.311],
+              [85.845, 20.228],
+              [85.801, 20.228],
+              [85.801, 20.311]
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "7c39d9a2-aeb4-4812-b302-f1ae5b90d002",
+        "name": "Prakash Chandra Sethi",
+        "party": "Bharatiya Janata Party",
+        "party_acronym": "BJP",
+        "party_logo_url": "/party-logos/bjp.svg",
+        "constituency_name": "Bhubaneswar North",
+        "contact_email": "mla.north@example.in",
+        "contact_phone": "+91-94370-00031",
+        "profile_url": "https://odishaassembly.nic.in/"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [85.845, 20.291],
+              [85.871, 20.291],
+              [85.871, 20.265],
+              [85.845, 20.265],
+              [85.845, 20.291]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

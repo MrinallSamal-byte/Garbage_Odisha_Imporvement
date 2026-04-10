@@ -1,11 +1,12 @@
 import Link from "next/link";
 
-import { SafaOdishaLogo } from "@/components/branding/safa-odisha-logo";
+import { SiteMark } from "@/components/branding/site-mark";
 
 const footerLinks = [
-  { href: "/report", label: "Report a cleanliness issue" },
-  { href: "/dashboard", label: "Browse public dashboard" },
-  { href: "/leaderboard", label: "District accountability leaderboard" },
+  { href: "/report/new", label: "Report a garbage issue" },
+  { href: "/", label: "Browse the public map" },
+  { href: "/stats", label: "Delhi analytics" },
+  { href: "/about", label: "How it works" },
   { href: "/admin", label: "Admin workspace" },
 ];
 
@@ -14,17 +15,17 @@ export function SiteFooter() {
     <footer className="border-t border-white/60 bg-white/80 backdrop-blur">
       <div className="container grid gap-8 py-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div className="space-y-4">
-          <SafaOdishaLogo
+          <SiteMark
             className="items-start"
-            eyebrow="Odisha accountability platform"
-            tagline="GPS-first cleanliness reporting with GIS-based routing."
+            eyebrow="Delhi accountability platform"
+            tagline="Mobile-first garbage reporting with GIS-based routing."
           />
           <h2 className="max-w-md text-2xl font-extrabold tracking-tight text-ink">
             Built for public cleanliness reporting with GPS, GIS, and accountable routing.
           </h2>
           <p className="max-w-lg text-sm leading-6 text-slateblue-700">
-            Citizens can capture live evidence, map it to the correct Odisha constituencies, and
-            surface unresolved civic issues on a public dashboard.
+            Citizens can capture roadside garbage, map it to the right Delhi authority and elected
+            representatives, and track public complaints on a shared dashboard.
           </p>
         </div>
 
@@ -63,8 +64,8 @@ export function SiteFooter() {
             Notes
           </h3>
           <div className="mt-4 space-y-3 text-sm leading-6 text-slateblue-700">
-            <p>Exact representative lookup comes from GIS point-in-polygon mapping, not image-only AI.</p>
-            <p>Mock mode is provided for local development where PostGIS is not yet available.</p>
+            <p>Jurisdiction lookup is designed to run in DigitalOcean PostgreSQL through PostGIS.</p>
+            <p>The current cluster still needs PostGIS enabled before Delhi GIS imports can go live.</p>
           </div>
         </div>
       </div>
