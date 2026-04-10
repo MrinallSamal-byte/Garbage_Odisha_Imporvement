@@ -12,7 +12,7 @@ const footerLinks = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/60 bg-white/80 backdrop-blur">
-      <div className="container grid gap-8 py-10 md:grid-cols-[1.2fr_1fr_1fr]">
+      <div className="container grid gap-8 py-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]">
         <div className="space-y-4">
           <SafaOdishaLogo
             className="items-start"
@@ -38,6 +38,23 @@ export function SiteFooter() {
                 {item.label}
               </Link>
             ))}
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-civic-700">
+            Developer
+          </h3>
+          <div className="mt-4 flex flex-col gap-3 text-sm text-slateblue-700">
+            <a href="/api/digest" target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">
+              RSS digest feed
+            </a>
+            <a href="/api/health" target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">
+              Health check
+            </a>
+            <a href="/api/leaderboard" target="_blank" rel="noopener noreferrer" className="transition hover:text-ink">
+              Leaderboard JSON API
+            </a>
           </div>
         </div>
 

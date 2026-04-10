@@ -100,10 +100,11 @@ export default async function HomePage() {
                 </Button>
               </Link>
             </div>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-4">
               <StatCard label="Reports logged" value={String(stats.totalReports)} />
               <StatCard label="Unresolved" value={String(stats.unresolvedReports)} />
-              <StatCard label="Average trust" value={`${stats.averageTrustScore}`} />
+              <StatCard label="Resolved" value={String(stats.resolvedReports)} />
+              <StatCard label="Avg trust score" value={stats.averageTrustScore > 0 ? `${stats.averageTrustScore}/100` : "—"} />
             </div>
             {feedWarning ? (
               <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm leading-6 text-amber-900">
@@ -216,6 +217,47 @@ export default async function HomePage() {
               <p className="text-sm leading-6 text-slateblue-700">{step.description}</p>
             </Card>
           ))}
+        </div>
+      </section>
+
+      {/* Leaderboard + digest teaser */}
+      <section className="border-y border-white/60 bg-white/60 backdrop-blur">
+        <div className="container grid gap-5 py-12 md:grid-cols-2">
+          <Link href="/leaderboard" className="group flex items-start gap-4 rounded-[1.75rem] border border-amber-100 bg-amber-50/80 p-6 transition hover:bg-amber-50">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
+              <Trophy className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="font-bold text-ink">District accountability leaderboard</div>
+              <p className="mt-1 text-sm leading-6 text-slateblue-700">
+                See which Odisha districts are resolving complaints fastest — and which have the most
+                unresolved HIGH and CRITICAL reports.
+              </p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-amber-700">
+                View leaderboard <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </span>
+            </div>
+          </Link>
+          <a
+            href="/api/digest"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-start gap-4 rounded-[1.75rem] border border-civic-100 bg-civic-50/80 p-6 transition hover:bg-civic-50"
+          >
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-civic-100 text-civic-600">
+              <Rss className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="font-bold text-ink">RSS digest — top unresolved reports</div>
+              <p className="mt-1 text-sm leading-6 text-slateblue-700">
+                Subscribe via any RSS reader to receive the top HIGH and CRITICAL unresolved complaints
+                across Odisha. Useful for journalists, RTI activists, and local monitoring groups.
+              </p>
+              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-civic-700">
+                Open RSS feed <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </span>
+            </div>
+          </a>
         </div>
       </section>
 

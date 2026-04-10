@@ -149,15 +149,32 @@ export default async function ReportDetailPage({ params }: PageProps) {
           </Card>
 
           <Card className="space-y-4">
-            <h2 className="text-xl font-bold text-ink">Public comments</h2>
+            <h2 className="text-xl font-bold text-ink">Public comments ({report.commentItems.length})</h2>
             <CommentComposer reportId={report.report.id} />
             <div className="space-y-3">
-              {report.commentItems.map((comment) => (
-                <div key={comment.id} className="rounded-[1.25rem] border border-slateblue-100 bg-slateblue-50/60 px-4 py-4">
-                  <div className="font-semibold text-ink">{comment.displayName}</div>
-                  <div className="mt-2 text-sm leading-6 text-slateblue-700">{comment.body}</div>
-                </div>
-              ))}
+              {report.commentItems.length === 0 ? (
+                <p className="text-sm text-slateblue-500">No comments yet. Be the first to add context or an area update.</p>
+              ) : (
+                report.commentItems.map((comment) => (
+                  <div key={comment.id} className="rounded-[1.25rem] border border-slateblue-100 bg-slateblue-50/60 px-4 py-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="font-semibold text-ink">{comment.displayName}</div>
+                      <time
+                        dateTime={comment.createdAt}
+                        className="text-xs text-slateblue-400"
+                        title={new Date(comment.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })}
+                      >
+                        {new Date(comment.createdAt).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </time>
+                    </div>
+                    <div className="mt-2 text-sm leading-6 text-slateblue-700">{comment.body}</div>
+                  </div>
+                ))
+              )}
             </div>
           </Card>
 

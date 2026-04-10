@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShieldCheck, Sparkles } from "lucide-react";
+import { Search, ShieldCheck } from "lucide-react";
 
 import { SafaOdishaLogo } from "@/components/branding/safa-odisha-logo";
 import { cn } from "@/lib/utils/cn";
@@ -20,7 +20,7 @@ export function SiteHeader() {
           <SafaOdishaLogo />
         </Link>
 
-        <nav className="hidden items-center gap-2 md:flex">
+        <nav className="hidden items-center gap-1 md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -33,11 +33,21 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <Badge icon={<ShieldCheck className="h-4 w-4" />}>
-            GPS-first lookup
-          </Badge>
-          <Badge icon={<Sparkles className="h-4 w-4" />}>AI-assisted review</Badge>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/search"
+            className="inline-flex h-9 items-center gap-2 rounded-full border border-slateblue-100 bg-white px-3 text-sm text-slateblue-500 shadow-sm transition hover:border-civic-200 hover:text-ink"
+            aria-label="Search reports and representatives"
+          >
+            <Search className="h-4 w-4" />
+            <span className="hidden lg:inline">Search</span>
+          </Link>
+          <div className="hidden items-center gap-1 lg:flex">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-civic-100 bg-civic-50 px-3 py-1 text-xs font-medium text-civic-700">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              GPS-first
+            </span>
+          </div>
         </div>
       </div>
 
@@ -47,29 +57,21 @@ export function SiteHeader() {
             key={link.href}
             href={link.href}
             className={cn(
-              "rounded-full border border-slateblue-100 bg-white px-4 py-2 text-sm font-medium text-slateblue-700",
+              "whitespace-nowrap rounded-full border border-slateblue-100 bg-white px-4 py-2 text-sm font-medium text-slateblue-700",
               link.href === "/report" && "border-saffron-200 bg-saffron-50 text-saffron-700",
             )}
           >
             {link.label}
           </Link>
         ))}
+        <Link
+          href="/search"
+          className="flex shrink-0 items-center gap-1.5 rounded-full border border-slateblue-100 bg-white px-4 py-2 text-sm font-medium text-slateblue-700"
+        >
+          <Search className="h-3.5 w-3.5" />
+          Search
+        </Link>
       </nav>
     </header>
-  );
-}
-
-function Badge({
-  children,
-  icon,
-}: {
-  children: React.ReactNode;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="inline-flex items-center gap-2 rounded-full border border-civic-100 bg-civic-50 px-3 py-1 text-sm font-medium text-civic-700">
-      {icon}
-      <span>{children}</span>
-    </div>
   );
 }
