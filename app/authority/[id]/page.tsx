@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { DelhiReportCard } from "@/components/delhi/delhi-report-card";
+import { CivicReportCard } from "@/components/civic/civic-report-card";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getDelhiAuthorityById, getDelhiHomeData } from "@/lib/delhi/repository";
-import type { DelhiFilters } from "@/lib/delhi/types";
+import { getCivicRepository } from "@/lib/civic/repository";
 
 export const dynamic = "force-dynamic";
 
@@ -13,73 +12,69 @@ type AuthorityPageProps = {
   params: Promise<{ id: string }>;
 };
 
-function filtersForAuthority(authority: string): DelhiFilters {
-  return {
-    view: "list",
-    severity: "all",
-    status: "all",
-    wasteType: "all",
-    authority,
-    ward: "",
-    mla: "",
-    mp: "",
-    q: "",
-  };
-}
+const bmcAuthorityIds = new Set([
+  "bmc",
+  "bhubaneswar",
+  "bhubaneswar-municipal-corporation",
+  "bhubaneswar-municipal-corporation-bmc",
+]);
 
 export default async function AuthorityPage({ params }: AuthorityPageProps) {
   const { id } = await params;
+  const normalizedId = id.trim().toLowerCase();
 
-  try {
-    const authority = await getDelhiAuthorityById(id);
-
-    if (!authority) {
-      notFound();
-    }
-
-    const data = await getDelhiHomeData(filtersForAuthority(authority.id));
-
-    return (
-      <main className="container py-12">
-        <div className="max-w-3xl space-y-5">
-          <div className="section-label">Civic authority</div>
-          <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
-            {authority.name}
-          </h1>
-          <p className="text-base leading-8 text-slateblue-700">
-            {authority.description ?? "Bhubaneswar civic authority profile and complaint accountability page."}
-          </p>
-        </div>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <Stat label="Active reports" value={data.stats.activeReports} />
-          <Stat label="Total reports" value={data.stats.totalReports} />
-          <Stat label="Resolved" value={data.stats.resolvedReports} />
-        </div>
-
-        <section className="mt-8 space-y-4">
-          <h2 className="text-2xl font-black text-ink">Complaints under this authority</h2>
-          {data.reports.length ? (
-            <div className="grid gap-4">
-              {data.reports.map((report) => (
-                <DelhiReportCard key={report.id} report={report} />
-              ))}
-            </div>
-          ) : (
-            <EmptyState warnings={data.warnings} />
-          )}
-        </section>
-
-        <div className="mt-8">
-          <Link href="/">
-            <Button variant="secondary">Back to map</Button>
-          </Link>
-        </div>
-      </main>
-    );
-  } catch (error) {
-    return <SetupError message={error instanceof Error ? error.message : "Authority page unavailable."} />;
+  if (!bmcAuthorityIds.has(normalizedId)) {
+    notFound();
   }
+
+  const repository = getCivicRepository();
+  const [reports, wards] = await Promise.all([
+    repository.listReports(),
+    repository.listWards(),
+  ]);
+  const activeReports = reports.filter((item) => item.report.status !== "resolved");
+  const resolvedReports = reports.filter((item) => item.report.status === "resolved");
+  const zones = new Set(wards.map((ward) => ward.zone));
+
+  return (
+    <main className="container py-12">
+      <div className="max-w-3xl space-y-5">
+        <div className="section-label">Civic authority</div>
+        <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
+          Bhubaneswar Municipal Corporation
+        </h1>
+        <p className="text-base leading-8 text-slateblue-700">
+          BMC complaint accountability page for Bhubaneswar ward reports.
+        </p>
+      </div>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-4">
+        <Stat label="Active reports" value={activeReports.length} />
+        <Stat label="Total reports" value={reports.length} />
+        <Stat label="Resolved" value={resolvedReports.length} />
+        <Stat label="Mapped zones" value={zones.size} />
+      </div>
+
+      <section className="mt-8 space-y-4">
+        <h2 className="text-2xl font-black text-ink">Complaints under BMC</h2>
+        {reports.length ? (
+          <div className="grid gap-4">
+            {reports.map((item) => (
+              <CivicReportCard key={item.report.id} item={item} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState />
+        )}
+      </section>
+
+      <div className="mt-8">
+        <Link href="/">
+          <Button variant="secondary">Back to map</Button>
+        </Link>
+      </div>
+    </main>
+  );
 }
 
 function Stat({ label, value }: { label: string; value: number }) {
@@ -91,23 +86,11 @@ function Stat({ label, value }: { label: string; value: number }) {
   );
 }
 
-function EmptyState({ warnings }: { warnings: string[] }) {
+function EmptyState() {
   return (
     <Card className="border-dashed p-6 text-sm leading-6 text-slateblue-700">
       No complaints are linked to this authority yet.
-      {warnings.length ? <span className="block pt-2 text-amber-800">{warnings.join(" ")}</span> : null}
+      <span className="block pt-2">Submit a Bhubaneswar report to populate this page.</span>
     </Card>
-  );
-}
-
-function SetupError({ message }: { message: string }) {
-  return (
-    <main className="container py-12">
-      <Card className="max-w-3xl border-amber-200 bg-amber-50 p-6 text-sm leading-6 text-amber-950">
-        <div className="section-label">Authority unavailable</div>
-        <h1 className="mt-4 text-3xl font-black tracking-tight">Bhubaneswar authority data is not readable yet.</h1>
-        <p className="mt-3">{message}</p>
-      </Card>
-    </main>
   );
 }

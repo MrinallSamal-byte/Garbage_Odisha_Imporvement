@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Manrope } from "next/font/google";
 
+import { FirstVisitWelcome } from "@/components/civic/first-visit-welcome";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MobilePrimaryCta } from "@/components/layout/mobile-primary-cta";
@@ -88,6 +89,7 @@ export default function RootLayout({
           <SiteFooter />
           <MobilePrimaryCta />
         </div>
+        <FirstVisitWelcome />
       </body>
     </html>
   );
