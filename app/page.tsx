@@ -1,298 +1,225 @@
 import Link from "next/link";
-import { ArrowRight, Camera, MapPinned, ShieldCheck, Sparkles, Trophy, Rss } from "lucide-react";
+import { ArrowRight, BarChart3, Camera, MapPinned, MessageCircle, UsersRound } from "lucide-react";
 
-import { LazyReportsMap } from "@/components/maps/lazy-reports-map";
-import { ReportCard } from "@/components/report/report-card";
+import { DelhiFilterBar } from "@/components/delhi/delhi-filter-bar";
+import { LazyDelhiMap } from "@/components/delhi/lazy-delhi-map";
+import { DelhiReportCard } from "@/components/delhi/delhi-report-card";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getDashboardData } from "@/server/services/report-query-service";
-import { emptyDashboardStats } from "@/server/services/report-query-service";
-import { serializeReportListItem } from "@/server/services/report-presentation-service";
+import { parseDelhiFilters } from "@/lib/delhi/search-params";
+import { getDelhiHomeData } from "@/lib/delhi/repository";
+import { statusLabels } from "@/lib/delhi/constants";
+import { env } from "@/lib/env";
 
-// Render on demand so image builds do not depend on the database schema
-// being ready before the container entrypoint runs Prisma migrations.
 export const dynamic = "force-dynamic";
 
-const steps = [
-  {
-    title: "Capture live evidence",
-    description: "Open the phone camera, take a live photo, and keep the report tied to an actual moment in time.",
-    icon: Camera,
-  },
-  {
-    title: "Resolve the exact Delhi location",
-    description: "Use browser GPS, reverse geocoding, and Delhi jurisdiction mapping to identify the correct civic area.",
-    icon: MapPinned,
-  },
-  {
-    title: "Route accountability",
-    description: "Show the mapped MLA and MP, publish the complaint, and track moderation and status changes publicly.",
-    icon: ShieldCheck,
-  },
-];
+type HomePageProps = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
 
-const reportFlowChecklist = [
-  {
-    eyebrow: "Capture",
-    title: "Take a live photo first",
-    description: "Live camera capture is the default, trust-first source path for public complaints.",
-  },
-  {
-    eyebrow: "Locate",
-    title: "Use device GPS for exact routing",
-    description: "Latitude, longitude, timestamp, and GPS accuracy are captured from the device, not inferred from the image.",
-  },
-  {
-    eyebrow: "Review",
-    title: "See the mapped MLA and MP",
-    description: "The preview screen shows reverse-geocoded location, constituencies, representative cards, and AI consistency notes.",
-  },
-  {
-    eyebrow: "Submit",
-    title: "Publish to the public dashboard",
-    description: "Once confirmed, the report appears in the live dashboard and can move through moderation and status updates.",
-  },
-];
-
-export default async function HomePage() {
-  let stats = emptyDashboardStats;
-  let reports: Awaited<ReturnType<typeof getDashboardData>>["reports"] = [];
-  let feedWarning: string | null = null;
-
-  try {
-    const data = await getDashboardData();
-    stats = data.stats;
-    reports = data.reports;
-  } catch (error) {
-    console.error("Homepage dashboard feed unavailable", error);
-    feedWarning =
-      "The public report feed is temporarily unavailable. The app shell is still live, but the database-backed dashboard data could not be loaded.";
-  }
-
-  const featuredReports = reports.slice(0, 2).map(serializeReportListItem);
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const filters = parseDelhiFilters(await searchParams);
+  const data = await getDelhiHomeData(filters);
 
   return (
     <main className="pb-16">
-      <section className="relative overflow-hidden border-b border-white/50 bg-hero-wash">
-        <div className="container grid gap-10 py-16 md:grid-cols-[1.05fr_0.95fr] md:py-24">
-          <div className="space-y-7">
-            <div className="section-label animate-fade-up">Delhi civic garbage reporting</div>
-            <div className="space-y-5">
-              <h1 className="max-w-3xl text-5xl font-black tracking-tight text-ink md:text-6xl">
-                Photograph roadside garbage and route it to the right Delhi authority.
+      <section className="relative overflow-hidden border-b border-white/60 bg-hero-wash">
+        <div className="container grid gap-8 py-10 lg:grid-cols-[0.88fr_1.12fr] lg:py-14">
+          <div className="space-y-6">
+            <div className="section-label">Delhi Garbage Watch</div>
+            <div className="space-y-4">
+              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-ink md:text-6xl">
+                Crowdsource Delhi garbage reports with location-based accountability.
               </h1>
-              <p className="max-w-2xl text-lg leading-8 text-slateblue-700">
-                Delhi Garbage Watch is being upgraded into a city-wide civic reporting platform
-                where every complaint is tied to location, mapped to the correct authority, ward or
-                equivalent, MLA, and MP, and surfaced for public follow-up.
+              <p className="max-w-2xl text-base leading-8 text-slateblue-700 md:text-lg">
+                Photograph roadside dumps, map them to the right civic authority, ward or
+                equivalent, MLA, and MP, then let the community confirm and verify cleanup.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link href="/report/new">
                 <Button size="lg">
-                  Report garbage
+                  <Camera className="mr-2 h-4 w-4" />
+                  Report Garbage
+                </Button>
+              </Link>
+              <Link href="/about">
+                <Button variant="secondary" size="lg">
+                  How it works
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/stats">
-                <Button variant="secondary" size="lg">
-                  View stats
-                </Button>
-              </Link>
             </div>
-            <div className="grid gap-4 sm:grid-cols-4">
-              <StatCard label="Reports logged" value={String(stats.totalReports)} />
-              <StatCard label="Unresolved" value={String(stats.unresolvedReports)} />
-              <StatCard label="Resolved" value={String(stats.resolvedReports)} />
-              <StatCard label="Avg trust score" value={stats.averageTrustScore > 0 ? `${stats.averageTrustScore}/100` : "—"} />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <StatCard label="Active complaints" value={String(data.stats.activeReports)} href="/?status=unresolved" />
+              <StatCard label="Total reports" value={String(data.stats.totalReports)} />
+              <StatCard label="Resolved" value={String(data.stats.resolvedReports)} href="/?status=resolved" />
+              <StatCard label="Critical active" value={String(data.stats.criticalReports)} href="/?severity=critical" />
             </div>
-            {feedWarning ? (
-              <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50/90 px-4 py-3 text-sm leading-6 text-amber-900">
-                {feedWarning}
-              </div>
-            ) : null}
           </div>
 
-          <Card className="relative overflow-hidden bg-white/88 p-4 sm:p-5">
-            <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-saffron-200/35 blur-3xl" />
-            <div className="absolute -bottom-10 -left-8 h-40 w-40 rounded-full bg-civic-200/40 blur-3xl" />
+          <Card className="relative overflow-hidden p-4">
+            <div className="absolute -right-14 -top-16 h-44 w-44 rounded-full bg-civic-200/40 blur-3xl" />
+            <div className="absolute -bottom-20 left-8 h-52 w-52 rounded-full bg-saffron-200/40 blur-3xl" />
             <div className="relative space-y-4">
-              <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.22em] text-civic-700">
-                <Sparkles className="h-4 w-4" />
-                Delhi public snapshot
+              <div className="grid gap-3 sm:grid-cols-3">
+                <MiniMetric icon={MapPinned} label="Coverage" value="Whole Delhi" />
+                <MiniMetric icon={UsersRound} label="Anonymous" value="Default" />
+                <MiniMetric icon={MessageCircle} label="Complaint assist" value="WhatsApp ready" />
               </div>
-              <LazyReportsMap
-                height={340}
-                markers={reports.map((report) => ({
-                  id: report.report.id,
-                  latitude: report.report.latitude,
-                  longitude: report.report.longitude,
-                  title: report.report.reportCode,
-                  subtitle: report.report.addressLine,
-                }))}
-              />
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Card className="border border-civic-100 bg-civic-50/80 p-4">
-                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-civic-700">
-                    GIS routing
-                  </div>
-                  <p className="mt-2 text-sm leading-6 text-civic-800">
-                    Reports are being migrated to Delhi civic authority, ward, assembly, and parliamentary routing.
-                  </p>
-                </Card>
-                <Card className="border border-saffron-100 bg-saffron-50/80 p-4">
-                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-saffron-700">
-                    AI assistance
-                  </div>
-                  <p className="mt-2 text-sm leading-6 text-saffron-900">
-                    AI is used only for scene understanding, clue extraction, and moderation help.
-                  </p>
-                </Card>
-              </div>
+              {data.warnings.length ? (
+                <SetupWarning warnings={data.warnings} />
+              ) : (
+                <p className="rounded-2xl border border-civic-100 bg-civic-50 px-4 py-3 text-sm leading-6 text-civic-900">
+                  Live Delhi data is loaded from the DigitalOcean PostgreSQL reporting schema.
+                </p>
+              )}
             </div>
           </Card>
         </div>
       </section>
 
-      <section className="container py-16">
-        <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+      <section className="container -mt-5 space-y-6 pb-16">
+        <DelhiFilterBar filters={filters} authorities={data.authorities} />
+
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
           <div className="space-y-5">
-            <div className="section-label">Report from your phone</div>
-            <h2 className="text-3xl font-black tracking-tight text-ink md:text-4xl">
-              Capture, review, and submit with GPS-backed area verification.
-            </h2>
-            <p className="max-w-xl text-base leading-8 text-slateblue-700">
-              The report flow is built for a real field submission: live camera, exact device GPS,
-              jurisdiction mapping, representative preview, and final confirmation before publishing.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/report/new">
-                <Button size="lg">
-                  Start live report
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/">
-                <Button variant="secondary" size="lg">
-                  Stay on the public feed
-                </Button>
-              </Link>
-            </div>
+            {filters.view === "map" ? (
+              <Card className="overflow-hidden p-3">
+                <LazyDelhiMap reports={data.reports} height={560} />
+              </Card>
+            ) : (
+              <ReportList reports={data.reports} />
+            )}
           </div>
 
-          <Card className="grid gap-4 p-5 sm:grid-cols-2">
-            {reportFlowChecklist.map((item, index) => (
-              <div
-                key={item.title}
-                className="rounded-[1.5rem] border border-slateblue-100 bg-white/70 p-4"
-              >
-                <div className="text-xs font-semibold uppercase tracking-[0.2em] text-civic-700">
-                  {item.eyebrow} {String(index + 1).padStart(2, "0")}
+          <aside className="space-y-5">
+            <Card className="space-y-4 p-5">
+              <div className="flex items-center gap-3">
+                <BarChart3 className="h-5 w-5 text-civic-700" />
+                <h2 className="text-lg font-bold text-ink">Status breakdown</h2>
+              </div>
+              <div className="space-y-3">
+                {data.stats.statusDistribution.map((item) => (
+                  <Link
+                    key={item.status}
+                    href={`/?status=${item.status}`}
+                    className="flex items-center justify-between rounded-2xl border border-slateblue-100 bg-white px-4 py-3 text-sm transition hover:border-civic-200"
+                  >
+                    <span className="font-semibold text-slateblue-700">{statusLabels[item.status]}</span>
+                    <span className="font-black text-ink">{item.count}</span>
+                  </Link>
+                ))}
+              </div>
+            </Card>
+
+            <Card className="space-y-4 p-5">
+              <h2 className="text-lg font-bold text-ink">Top active wards</h2>
+              {data.stats.topWards.length ? (
+                <div className="space-y-3">
+                  {data.stats.topWards.map((ward) => (
+                    <Link
+                      key={ward.wardId}
+                      href={`/ward/${ward.wardId}`}
+                      className="flex items-center justify-between rounded-2xl border border-slateblue-100 bg-white px-4 py-3 text-sm transition hover:border-civic-200"
+                    >
+                      <span className="line-clamp-1 font-semibold text-slateblue-700">{ward.wardLabel}</span>
+                      <span className="font-black text-ink">{ward.count}</span>
+                    </Link>
+                  ))}
                 </div>
-                <h3 className="mt-3 text-lg font-bold text-ink">{item.title}</h3>
-                <p className="mt-2 text-sm leading-6 text-slateblue-700">{item.description}</p>
-              </div>
-            ))}
-          </Card>
-        </div>
-      </section>
-
-      <section className="container py-16">
-        <div className="flex items-center justify-between gap-6">
-          <div>
-            <div className="section-label">How it works</div>
-            <h2 className="mt-4 text-3xl font-black tracking-tight text-ink">Built for real civic routing, not a fake demo flow.</h2>
-          </div>
-        </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
-          {steps.map((step, index) => (
-            <Card key={step.title} className="space-y-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-civic-50 text-civic-700">
-                <step.icon className="h-6 w-6" />
-              </div>
-              <div className="text-sm font-semibold uppercase tracking-[0.2em] text-slateblue-500">
-                Step {index + 1}
-              </div>
-              <h3 className="text-xl font-bold text-ink">{step.title}</h3>
-              <p className="text-sm leading-6 text-slateblue-700">{step.description}</p>
+              ) : (
+                <p className="text-sm leading-6 text-slateblue-600">
+                  Ward rankings will appear after the Delhi GIS schema is live and reports are submitted.
+                </p>
+              )}
             </Card>
-          ))}
-        </div>
-      </section>
 
-      {/* Leaderboard + digest teaser */}
-      <section className="border-y border-white/60 bg-white/60 backdrop-blur">
-        <div className="container grid gap-5 py-12 md:grid-cols-2">
-          <Link href="/stats" className="group flex items-start gap-4 rounded-[1.75rem] border border-amber-100 bg-amber-50/80 p-6 transition hover:bg-amber-50">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
-              <Trophy className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="font-bold text-ink">Delhi hotspot stats</div>
-              <p className="mt-1 text-sm leading-6 text-slateblue-700">
-                See which areas are carrying the highest active complaint load and which severity
-                bands need the fastest attention.
+            <Card className="space-y-4 border-civic-100 bg-civic-50/80 p-5">
+              <h2 className="text-lg font-bold text-ink">Join the community</h2>
+              <p className="text-sm leading-6 text-civic-900">
+                Get updates, flag bad mappings, and help test the Delhi-wide workflow.
               </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-amber-700">
-                View stats <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-              </span>
-            </div>
-          </Link>
-          <a
-            href="/api/digest"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-start gap-4 rounded-[1.75rem] border border-civic-100 bg-civic-50/80 p-6 transition hover:bg-civic-50"
-          >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-civic-100 text-civic-600">
-              <Rss className="h-6 w-6" />
-            </div>
-            <div>
-              <div className="font-bold text-ink">RSS digest — top unresolved reports</div>
-              <p className="mt-1 text-sm leading-6 text-slateblue-700">
-                Subscribe via any RSS reader to receive the highest-priority unresolved complaints
-                from the public feed while the Delhi-wide reporting layer is rolled out.
-              </p>
-              <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-civic-700">
-                Open RSS feed <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-              </span>
-            </div>
-          </a>
-        </div>
-      </section>
-
-      <section className="container pb-16">
-        <div className="flex items-center justify-between gap-6">
-          <div>
-            <div className="section-label">Recent reports</div>
-            <h2 className="mt-4 text-3xl font-black tracking-tight text-ink">Public issues already visible in the feed.</h2>
-          </div>
-          <Link href="/report/new" className="text-sm font-semibold text-civic-700 underline decoration-civic-300 underline-offset-4">
-            Create a report
-          </Link>
-        </div>
-        <div className="mt-10 grid gap-5">
-          {featuredReports.length > 0 ? (
-            featuredReports.map((report) => <ReportCard key={report.report.id} item={report} />)
-          ) : (
-            <Card className="border-dashed">
-              <p className="text-sm leading-6 text-slateblue-700">
-                No public reports are visible yet. Once the database is seeded and reports are submitted,
-                the live dashboard feed will appear here.
-              </p>
+              <a
+                href={env.NEXT_PUBLIC_COMMUNITY_LINK}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-ink px-5 text-sm font-semibold text-white"
+              >
+                Open community group
+              </a>
             </Card>
-          )}
+          </aside>
         </div>
+
+        {filters.view === "map" ? <ReportList reports={data.reports.slice(0, 8)} compact /> : null}
       </section>
     </main>
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
+function ReportList({ reports, compact = false }: { reports: Awaited<ReturnType<typeof getDelhiHomeData>>["reports"]; compact?: boolean }) {
+  if (!reports.length) {
+    return (
+      <Card className="border-dashed p-6">
+        <h2 className="text-lg font-bold text-ink">No reports match this view yet.</h2>
+        <p className="mt-2 text-sm leading-6 text-slateblue-700">
+          Once the Delhi schema is applied and public reports are submitted, matching complaints
+          will appear here.
+        </p>
+      </Card>
+    );
+  }
+
   return (
-    <Card className="border border-white/60 bg-white/85 p-5">
-      <div className="text-sm font-semibold uppercase tracking-[0.18em] text-slateblue-500">{label}</div>
-      <div className="mt-3 text-3xl font-black tracking-tight text-ink">{value}</div>
+    <div className={compact ? "grid gap-4 md:grid-cols-2" : "grid gap-4"}>
+      {reports.map((report) => (
+        <DelhiReportCard key={report.id} report={report} />
+      ))}
+    </div>
+  );
+}
+
+function StatCard({ label, value, href }: { label: string; value: string; href?: string }) {
+  const card = (
+    <Card className="border border-white/60 bg-white/85 p-5 transition hover:border-civic-200">
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">{label}</div>
+      <div className="mt-2 text-3xl font-black tracking-tight text-ink">{value}</div>
     </Card>
+  );
+
+  return href ? <Link href={href}>{card}</Link> : card;
+}
+
+function MiniMetric({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof MapPinned;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-slateblue-100 bg-white/80 p-4">
+      <Icon className="h-5 w-5 text-civic-700" />
+      <div className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">
+        {label}
+      </div>
+      <div className="mt-1 font-black text-ink">{value}</div>
+    </div>
+  );
+}
+
+function SetupWarning({ warnings }: { warnings: string[] }) {
+  return (
+    <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 px-4 py-4 text-sm leading-6 text-amber-950">
+      <div className="font-bold">Database setup is not complete yet.</div>
+      <div className="mt-2 space-y-1">
+        {warnings.map((warning) => (
+          <p key={warning}>{warning}</p>
+        ))}
+      </div>
+    </div>
   );
 }

@@ -1,33 +1,29 @@
 import Link from "next/link";
-import { BarChart3, Building2, MapPinned, ShieldAlert } from "lucide-react";
+import { BarChart3, CheckCircle2, Flame, MapPinned, Siren } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { getDelhiHomeData } from "@/lib/delhi/repository";
+import { severityLabels, statusLabels } from "@/lib/delhi/constants";
+import type { DelhiFilters } from "@/lib/delhi/types";
 
-const statPlaceholders = [
-  {
-    title: "Total reports",
-    body: "Delhi-wide totals will be computed from DigitalOcean PostgreSQL views and RPC queries.",
-    icon: BarChart3,
-  },
-  {
-    title: "Authority breakdown",
-    body: "MCD, NDMC, and special jurisdiction coverage will be compared side by side.",
-    icon: Building2,
-  },
-  {
-    title: "Hotspot wards",
-    body: "Top wards or equivalent local areas will be ranked by active complaint count.",
-    icon: MapPinned,
-  },
-  {
-    title: "Critical cases",
-    body: "Severity trends will be exposed as shareable links back to filtered public views.",
-    icon: ShieldAlert,
-  },
-];
+export const dynamic = "force-dynamic";
 
-export default function StatsPage() {
+const allFilters: DelhiFilters = {
+  view: "map",
+  severity: "all",
+  status: "all",
+  wasteType: "all",
+  authority: "",
+  ward: "",
+  mla: "",
+  mp: "",
+  q: "",
+};
+
+export default async function StatsPage() {
+  const data = await getDelhiHomeData(allFilters);
+
   return (
     <main className="container py-12">
       <div className="max-w-3xl space-y-5">
@@ -36,23 +32,108 @@ export default function StatsPage() {
           Delhi analytics and accountability trends.
         </h1>
         <p className="text-base leading-8 text-slateblue-700">
-          This route is reserved for the Delhi-wide stats dashboard. The page shell is now in
-          place; the live aggregates will be connected once the Delhi schema is applied on the
-          PostGIS-enabled DigitalOcean cluster.
+          Aggregates are read from the DigitalOcean PostgreSQL reporting schema. Until PostGIS is
+          available and the Delhi migration is applied, this page shows the live setup warning and
+          empty counters.
         </p>
       </div>
 
-      <div className="mt-10 grid gap-5 md:grid-cols-2">
-        {statPlaceholders.map((item) => (
-          <Card key={item.title} className="space-y-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-saffron-50 text-saffron-700">
-              <item.icon className="h-6 w-6" />
-            </div>
-            <h2 className="text-xl font-bold text-ink">{item.title}</h2>
-            <p className="text-sm leading-6 text-slateblue-700">{item.body}</p>
-          </Card>
-        ))}
+      {data.warnings.length ? (
+        <Card className="mt-8 border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-950">
+          <div className="font-bold">Database setup is not complete yet.</div>
+          {data.warnings.map((warning) => (
+            <p key={warning} className="mt-2">
+              {warning}
+            </p>
+          ))}
+        </Card>
+      ) : null}
+
+      <div className="mt-10 grid gap-5 md:grid-cols-4">
+        <StatCard
+          icon={BarChart3}
+          title="Total reports"
+          value={data.stats.totalReports}
+          href="/"
+        />
+        <StatCard
+          icon={Siren}
+          title="Active reports"
+          value={data.stats.activeReports}
+          href="/?status=unresolved"
+        />
+        <StatCard
+          icon={CheckCircle2}
+          title="Resolved"
+          value={data.stats.resolvedReports}
+          href="/?status=resolved"
+        />
+        <StatCard
+          icon={Flame}
+          title="Critical active"
+          value={data.stats.criticalReports}
+          href="/?severity=critical"
+        />
       </div>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <Card className="space-y-4 p-5">
+          <h2 className="text-xl font-bold text-ink">Severity breakdown</h2>
+          <div className="space-y-3">
+            {data.stats.severityDistribution.map((item) => (
+              <Link
+                key={item.severity}
+                href={`/?severity=${item.severity}`}
+                className="flex items-center justify-between rounded-2xl border border-slateblue-100 bg-white px-4 py-3 text-sm transition hover:border-civic-200"
+              >
+                <span className="font-semibold text-slateblue-700">{severityLabels[item.severity]}</span>
+                <span className="font-black text-ink">{item.count}</span>
+              </Link>
+            ))}
+          </div>
+        </Card>
+
+        <Card className="space-y-4 p-5">
+          <h2 className="text-xl font-bold text-ink">Status breakdown</h2>
+          <div className="space-y-3">
+            {data.stats.statusDistribution.map((item) => (
+              <Link
+                key={item.status}
+                href={`/?status=${item.status}`}
+                className="flex items-center justify-between rounded-2xl border border-slateblue-100 bg-white px-4 py-3 text-sm transition hover:border-civic-200"
+              >
+                <span className="font-semibold text-slateblue-700">{statusLabels[item.status]}</span>
+                <span className="font-black text-ink">{item.count}</span>
+              </Link>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      <Card className="mt-8 space-y-4 p-5">
+        <div className="flex items-center gap-3">
+          <MapPinned className="h-5 w-5 text-civic-700" />
+          <h2 className="text-xl font-bold text-ink">Top complaint-heavy wards</h2>
+        </div>
+        {data.stats.topWards.length ? (
+          <div className="grid gap-3 md:grid-cols-2">
+            {data.stats.topWards.map((ward) => (
+              <Link
+                key={ward.wardId}
+                href={`/ward/${ward.wardId}`}
+                className="flex items-center justify-between rounded-2xl border border-slateblue-100 bg-white px-4 py-3 text-sm transition hover:border-civic-200"
+              >
+                <span className="line-clamp-1 font-semibold text-slateblue-700">{ward.wardLabel}</span>
+                <span className="font-black text-ink">{ward.count}</span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm leading-6 text-slateblue-600">
+            Ward rankings will populate after Delhi reports are stored in the PostGIS-backed schema.
+          </p>
+        )}
+      </Card>
 
       <div className="mt-8">
         <Link href="/">
@@ -60,5 +141,29 @@ export default function StatsPage() {
         </Link>
       </div>
     </main>
+  );
+}
+
+function StatCard({
+  icon: Icon,
+  title,
+  value,
+  href,
+}: {
+  icon: typeof BarChart3;
+  title: string;
+  value: number;
+  href: string;
+}) {
+  return (
+    <Link href={href}>
+      <Card className="h-full p-5 transition hover:border-civic-200">
+        <Icon className="h-5 w-5 text-civic-700" />
+        <div className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">
+          {title}
+        </div>
+        <div className="mt-2 text-3xl font-black text-ink">{value}</div>
+      </Card>
+    </Link>
   );
 }

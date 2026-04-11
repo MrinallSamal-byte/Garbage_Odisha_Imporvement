@@ -1,11 +1,11 @@
 import { Camera, MapPinned, ShieldCheck } from "lucide-react";
 
-import { LiveReportExperience } from "@/components/report/live-report-experience";
+import { DelhiReportForm } from "@/components/delhi/delhi-report-form";
 
 const highlights = [
-  { icon: Camera, text: "Use the rear camera first for evidence capture on mobile." },
-  { icon: MapPinned, text: "Location is captured from the device and resolved through GIS lookup." },
-  { icon: ShieldCheck, text: "The final Delhi form will show civic authority, ward, MLA, and MP before submit." },
+  { icon: Camera, text: "Take a live photo or upload a clear image." },
+  { icon: MapPinned, text: "Use GPS to resolve Delhi jurisdiction mapping." },
+  { icon: ShieldCheck, text: "Review civic authority, ward, MLA, and MP before submitting." },
 ];
 
 export default function NewReportPage() {
@@ -14,13 +14,13 @@ export default function NewReportPage() {
       <div className="mb-8 space-y-4 text-center">
         <div className="section-label mx-auto">Report garbage</div>
         <h1 className="mx-auto max-w-2xl text-4xl font-black tracking-tight text-ink md:text-5xl">
-          Capture a Delhi garbage complaint with live evidence and location-aware routing.
+          Submit a Delhi garbage report without logging in.
         </h1>
         <p className="mx-auto max-w-xl text-base leading-7 text-slateblue-700">
-          The existing live-report flow is being refit to the Delhi data model. The page is now
-          mounted on the canonical route for the new platform.
+          Capture evidence, share your location, add address clues, and publish a report mapped to
+          Delhi civic accountability records.
         </p>
-        <div className="mx-auto flex max-w-lg flex-col gap-2 pt-2 sm:flex-row sm:justify-center">
+        <div className="mx-auto flex max-w-3xl flex-col gap-2 pt-2 md:flex-row md:justify-center">
           {highlights.map((item) => (
             <div
               key={item.text}
@@ -32,7 +32,7 @@ export default function NewReportPage() {
           ))}
         </div>
       </div>
-      <LiveReportExperience />
+      <DelhiReportForm />
     </main>
   );
 }

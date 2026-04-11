@@ -1,40 +1,125 @@
-# SafaOdisha
+# Delhi Garbage Watch
 
-SafaOdisha is a production-oriented civic cleanliness reporting platform for Odisha, India. Citizens can capture a live photo from the device camera, share GPS, map the point to Odisha GIS constituencies, view the current MLA and MP assigned to that location, and publish the report on a public accountability dashboard.
+Delhi Garbage Watch is being migrated from the existing SafaOdisha codebase into a Delhi-wide civic garbage reporting platform. Citizens can capture a garbage photo from a phone, share GPS, map the point to the correct Delhi civic authority, ward or equivalent local unit, MLA, and MP, then publish the report on a public map/list dashboard.
 
 The app is built with a real architecture for:
 
 - GPS-first report capture
-- GIS-based point-in-polygon constituency lookup
-- database-managed representative records and ruling-party flags
-- public reporting, comments, support votes, and status timelines
+- DigitalOcean PostgreSQL as the single primary relational/geospatial database
+- PostGIS point-in-polygon lookup for civic authority, ward, assembly, and parliamentary boundaries
+- database-managed party, leader, and jurisdiction records
+- public reporting, confirmations, cleanup verification, and status history
 - admin moderation and representative management
-- mock mode for local no-DB runs
-- PostGIS mode for authoritative spatial operations
+- PWA install support for mobile use
 
-## Product name
+## Migration status
 
-This codebase uses the name `SafaOdisha` consistently across UI, API, config, and documentation.
+The current codebase still contains older Odisha routes, tests, and import scripts while the Delhi migration is in progress. New Delhi-specific work is under:
+
+- `lib/delhi/*`
+- `components/delhi/*`
+- `app/report/new`
+- `app/report/[id]`
+- `app/authority/[id]`
+- `app/ward/[id]`
+- `app/mla/[id]`
+- `app/mp/[id]`
+- `app/stats`
+- `docs/delhi-platform-audit.md`
+
+Important current blocker:
+
+- the connected DigitalOcean PostgreSQL cluster is reachable
+- `postgis` is not available on that cluster yet
+- the Delhi migration cannot be applied until the same primary DigitalOcean database is PostGIS-capable
 
 ## Core principles
 
 - Exact location comes from browser/device GPS and geospatial lookup, never image-only AI.
 - Live camera capture is the primary reporting flow.
-- MLA/MP lookup comes from GIS constituency mapping plus representative database records.
-- Party and ruling-status badges are loaded from data records, not hardcoded in the frontend.
-- AI is only used for scene understanding, OCR/clue extraction, mismatch detection, and moderation assistance.
+- Civic authority, ward, MLA, and MP lookup must come from DigitalOcean PostgreSQL + PostGIS.
+- Party names and logos are loaded from data records, not copied from a reference site.
+- Anonymous citizen reporting is allowed by default.
 
 ## Stack
 
 - Frontend: Next.js 15 App Router, TypeScript, Tailwind CSS
 - Backend: Next.js route handlers with service and repository layers
-- Database: PostgreSQL + PostGIS
-- ORM: Prisma with raw SQL migrations for geometry fields and spatial indexes
+- Database: existing DigitalOcean Managed PostgreSQL cluster only
+- Geospatial: PostGIS in that same DigitalOcean database
+- ORM/query layer: Prisma client with raw SQL for PostGIS operations
 - Maps: React Leaflet
 - Validation: Zod
 - Storage: local filesystem adapter plus S3-compatible adapter interface
 - Image processing: Sharp + EXIF parsing
 - Testing: Vitest
+- PWA: `public/manifest.webmanifest`, `public/sw.js`, and install button in the header
+
+## Required environment variables
+
+Do not commit real credentials. Use `.env`, `.env.local`, production secrets, or hosting environment settings.
+
+```bash
+DATABASE_URL=
+PGHOST=
+PGPORT=25060
+PGUSER=
+PGPASSWORD=
+PGDATABASE=
+PGSSLMODE=require
+
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_COMMUNITY_LINK=https://t.me/garbagewatchdelhi
+NEXT_PUBLIC_COMPLAINT_WHATSAPP=https://wa.me/<number>
+
+STORAGE_PROVIDER=local
+LOCAL_UPLOAD_DIR=public/uploads
+```
+
+## DigitalOcean PostgreSQL setup
+
+The Delhi schema requires these database extensions in the existing DigitalOcean PostgreSQL database:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+```
+
+Check connection and extension availability:
+
+```bash
+set -a; source .env; set +a; npm run db:health
+```
+
+Current expected failure mode on the existing cluster:
+
+```text
+DigitalOcean PostgreSQL connection is healthy, but GIS prerequisites are incomplete.
+PostGIS is not available on the connected DigitalOcean PostgreSQL cluster.
+```
+
+Do not create a second primary Postgres database to work around this. The DigitalOcean primary database must be made PostGIS-capable first.
+
+## Delhi migrations and imports
+
+After PostGIS is available on the existing DigitalOcean database:
+
+```bash
+set -a; source .env; set +a; npm run db:migrate
+set -a; source .env; set +a; npm run import:delhi:boundaries
+set -a; source .env; set +a; npm run import:delhi:parties
+set -a; source .env; set +a; npm run import:delhi:leaders
+```
+
+Leader imports expect curated CSV files:
+
+```text
+data/delhi/assembly-leaders.csv
+data/delhi/parliament-leaders.csv
+```
+
+Templates are provided in `data/delhi/*.template.csv`.
 
 ## Runtime modes
 

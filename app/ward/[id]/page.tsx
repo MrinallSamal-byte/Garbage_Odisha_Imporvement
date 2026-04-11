@@ -1,38 +1,112 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
+import { DelhiReportCard } from "@/components/delhi/delhi-report-card";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { getDelhiHomeData, getDelhiWardById } from "@/lib/delhi/repository";
+import type { DelhiFilters } from "@/lib/delhi/types";
+
+export const dynamic = "force-dynamic";
 
 type WardPageProps = {
   params: Promise<{ id: string }>;
 };
 
+function filtersForWard(ward: string): DelhiFilters {
+  return {
+    view: "list",
+    severity: "all",
+    status: "all",
+    wasteType: "all",
+    authority: "",
+    ward,
+    mla: "",
+    mp: "",
+    q: "",
+  };
+}
+
 export default async function WardPage({ params }: WardPageProps) {
   const { id } = await params;
 
+  try {
+    const ward = await getDelhiWardById(id);
+
+    if (!ward) {
+      notFound();
+    }
+
+    const data = await getDelhiHomeData(filtersForWard(ward.id));
+
+    return (
+      <main className="container py-12">
+        <div className="max-w-3xl space-y-5">
+          <div className="section-label">Ward or local unit</div>
+          <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
+            Ward {ward.number} - {ward.name}
+          </h1>
+          <p className="text-base leading-8 text-slateblue-700">
+            {ward.authority ? `Civic authority: ${ward.authority.name}` : "Civic authority mapping pending."}
+            {ward.zone ? ` Zone: ${ward.zone}.` : ""}
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <Stat label="Active reports" value={data.stats.activeReports} />
+          <Stat label="Total reports" value={data.stats.totalReports} />
+          <Stat label="Resolved" value={data.stats.resolvedReports} />
+        </div>
+
+        <section className="mt-8 space-y-4">
+          <h2 className="text-2xl font-black text-ink">Complaints in this ward</h2>
+          {data.reports.length ? (
+            <div className="grid gap-4">
+              {data.reports.map((report) => (
+                <DelhiReportCard key={report.id} report={report} />
+              ))}
+            </div>
+          ) : (
+            <Card className="border-dashed p-6 text-sm leading-6 text-slateblue-700">
+              No complaints are linked to this ward yet.
+            </Card>
+          )}
+        </section>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          {ward.authority ? (
+            <Link href={`/authority/${ward.authority.id}`}>
+              <Button variant="secondary">Open civic authority</Button>
+            </Link>
+          ) : null}
+          <Link href="/">
+            <Button variant="secondary">Back to map</Button>
+          </Link>
+        </div>
+      </main>
+    );
+  } catch (error) {
+    return <SetupError message={error instanceof Error ? error.message : "Ward page unavailable."} />;
+  }
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <Card className="p-5">
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">{label}</div>
+      <div className="mt-2 text-3xl font-black text-ink">{value}</div>
+    </Card>
+  );
+}
+
+function SetupError({ message }: { message: string }) {
   return (
     <main className="container py-12">
-      <div className="max-w-3xl space-y-5">
-        <div className="section-label">Ward</div>
-        <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
-          Ward route ready for <span className="text-civic-700">{id}</span>.
-        </h1>
-        <p className="text-base leading-8 text-slateblue-700">
-          This route will expose ward or ward-equivalent boundaries, authority linkage, MLA and MP
-          mapping, and complaint history after the Delhi dataset import is complete.
-        </p>
-      </div>
-
-      <Card className="mt-8 text-sm leading-6 text-slateblue-700">
-        The route shell is now in place so cards and deep links can target `/ward/[id]` without
-        another route migration later.
+      <Card className="max-w-3xl border-amber-200 bg-amber-50 p-6 text-sm leading-6 text-amber-950">
+        <div className="section-label">Ward unavailable</div>
+        <h1 className="mt-4 text-3xl font-black tracking-tight">Delhi ward data is not readable yet.</h1>
+        <p className="mt-3">{message}</p>
       </Card>
-
-      <div className="mt-8">
-        <Link href="/">
-          <Button variant="secondary">Back to map</Button>
-        </Link>
-      </div>
     </main>
   );
 }

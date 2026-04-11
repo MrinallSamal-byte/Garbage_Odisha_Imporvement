@@ -125,6 +125,29 @@ CREATE TABLE IF NOT EXISTS public.parties (
   updated_at timestamptz NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS public.waste_types (
+  key waste_type PRIMARY KEY,
+  label text NOT NULL,
+  description text,
+  sort_order integer NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT NOW(),
+  updated_at timestamptz NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO public.waste_types (key, label, description, sort_order)
+VALUES
+  ('household_waste', 'Household Waste', 'Domestic trash, bags, street-corner dumping, and everyday mixed residential waste.', 10),
+  ('construction_debris', 'Construction Debris', 'Bricks, concrete, plaster, soil, tiles, and other construction or demolition waste.', 20),
+  ('mixed_waste', 'Mixed Waste', 'Multiple visible categories in the same dump pile.', 30),
+  ('e_waste', 'E-Waste', 'Discarded electrical or electronic items.', 40),
+  ('biomedical', 'Biomedical', 'Medical or sanitary waste that may need special handling.', 50),
+  ('other', 'Other', 'Waste that does not fit the standard categories.', 60)
+ON CONFLICT (key) DO UPDATE
+SET
+  label = EXCLUDED.label,
+  description = EXCLUDED.description,
+  sort_order = EXCLUDED.sort_order;
+
 CREATE TABLE IF NOT EXISTS public.leaders (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   role leader_role NOT NULL,
@@ -247,6 +270,10 @@ CREATE INDEX IF NOT EXISTS idx_reports_geom ON public.reports USING GIST (geom);
 CREATE INDEX IF NOT EXISTS idx_reports_status ON public.reports (status);
 CREATE INDEX IF NOT EXISTS idx_reports_severity ON public.reports (severity);
 CREATE INDEX IF NOT EXISTS idx_reports_waste_type ON public.reports (waste_type);
+CREATE INDEX IF NOT EXISTS idx_reports_authority_id ON public.reports (authority_id);
+CREATE INDEX IF NOT EXISTS idx_reports_ward_id ON public.reports (ward_id);
+CREATE INDEX IF NOT EXISTS idx_reports_mla_leader_id ON public.reports (mla_leader_id);
+CREATE INDEX IF NOT EXISTS idx_reports_mp_leader_id ON public.reports (mp_leader_id);
 CREATE INDEX IF NOT EXISTS idx_reports_created_at ON public.reports (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_reports_status_severity ON public.reports (status, severity, waste_type);
 CREATE INDEX IF NOT EXISTS idx_confirmations_report_id ON public.confirmations (report_id, created_at DESC);
@@ -315,6 +342,12 @@ EXECUTE FUNCTION public.set_updated_at();
 DROP TRIGGER IF EXISTS trg_parties_updated_at ON public.parties;
 CREATE TRIGGER trg_parties_updated_at
 BEFORE UPDATE ON public.parties
+FOR EACH ROW
+EXECUTE FUNCTION public.set_updated_at();
+
+DROP TRIGGER IF EXISTS trg_waste_types_updated_at ON public.waste_types;
+CREATE TRIGGER trg_waste_types_updated_at
+BEFORE UPDATE ON public.waste_types
 FOR EACH ROW
 EXECUTE FUNCTION public.set_updated_at();
 

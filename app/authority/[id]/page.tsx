@@ -1,41 +1,113 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
+import { DelhiReportCard } from "@/components/delhi/delhi-report-card";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { getDelhiAuthorityById, getDelhiHomeData } from "@/lib/delhi/repository";
+import type { DelhiFilters } from "@/lib/delhi/types";
+
+export const dynamic = "force-dynamic";
 
 type AuthorityPageProps = {
   params: Promise<{ id: string }>;
 };
 
+function filtersForAuthority(authority: string): DelhiFilters {
+  return {
+    view: "list",
+    severity: "all",
+    status: "all",
+    wasteType: "all",
+    authority,
+    ward: "",
+    mla: "",
+    mp: "",
+    q: "",
+  };
+}
+
 export default async function AuthorityPage({ params }: AuthorityPageProps) {
   const { id } = await params;
 
+  try {
+    const authority = await getDelhiAuthorityById(id);
+
+    if (!authority) {
+      notFound();
+    }
+
+    const data = await getDelhiHomeData(filtersForAuthority(authority.id));
+
+    return (
+      <main className="container py-12">
+        <div className="max-w-3xl space-y-5">
+          <div className="section-label">Civic authority</div>
+          <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
+            {authority.name}
+          </h1>
+          <p className="text-base leading-8 text-slateblue-700">
+            {authority.description ?? "Delhi civic authority profile and complaint accountability page."}
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-4 sm:grid-cols-3">
+          <Stat label="Active reports" value={data.stats.activeReports} />
+          <Stat label="Total reports" value={data.stats.totalReports} />
+          <Stat label="Resolved" value={data.stats.resolvedReports} />
+        </div>
+
+        <section className="mt-8 space-y-4">
+          <h2 className="text-2xl font-black text-ink">Complaints under this authority</h2>
+          {data.reports.length ? (
+            <div className="grid gap-4">
+              {data.reports.map((report) => (
+                <DelhiReportCard key={report.id} report={report} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState warnings={data.warnings} />
+          )}
+        </section>
+
+        <div className="mt-8">
+          <Link href="/">
+            <Button variant="secondary">Back to map</Button>
+          </Link>
+        </div>
+      </main>
+    );
+  } catch (error) {
+    return <SetupError message={error instanceof Error ? error.message : "Authority page unavailable."} />;
+  }
+}
+
+function Stat({ label, value }: { label: string; value: number }) {
+  return (
+    <Card className="p-5">
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">{label}</div>
+      <div className="mt-2 text-3xl font-black text-ink">{value}</div>
+    </Card>
+  );
+}
+
+function EmptyState({ warnings }: { warnings: string[] }) {
+  return (
+    <Card className="border-dashed p-6 text-sm leading-6 text-slateblue-700">
+      No complaints are linked to this authority yet.
+      {warnings.length ? <span className="block pt-2 text-amber-800">{warnings.join(" ")}</span> : null}
+    </Card>
+  );
+}
+
+function SetupError({ message }: { message: string }) {
   return (
     <main className="container py-12">
-      <div className="max-w-3xl space-y-5">
-        <div className="section-label">Civic authority</div>
-        <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
-          Authority profile route ready for <span className="text-civic-700">{id}</span>.
-        </h1>
-        <p className="text-base leading-8 text-slateblue-700">
-          This page will show Delhi authority metadata, covered areas, related wards, and linked
-          complaints once the new DigitalOcean PostGIS schema is live.
-        </p>
-      </div>
-
-      <Card className="mt-8 space-y-3">
-        <h2 className="text-xl font-bold text-ink">Planned sections</h2>
-        <p className="text-sm leading-6 text-slateblue-700">
-          Authority identity, jurisdiction coverage, active complaints, resolved complaints, and
-          linked ward pages.
-        </p>
+      <Card className="max-w-3xl border-amber-200 bg-amber-50 p-6 text-sm leading-6 text-amber-950">
+        <div className="section-label">Authority unavailable</div>
+        <h1 className="mt-4 text-3xl font-black tracking-tight">Delhi authority data is not readable yet.</h1>
+        <p className="mt-3">{message}</p>
       </Card>
-
-      <div className="mt-8">
-        <Link href="/">
-          <Button variant="secondary">Back to map</Button>
-        </Link>
-      </div>
     </main>
   );
 }
