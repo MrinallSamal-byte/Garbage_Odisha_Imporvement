@@ -11,7 +11,7 @@ const envSchema = z.object({
   PGDATABASE: z.string().optional(),
   PGSSLMODE: z.string().default("require"),
   NEXT_PUBLIC_APP_URL: z.string().optional(),
-  STORAGE_PROVIDER: z.enum(["local", "s3"]).default("local"),
+  STORAGE_PROVIDER: z.enum(["local", "s3", "database"]).default("local"),
   LOCAL_UPLOAD_DIR: z.string().default("public/uploads"),
   S3_BUCKET: z.string().optional(),
   S3_REGION: z.string().optional(),

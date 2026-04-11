@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CircleMarker, MapContainer, Popup, TileLayer } from "react-leaflet";
+import { CircleMarker, MapContainer, Popup, TileLayer, ZoomControl } from "react-leaflet";
 
 import { DelhiSeverityBadge, DelhiStatusBadge } from "@/components/delhi/severity-status-badges";
 import { severityColors, wasteTypeLabels } from "@/lib/delhi/constants";
@@ -14,7 +14,7 @@ export function DelhiMap({
   height = 520,
 }: {
   reports: DelhiReportCard[];
-  height?: number;
+  height?: number | string;
 }) {
   const router = useRouter();
 
@@ -22,10 +22,12 @@ export function DelhiMap({
     <MapContainer
       center={delhiCenter}
       zoom={11}
-      scrollWheelZoom={false}
+      scrollWheelZoom
+      zoomControl={false}
       style={{ height }}
-      className="w-full overflow-hidden"
+      className="h-full w-full !rounded-none"
     >
+      <ZoomControl position="bottomright" />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

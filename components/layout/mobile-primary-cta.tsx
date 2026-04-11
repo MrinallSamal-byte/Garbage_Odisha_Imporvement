@@ -11,6 +11,7 @@ export function MobilePrimaryCta() {
     !pathname ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/api") ||
+    pathname === "/" ||
     pathname === "/report" ||
     pathname === "/report/new"
   ) {

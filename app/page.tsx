@@ -1,15 +1,19 @@
 import Link from "next/link";
-import { ArrowRight, BarChart3, Camera, MapPinned, MessageCircle, UsersRound } from "lucide-react";
+import type { ReactNode } from "react";
+import { Activity, List, Map as MapIcon, Plus } from "lucide-react";
 
-import { DelhiFilterBar } from "@/components/delhi/delhi-filter-bar";
-import { LazyDelhiMap } from "@/components/delhi/lazy-delhi-map";
 import { DelhiReportCard } from "@/components/delhi/delhi-report-card";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { parseDelhiFilters } from "@/lib/delhi/search-params";
+import { LazyDelhiMap } from "@/components/delhi/lazy-delhi-map";
+import {
+  delhiSeverities,
+  delhiStatuses,
+  severityLabels,
+  statusLabels,
+} from "@/lib/delhi/constants";
 import { getDelhiHomeData } from "@/lib/delhi/repository";
-import { statusLabels } from "@/lib/delhi/constants";
-import { env } from "@/lib/env";
+import { buildDelhiQueryString, parseDelhiFilters } from "@/lib/delhi/search-params";
+import type { DelhiFilters } from "@/lib/delhi/types";
+import { cn } from "@/lib/utils/cn";
 
 export const dynamic = "force-dynamic";
 
@@ -22,204 +26,173 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const data = await getDelhiHomeData(filters);
 
   return (
-    <main className="pb-16">
-      <section className="relative overflow-hidden border-b border-white/60 bg-hero-wash">
-        <div className="container grid gap-8 py-10 lg:grid-cols-[0.88fr_1.12fr] lg:py-14">
-          <div className="space-y-6">
-            <div className="section-label">Delhi Garbage Watch</div>
-            <div className="space-y-4">
-              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-ink md:text-6xl">
-                Crowdsource Delhi garbage reports with location-based accountability.
-              </h1>
-              <p className="max-w-2xl text-base leading-8 text-slateblue-700 md:text-lg">
-                Photograph roadside dumps, map them to the right civic authority, ward or
-                equivalent, MLA, and MP, then let the community confirm and verify cleanup.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/report/new">
-                <Button size="lg">
-                  <Camera className="mr-2 h-4 w-4" />
-                  Report Garbage
-                </Button>
-              </Link>
-              <Link href="/about">
-                <Button variant="secondary" size="lg">
-                  How it works
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <StatCard label="Active complaints" value={String(data.stats.activeReports)} href="/?status=unresolved" />
-              <StatCard label="Total reports" value={String(data.stats.totalReports)} />
-              <StatCard label="Resolved" value={String(data.stats.resolvedReports)} href="/?status=resolved" />
-              <StatCard label="Critical active" value={String(data.stats.criticalReports)} href="/?severity=critical" />
-            </div>
-          </div>
+    <div className="bg-white">
+      <div className="border-b border-slate-200 bg-white">
+        <div className="flex flex-col gap-3 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
+          <form className="flex flex-wrap items-center gap-2" action="/">
+            <input type="hidden" name="view" value={filters.view} />
+            <FilterSelect name="severity" label="Severity" value={filters.severity}>
+              <option value="all">All Severity</option>
+              {delhiSeverities.map((severity) => (
+                <option key={severity} value={severity}>
+                  {severityLabels[severity]}
+                </option>
+              ))}
+            </FilterSelect>
+            <FilterSelect name="status" label="Status" value={filters.status}>
+              <option value="all">All Status</option>
+              {delhiStatuses.map((status) => (
+                <option key={status} value={status}>
+                  {statusLabels[status]}
+                </option>
+              ))}
+            </FilterSelect>
+            <button
+              type="submit"
+              className="h-9 rounded-md border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+            >
+              Apply
+            </button>
+          </form>
 
-          <Card className="relative overflow-hidden p-4">
-            <div className="absolute -right-14 -top-16 h-44 w-44 rounded-full bg-civic-200/40 blur-3xl" />
-            <div className="absolute -bottom-20 left-8 h-52 w-52 rounded-full bg-saffron-200/40 blur-3xl" />
-            <div className="relative space-y-4">
-              <div className="grid gap-3 sm:grid-cols-3">
-                <MiniMetric icon={MapPinned} label="Coverage" value="Whole Delhi" />
-                <MiniMetric icon={UsersRound} label="Anonymous" value="Default" />
-                <MiniMetric icon={MessageCircle} label="Complaint assist" value="WhatsApp ready" />
-              </div>
-              {data.warnings.length ? (
-                <SetupWarning warnings={data.warnings} />
-              ) : (
-                <p className="rounded-2xl border border-civic-100 bg-civic-50 px-4 py-3 text-sm leading-6 text-civic-900">
-                  Live Delhi data is loaded from the DigitalOcean PostgreSQL reporting schema.
-                </p>
-              )}
+          <div className="flex items-center justify-between gap-3 sm:justify-end">
+            <div className="hidden items-center gap-1 text-[11px] font-bold text-slate-400 sm:flex">
+              <Activity className="h-3.5 w-3.5" />
+              v0.2.1
             </div>
-          </Card>
+            <ViewToggle filters={filters} />
+          </div>
+        </div>
+      </div>
+
+      <section className="relative min-h-[calc(100svh-150px)] overflow-hidden bg-slate-100">
+        {filters.view === "map" ? (
+          <>
+            <LazyDelhiMap reports={data.reports} height="calc(100svh - 150px)" />
+            <div className="pointer-events-none absolute left-3 top-3 z-[500] flex overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+              <StatPill value={data.stats.activeReports} label="Active" tone="red" />
+              <StatPill value={data.stats.totalReports} label="Reports" tone="orange" />
+            </div>
+            {data.warnings.length ? (
+              <div className="absolute left-3 right-3 top-20 z-[500] rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold leading-5 text-amber-900 shadow-sm sm:left-auto sm:w-[360px]">
+                {data.warnings[0]}
+              </div>
+            ) : null}
+          </>
+        ) : (
+          <div className="mx-auto max-w-4xl px-3 py-4">
+            <ReportList reports={data.reports} />
+          </div>
+        )}
+
+        <div className="fixed bottom-4 left-3 right-3 z-40 grid gap-2 sm:grid-cols-[1fr_320px]">
+          <Link
+            href="/report/new"
+            className="inline-flex h-12 items-center justify-center rounded-md bg-[#e60023] px-5 text-sm font-black text-white shadow-[0_10px_30px_rgba(230,0,35,0.25)] transition hover:bg-[#c9001f]"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Report Garbage
+          </Link>
+          <Link
+            href={buildDelhiQueryString(filters, {
+              view: filters.view === "map" ? "list" : "map",
+            })}
+            className="hidden h-12 items-center justify-center rounded-md border border-slate-200 bg-white px-5 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 sm:inline-flex"
+          >
+            {filters.view === "map" ? <List className="mr-2 h-4 w-4" /> : <MapIcon className="mr-2 h-4 w-4" />}
+            {filters.view === "map" ? "Open List" : "Open Map"}
+          </Link>
         </div>
       </section>
-
-      <section className="container -mt-5 space-y-6 pb-16">
-        <DelhiFilterBar filters={filters} authorities={data.authorities} />
-
-        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-          <div className="space-y-5">
-            {filters.view === "map" ? (
-              <Card className="overflow-hidden p-3">
-                <LazyDelhiMap reports={data.reports} height={560} />
-              </Card>
-            ) : (
-              <ReportList reports={data.reports} />
-            )}
-          </div>
-
-          <aside className="space-y-5">
-            <Card className="space-y-4 p-5">
-              <div className="flex items-center gap-3">
-                <BarChart3 className="h-5 w-5 text-civic-700" />
-                <h2 className="text-lg font-bold text-ink">Status breakdown</h2>
-              </div>
-              <div className="space-y-3">
-                {data.stats.statusDistribution.map((item) => (
-                  <Link
-                    key={item.status}
-                    href={`/?status=${item.status}`}
-                    className="flex items-center justify-between rounded-2xl border border-slateblue-100 bg-white px-4 py-3 text-sm transition hover:border-civic-200"
-                  >
-                    <span className="font-semibold text-slateblue-700">{statusLabels[item.status]}</span>
-                    <span className="font-black text-ink">{item.count}</span>
-                  </Link>
-                ))}
-              </div>
-            </Card>
-
-            <Card className="space-y-4 p-5">
-              <h2 className="text-lg font-bold text-ink">Top active wards</h2>
-              {data.stats.topWards.length ? (
-                <div className="space-y-3">
-                  {data.stats.topWards.map((ward) => (
-                    <Link
-                      key={ward.wardId}
-                      href={`/ward/${ward.wardId}`}
-                      className="flex items-center justify-between rounded-2xl border border-slateblue-100 bg-white px-4 py-3 text-sm transition hover:border-civic-200"
-                    >
-                      <span className="line-clamp-1 font-semibold text-slateblue-700">{ward.wardLabel}</span>
-                      <span className="font-black text-ink">{ward.count}</span>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm leading-6 text-slateblue-600">
-                  Ward rankings will appear after the Delhi GIS schema is live and reports are submitted.
-                </p>
-              )}
-            </Card>
-
-            <Card className="space-y-4 border-civic-100 bg-civic-50/80 p-5">
-              <h2 className="text-lg font-bold text-ink">Join the community</h2>
-              <p className="text-sm leading-6 text-civic-900">
-                Get updates, flag bad mappings, and help test the Delhi-wide workflow.
-              </p>
-              <a
-                href={env.NEXT_PUBLIC_COMMUNITY_LINK}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-ink px-5 text-sm font-semibold text-white"
-              >
-                Open community group
-              </a>
-            </Card>
-          </aside>
-        </div>
-
-        {filters.view === "map" ? <ReportList reports={data.reports.slice(0, 8)} compact /> : null}
-      </section>
-    </main>
+    </div>
   );
 }
 
-function ReportList({ reports, compact = false }: { reports: Awaited<ReturnType<typeof getDelhiHomeData>>["reports"]; compact?: boolean }) {
+function FilterSelect({
+  name,
+  label,
+  value,
+  children,
+}: {
+  name: string;
+  label: string;
+  value: string;
+  children: ReactNode;
+}) {
+  return (
+    <label>
+      <span className="sr-only">{label}</span>
+      <select
+        name={name}
+        defaultValue={value}
+        className="h-9 rounded-md border border-slate-200 bg-white px-3 pr-8 text-xs font-bold text-slate-700 shadow-sm outline-none transition focus:border-[#e60023] focus:ring-2 focus:ring-red-100"
+      >
+        {children}
+      </select>
+    </label>
+  );
+}
+
+function ViewToggle({ filters }: { filters: DelhiFilters }) {
+  return (
+    <div className="inline-flex rounded-md bg-slate-100 p-1">
+      <Link
+        href={buildDelhiQueryString(filters, { view: "map" })}
+        className={cn(
+          "inline-flex h-8 items-center rounded-md px-3 text-xs font-bold transition",
+          filters.view === "map" ? "bg-white text-ink shadow-sm" : "text-slate-500 hover:text-slate-800",
+        )}
+      >
+        <MapIcon className="mr-1.5 h-3.5 w-3.5" />
+        Map
+      </Link>
+      <Link
+        href={buildDelhiQueryString(filters, { view: "list" })}
+        className={cn(
+          "inline-flex h-8 items-center rounded-md px-3 text-xs font-bold transition",
+          filters.view === "list" ? "bg-white text-ink shadow-sm" : "text-slate-500 hover:text-slate-800",
+        )}
+      >
+        <List className="mr-1.5 h-3.5 w-3.5" />
+        List
+      </Link>
+    </div>
+  );
+}
+
+function StatPill({
+  value,
+  label,
+  tone,
+}: {
+  value: number;
+  label: string;
+  tone: "red" | "orange";
+}) {
+  return (
+    <div className="min-w-20 px-4 py-3">
+      <div className={cn("text-lg font-black leading-none", tone === "red" ? "text-[#e60023]" : "text-[#f97316]")}>
+        {value}
+      </div>
+      <div className="mt-1 text-[11px] font-semibold text-slate-500">{label}</div>
+    </div>
+  );
+}
+
+function ReportList({ reports }: { reports: Awaited<ReturnType<typeof getDelhiHomeData>>["reports"] }) {
   if (!reports.length) {
     return (
-      <Card className="border-dashed p-6">
-        <h2 className="text-lg font-bold text-ink">No reports match this view yet.</h2>
-        <p className="mt-2 text-sm leading-6 text-slateblue-700">
-          Once the Delhi schema is applied and public reports are submitted, matching complaints
-          will appear here.
-        </p>
-      </Card>
+      <div className="rounded-md border border-dashed border-slate-300 bg-white p-5 text-sm font-semibold text-slate-600">
+        No reports match this view yet.
+      </div>
     );
   }
 
   return (
-    <div className={compact ? "grid gap-4 md:grid-cols-2" : "grid gap-4"}>
+    <div className="grid gap-3 pb-20">
       {reports.map((report) => (
         <DelhiReportCard key={report.id} report={report} />
       ))}
-    </div>
-  );
-}
-
-function StatCard({ label, value, href }: { label: string; value: string; href?: string }) {
-  const card = (
-    <Card className="border border-white/60 bg-white/85 p-5 transition hover:border-civic-200">
-      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">{label}</div>
-      <div className="mt-2 text-3xl font-black tracking-tight text-ink">{value}</div>
-    </Card>
-  );
-
-  return href ? <Link href={href}>{card}</Link> : card;
-}
-
-function MiniMetric({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: typeof MapPinned;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-slateblue-100 bg-white/80 p-4">
-      <Icon className="h-5 w-5 text-civic-700" />
-      <div className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">
-        {label}
-      </div>
-      <div className="mt-1 font-black text-ink">{value}</div>
-    </div>
-  );
-}
-
-function SetupWarning({ warnings }: { warnings: string[] }) {
-  return (
-    <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 px-4 py-4 text-sm leading-6 text-amber-950">
-      <div className="font-bold">Database setup is not complete yet.</div>
-      <div className="mt-2 space-y-1">
-        {warnings.map((warning) => (
-          <p key={warning}>{warning}</p>
-        ))}
-      </div>
     </div>
   );
 }

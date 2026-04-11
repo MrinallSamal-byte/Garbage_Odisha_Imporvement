@@ -72,7 +72,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_COMMUNITY_LINK=https://t.me/garbagewatchdelhi
 NEXT_PUBLIC_COMPLAINT_WHATSAPP=https://wa.me/<number>
 
-STORAGE_PROVIDER=local
+STORAGE_PROVIDER=local # local, s3, or database
 LOCAL_UPLOAD_DIR=public/uploads
 ```
 
@@ -267,6 +267,10 @@ See `.env.example` for the full list. The most important ones are:
 - `ADMIN_PASSWORD`
 - `GPS_ACCURACY_WARN_THRESHOLD`
 - `GPS_ACCURACY_BLOCK_THRESHOLD`
+
+For DigitalOcean App Platform deployments without durable local disk or object storage, set
+`STORAGE_PROVIDER=database` with `DATABASE_URL` pointed at the managed PostgreSQL database. Uploaded
+report images are then written to `public.uploaded_media` and served through `/api/uploads/...`.
 
 ## Database and PostGIS
 

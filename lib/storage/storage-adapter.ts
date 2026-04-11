@@ -1,4 +1,5 @@
 import { env } from "@/lib/env";
+import { DatabaseStorageAdapter } from "@/lib/storage/providers/database-storage";
 import { LocalStorageAdapter } from "@/lib/storage/providers/local-storage";
 import { S3StorageAdapter } from "@/lib/storage/providers/s3-storage";
 
@@ -19,7 +20,13 @@ let adapter: StorageAdapter | null = null;
 
 export function getStorageAdapter() {
   if (!adapter) {
-    adapter = env.STORAGE_PROVIDER === "s3" ? new S3StorageAdapter() : new LocalStorageAdapter();
+    if (env.STORAGE_PROVIDER === "database") {
+      adapter = new DatabaseStorageAdapter();
+    } else if (env.STORAGE_PROVIDER === "s3") {
+      adapter = new S3StorageAdapter();
+    } else {
+      adapter = new LocalStorageAdapter();
+    }
   }
 
   return adapter;

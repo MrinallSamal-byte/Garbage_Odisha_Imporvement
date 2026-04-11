@@ -1,6 +1,5 @@
 import { randomUUID } from "node:crypto";
 
-import { extension } from "mime-types";
 import { NextRequest } from "next/server";
 import sharp from "sharp";
 
@@ -93,31 +92,51 @@ export async function POST(request: NextRequest) {
 
     const id = randomUUID();
     const datePath = new Date().toISOString().slice(0, 10);
-    const ext = extension(photo.type) || "jpg";
+    const normalizedExt = "jpg";
     const storage = getStorageAdapter();
-    const original = await storage.saveBuffer({
-      buffer: normalized,
-      storageKey: `reports/${datePath}/${id}.${ext === "jpeg" ? "jpg" : ext}`,
-      contentType: "image/jpeg",
-    });
-    const thumb = await storage.saveBuffer({
-      buffer: thumbnail,
-      storageKey: `reports/${datePath}/${id}-thumb.jpg`,
-      contentType: "image/jpeg",
-    });
+    const savedStorageKeys: string[] = [];
+    let report: Awaited<ReturnType<typeof createDelhiReport>>;
 
-    const report = await createDelhiReport({
-      title: buildReportTitle(addressText, landmark),
-      description,
-      addressText,
-      landmark,
-      latitude,
-      longitude,
-      severity,
-      wasteType,
-      photoUrl: original.publicUrl,
-      thumbnailUrl: thumb.publicUrl,
-    });
+    try {
+      const original = await storage.saveBuffer({
+        buffer: normalized,
+        storageKey: `reports/${datePath}/${id}.${normalizedExt}`,
+        contentType: "image/jpeg",
+      });
+      savedStorageKeys.push(original.storageKey);
+
+      const thumb = await storage.saveBuffer({
+        buffer: thumbnail,
+        storageKey: `reports/${datePath}/${id}-thumb.jpg`,
+        contentType: "image/jpeg",
+      });
+      savedStorageKeys.push(thumb.storageKey);
+
+      report = await createDelhiReport({
+        title: buildReportTitle(addressText, landmark),
+        description,
+        addressText,
+        landmark,
+        latitude,
+        longitude,
+        severity,
+        wasteType,
+        photoUrl: original.publicUrl,
+        thumbnailUrl: thumb.publicUrl,
+      });
+    } catch (error) {
+      const cleanupResults = await Promise.allSettled(
+        savedStorageKeys.map((storageKey) => storage.deleteObject(storageKey)),
+      );
+
+      for (const cleanupResult of cleanupResults) {
+        if (cleanupResult.status === "rejected") {
+          console.error("Could not remove uploaded media after failed report creation", cleanupResult.reason);
+        }
+      }
+
+      throw error;
+    }
 
     return ok({ reportId: report.id, publicId: report.public_id });
   } catch (error) {
