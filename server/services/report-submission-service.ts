@@ -3,6 +3,7 @@ import path from "path";
 import { getStorageAdapter } from "@/lib/storage/storage-adapter";
 import { AppError } from "@/lib/utils/errors";
 import { getReportRepository } from "@/server/repositories/repository-factory";
+import { lookupRepresentativesByPoint } from "@/server/services/spatial-lookup-service";
 import { deletePreviewSession, readPreviewSession } from "@/server/workflows/preview-session-store";
 
 function toIssueLabel(value: string) {
@@ -54,7 +55,16 @@ export async function submitPreviewedReport(input: {
   const storage = getStorageAdapter();
   const extension = path.extname(preview.input.fileName) || ".jpg";
   const finalStorageKey = `reports/${new Date().toISOString().slice(0, 10)}/${input.previewToken}${extension}`;
-  const resolvedDescription = resolveSubmittedDescription(preview, input.description);
+  const refreshedLookup = await lookupRepresentativesByPoint(
+    preview.input.latitude,
+    preview.input.longitude,
+  );
+  const refreshedPreview = {
+    ...preview,
+    lookup: refreshedLookup,
+    reviewNotes: Array.from(new Set([...preview.reviewNotes, ...refreshedLookup.reviewNotes])),
+  };
+  const resolvedDescription = resolveSubmittedDescription(refreshedPreview, input.description);
 
   await storage.copyObject(preview.media.tempStorageKey, finalStorageKey);
 
@@ -64,7 +74,7 @@ export async function submitPreviewedReport(input: {
 
   try {
     detail = await reportRepository.createReportFromPreview({
-      preview,
+      preview: refreshedPreview,
       description: resolvedDescription,
       anonymousFlag: input.anonymousFlag,
       createdByUserId: input.createdByUserId ?? null,

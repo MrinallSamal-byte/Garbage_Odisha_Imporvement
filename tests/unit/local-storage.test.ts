@@ -1,3 +1,6 @@
+import { existsSync } from "fs";
+import path from "path";
+
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 describe("LocalStorageAdapter", () => {
@@ -31,5 +34,10 @@ describe("LocalStorageAdapter", () => {
     expect(() => new LocalStorageAdapter()).toThrow(
       "LOCAL_UPLOAD_DIR must be inside the public directory when using local storage.",
     );
+  });
+
+  it("keeps public placeholders for seeded mock report media", () => {
+    expect(existsSync(path.join(process.cwd(), "public/uploads/seed/mock-report-1.svg"))).toBe(true);
+    expect(existsSync(path.join(process.cwd(), "public/uploads/seed/mock-report-2.svg"))).toBe(true);
   });
 });

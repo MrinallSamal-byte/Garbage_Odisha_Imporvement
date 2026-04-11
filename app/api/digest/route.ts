@@ -6,7 +6,16 @@ import { serializeReportListItem } from "@/server/services/report-presentation-s
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+function escapeXml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
+export async function GET(request: Request) {
   const { reports, stats } = await getDashboardData({ pageSize: 50 });
   const items = reports.map(serializeReportListItem);
 
@@ -52,6 +61,18 @@ export async function GET() {
     })),
   };
 
+  const format = new URL(request.url).searchParams.get("format")?.toLowerCase();
+  const cacheControl = "public, max-age=3600, s-maxage=3600";
+
+  if (format === "json") {
+    return NextResponse.json(json, {
+      headers: {
+        "Cache-Control": cacheControl,
+        "X-SafaOdisha-Stats": JSON.stringify(json.stats),
+      },
+    });
+  }
+
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -66,10 +87,10 @@ export async function GET() {
       .map(
         (item) => `
     <item>
-      <title>[${item.report.severity}] ${item.report.description}</title>
+      <title>[${item.report.severity}] ${escapeXml(item.report.description)}</title>
       <link>${appUrl}/reports/${item.report.id}</link>
       <guid isPermaLink="true">${appUrl}/reports/${item.report.id}</guid>
-      <description>${item.report.addressLine} | MLA: ${item.mla?.name ?? "Unknown"} | MP: ${item.mp?.name ?? "Unknown"} | Status: ${item.report.status} | Trust: ${item.report.trustScore}</description>
+      <description>${escapeXml(item.report.addressLine)} | MLA: ${escapeXml(item.mla?.name ?? "Unknown")} | MP: ${escapeXml(item.mp?.name ?? "Unknown")} | Status: ${item.report.status} | Trust: ${item.report.trustScore}</description>
       <pubDate>${new Date(item.report.createdAt).toUTCString()}</pubDate>
     </item>`,
       )
@@ -80,7 +101,7 @@ export async function GET() {
   return new NextResponse(rss, {
     headers: {
       "Content-Type": "application/rss+xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600, s-maxage=3600",
+      "Cache-Control": cacheControl,
       "X-SafaOdisha-Stats": JSON.stringify(json.stats),
     },
   });

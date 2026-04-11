@@ -64,6 +64,8 @@ describe("report analyze and submit API", () => {
 
     const detail = await getReportRepository().getReportDetail(submitPayload.report.report.id);
     expect(detail?.timeline[0]?.newStatus).toBe("REPORTED");
+    expect(detail?.mla?.name).toBe("Ananta Narayan Jena");
+    expect(detail?.mp?.name).toBe("Aparajita Sarangi");
   });
 
   it("submits successfully even when the final description is left blank", async () => {

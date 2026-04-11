@@ -33,15 +33,29 @@ import { prisma } from "@/lib/db/prisma";
 
 import type { CreateReportFromPreviewInput, ReportRepository } from "./report-repository";
 
-const reportInclude = {
+const reportListInclude = {
   district: true,
   assemblyConstituency: true,
   parliamentConstituency: true,
   mlaRepresentative: true,
   mpRepresentative: true,
   mediaAssets: true,
-  comments: true,
-  votes: true,
+  _count: {
+    select: {
+      comments: true,
+      votes: true,
+    },
+  },
+} satisfies Prisma.ReportInclude;
+
+const reportDetailInclude = {
+  ...reportListInclude,
+  comments: {
+    orderBy: { createdAt: "asc" },
+  },
+  statusHistory: {
+    orderBy: { createdAt: "asc" },
+  },
 } satisfies Prisma.ReportInclude;
 
 function mapDistrict(district: PrismaDistrict | null): District | null {
@@ -237,7 +251,7 @@ function matchesFilters(item: ReportListItem, filters?: ReportFilters) {
 export class PrismaReportRepository implements ReportRepository {
   private async loadReportItems() {
     const rows = await prisma.report.findMany({
-      include: reportInclude,
+      include: reportListInclude,
       orderBy: { createdAt: "desc" },
     });
 
@@ -249,8 +263,8 @@ export class PrismaReportRepository implements ReportRepository {
       mla: mapRepresentative(row.mlaRepresentative),
       mp: mapRepresentative(row.mpRepresentative),
       media: row.mediaAssets.map(mapMedia),
-      votes: row.votes.length,
-      comments: row.comments.length,
+      votes: row._count.votes,
+      comments: row._count.comments,
     }));
   }
 
@@ -268,12 +282,7 @@ export class PrismaReportRepository implements ReportRepository {
   async getReportDetail(reportId: string): Promise<ReportDetail | null> {
     const row = await prisma.report.findUnique({
       where: { id: reportId },
-      include: {
-        ...reportInclude,
-        statusHistory: {
-          orderBy: { createdAt: "asc" },
-        },
-      },
+      include: reportDetailInclude,
     });
 
     if (!row) {
@@ -288,8 +297,8 @@ export class PrismaReportRepository implements ReportRepository {
       mla: mapRepresentative(row.mlaRepresentative),
       mp: mapRepresentative(row.mpRepresentative),
       media: row.mediaAssets.map(mapMedia),
-      votes: row.votes.length,
-      comments: row.comments.length,
+      votes: row._count.votes,
+      comments: row._count.comments,
       timeline: row.statusHistory.map((entry: PrismaReportStatusHistory) => ({
         id: entry.id,
         reportId: entry.reportId,
@@ -299,7 +308,7 @@ export class PrismaReportRepository implements ReportRepository {
         changedByUserId: entry.changedByUserId,
         createdAt: entry.createdAt.toISOString(),
       })),
-      commentItems: row.comments.map(mapComment).sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)),
+      commentItems: row.comments.map(mapComment),
     };
   }
 
@@ -616,7 +625,7 @@ export class PrismaReportRepository implements ReportRepository {
     const [sameImageRows, nearbyRows, sessionRows] = await Promise.all([
       prisma.report.findMany({
         where: { mediaAssets: { some: { sha256Hash: input.sha256Hash } } },
-        include: reportInclude,
+        include: reportListInclude,
         orderBy: { createdAt: "desc" },
       }),
       prisma.report.findMany({
@@ -631,7 +640,7 @@ export class PrismaReportRepository implements ReportRepository {
             lte: input.longitude + 0.002,
           },
         },
-        include: reportInclude,
+        include: reportListInclude,
         orderBy: { createdAt: "desc" },
       }),
       input.sessionFingerprintHash
@@ -640,7 +649,7 @@ export class PrismaReportRepository implements ReportRepository {
               deviceFingerprintHash: input.sessionFingerprintHash,
               createdAt: { gte: windowStart },
             },
-            include: reportInclude,
+            include: reportListInclude,
             orderBy: { createdAt: "desc" },
           })
         : Promise.resolve([]),
@@ -654,8 +663,8 @@ export class PrismaReportRepository implements ReportRepository {
       mla: mapRepresentative(row.mlaRepresentative),
       mp: mapRepresentative(row.mpRepresentative),
       media: row.mediaAssets.map(mapMedia),
-      votes: row.votes.length,
-      comments: row.comments.length,
+      votes: row._count.votes,
+      comments: row._count.comments,
     });
 
     const nearbyMatches = nearbyRows

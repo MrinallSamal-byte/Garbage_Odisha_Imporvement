@@ -68,6 +68,10 @@ const config: Config = {
         mono: ["var(--font-ibm-plex-mono)", "monospace"],
       },
       keyframes: {
+        "page-enter": {
+          "0%": { opacity: "0", transform: "translateY(6px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
         "fade-up": {
           "0%": { opacity: "0", transform: "translateY(24px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
@@ -76,6 +80,10 @@ const config: Config = {
           "0%": { transform: "scale(0.95)", opacity: "0.45" },
           "70%": { transform: "scale(1.08)", opacity: "0" },
           "100%": { transform: "scale(1.08)", opacity: "0" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-400px 0" },
+          "100%": { backgroundPosition: "400px 0" },
         },
       },
       animation: {
