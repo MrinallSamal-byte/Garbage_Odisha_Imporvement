@@ -1,8 +1,5 @@
 import "server-only";
 
-import { env } from "@/lib/env";
-
-import { DatabaseCivicRepository } from "@/lib/civic/repository.database";
 import { MockCivicRepository } from "@/lib/civic/repository.mock";
 import type {
   GeoLookupResult,
@@ -49,7 +46,7 @@ let repository: CivicRepository | null = null;
 
 export function getCivicRepository() {
   if (!repository) {
-    repository = env.APP_MODE === "real" ? new DatabaseCivicRepository() : new MockCivicRepository();
+    repository = new MockCivicRepository();
   }
 
   return repository;

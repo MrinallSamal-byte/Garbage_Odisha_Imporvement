@@ -44,7 +44,7 @@ export function SiteHeader() {
           <Link
             href="/search"
             className="inline-flex h-9 items-center gap-2 rounded-full border border-slateblue-100 bg-white px-3 text-sm text-slateblue-500 shadow-sm transition hover:border-civic-200 hover:text-ink"
-            aria-label="Search reports and Delhi accountability records"
+            aria-label="Search reports and Bhubaneswar accountability records"
           >
             <Search className="h-4 w-4" />
             <span className="hidden lg:inline">Search</span>

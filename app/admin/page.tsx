@@ -27,7 +27,7 @@ export default async function AdminPage() {
       <div className="grid gap-6 md:grid-cols-[1fr_320px]">
         <Card>
           <div className="section-label">Admin workspace</div>
-          <h1 className="mt-4 text-4xl font-black tracking-tight text-ink">Moderate reports, manage representatives, and keep the Odisha GIS layer current.</h1>
+          <h1 className="mt-4 text-4xl font-black tracking-tight text-ink">Moderate reports, manage representatives, and keep the Bhubaneswar GIS layer current.</h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-slateblue-700">
             Signed in as {session.email}. Use the panels below to update statuses, review suspicious
             reports, and refresh representative records.

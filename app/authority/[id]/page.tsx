@@ -47,7 +47,7 @@ export default async function AuthorityPage({ params }: AuthorityPageProps) {
             {authority.name}
           </h1>
           <p className="text-base leading-8 text-slateblue-700">
-            {authority.description ?? "Delhi civic authority profile and complaint accountability page."}
+            {authority.description ?? "Bhubaneswar civic authority profile and complaint accountability page."}
           </p>
         </div>
 
@@ -105,7 +105,7 @@ function SetupError({ message }: { message: string }) {
     <main className="container py-12">
       <Card className="max-w-3xl border-amber-200 bg-amber-50 p-6 text-sm leading-6 text-amber-950">
         <div className="section-label">Authority unavailable</div>
-        <h1 className="mt-4 text-3xl font-black tracking-tight">Delhi authority data is not readable yet.</h1>
+        <h1 className="mt-4 text-3xl font-black tracking-tight">Bhubaneswar authority data is not readable yet.</h1>
         <p className="mt-3">{message}</p>
       </Card>
     </main>

@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { DelhiReportCard } from "@/components/delhi/delhi-report-card";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getDelhiHomeData, getDelhiWardById } from "@/lib/delhi/repository";
-import type { DelhiFilters } from "@/lib/delhi/types";
+import { Card } from "@/components/ui/card";
+import { severityBadgeClasses, severityLabels } from "@/lib/civic/constants";
+import { getCivicRepository } from "@/lib/civic/repository";
+import { formatWardLabel } from "@/lib/civic/map-view";
 
 export const dynamic = "force-dynamic";
 
@@ -13,81 +13,80 @@ type WardPageProps = {
   params: Promise<{ id: string }>;
 };
 
-function filtersForWard(ward: string): DelhiFilters {
-  return {
-    view: "list",
-    severity: "all",
-    status: "all",
-    wasteType: "all",
-    authority: "",
-    ward,
-    mla: "",
-    mp: "",
-    q: "",
-  };
-}
-
 export default async function WardPage({ params }: WardPageProps) {
   const { id } = await params;
+  const repository = getCivicRepository();
+  const [wards, reports] = await Promise.all([
+    repository.listWards(),
+    repository.listReports(),
+  ]);
+  const ward = wards.find((item) => item.id === id);
 
-  try {
-    const ward = await getDelhiWardById(id);
-
-    if (!ward) {
-      notFound();
-    }
-
-    const data = await getDelhiHomeData(filtersForWard(ward.id));
-
-    return (
-      <main className="container py-12">
-        <div className="max-w-3xl space-y-5">
-          <div className="section-label">Ward or local unit</div>
-          <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
-            Ward {ward.number} - {ward.name}
-          </h1>
-          <p className="text-base leading-8 text-slateblue-700">
-            {ward.authority ? `Civic authority: ${ward.authority.name}` : "Civic authority mapping pending."}
-            {ward.zone ? ` Zone: ${ward.zone}.` : ""}
-          </p>
-        </div>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <Stat label="Active reports" value={data.stats.activeReports} />
-          <Stat label="Total reports" value={data.stats.totalReports} />
-          <Stat label="Resolved" value={data.stats.resolvedReports} />
-        </div>
-
-        <section className="mt-8 space-y-4">
-          <h2 className="text-2xl font-black text-ink">Complaints in this ward</h2>
-          {data.reports.length ? (
-            <div className="grid gap-4">
-              {data.reports.map((report) => (
-                <DelhiReportCard key={report.id} report={report} />
-              ))}
-            </div>
-          ) : (
-            <Card className="border-dashed p-6 text-sm leading-6 text-slateblue-700">
-              No complaints are linked to this ward yet.
-            </Card>
-          )}
-        </section>
-
-        <div className="mt-8 flex flex-wrap gap-3">
-          {ward.authority ? (
-            <Link href={`/authority/${ward.authority.id}`}>
-              <Button variant="secondary">Open civic authority</Button>
-            </Link>
-          ) : null}
-          <Link href="/">
-            <Button variant="secondary">Back to map</Button>
-          </Link>
-        </div>
-      </main>
-    );
-  } catch (error) {
-    return <SetupError message={error instanceof Error ? error.message : "Ward page unavailable."} />;
+  if (!ward) {
+    notFound();
   }
+
+  const wardReports = reports.filter((item) => item.ward.id === ward.id);
+  const activeReports = wardReports.filter((item) => item.report.status !== "resolved");
+  const resolvedReports = wardReports.filter((item) => item.report.status === "resolved");
+
+  return (
+    <main className="container py-12">
+      <div className="max-w-3xl space-y-5">
+        <div className="section-label">Bhubaneswar ward</div>
+        <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
+          {formatWardLabel(ward)}
+        </h1>
+        <p className="text-base leading-8 text-slateblue-700">
+          BMC zone: {ward.zone}. Reports shown here use the Bhubaneswar civic ward boundary data.
+        </p>
+      </div>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+        <Stat label="Active reports" value={activeReports.length} />
+        <Stat label="Total reports" value={wardReports.length} />
+        <Stat label="Resolved" value={resolvedReports.length} />
+      </div>
+
+      <section className="mt-8 space-y-4">
+        <h2 className="text-2xl font-black text-ink">Reports in this ward</h2>
+        {wardReports.length ? (
+          <div className="grid gap-3">
+            {wardReports.map((item) => (
+              <Link
+                key={item.report.id}
+                href={`/report/${item.report.id}`}
+                className="grid gap-3 rounded-md border border-slateblue-100 bg-white p-4 transition hover:border-[#e60023]/40 sm:grid-cols-[1fr_auto]"
+              >
+                <div>
+                  <h3 className="font-black text-ink">{item.report.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-slateblue-700">{item.report.address}</p>
+                </div>
+                <div className="flex items-center gap-2 sm:block sm:text-right">
+                  <span className={`inline-flex rounded-full border px-3 py-1 text-xs font-black ${severityBadgeClasses[item.report.severity]}`}>
+                    {severityLabels[item.report.severity]}
+                  </span>
+                  <div className="text-xs font-bold text-slateblue-500 sm:mt-2">
+                    {item.report.reporterCount} report{item.report.reporterCount === 1 ? "" : "s"}
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Card className="border-dashed p-6 text-sm leading-6 text-slateblue-700">
+            No Bhubaneswar reports are linked to this ward yet.
+          </Card>
+        )}
+      </section>
+
+      <div className="mt-8">
+        <Link href="/">
+          <Button variant="secondary">Back to map</Button>
+        </Link>
+      </div>
+    </main>
+  );
 }
 
 function Stat({ label, value }: { label: string; value: number }) {
@@ -96,17 +95,5 @@ function Stat({ label, value }: { label: string; value: number }) {
       <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slateblue-500">{label}</div>
       <div className="mt-2 text-3xl font-black text-ink">{value}</div>
     </Card>
-  );
-}
-
-function SetupError({ message }: { message: string }) {
-  return (
-    <main className="container py-12">
-      <Card className="max-w-3xl border-amber-200 bg-amber-50 p-6 text-sm leading-6 text-amber-950">
-        <div className="section-label">Ward unavailable</div>
-        <h1 className="mt-4 text-3xl font-black tracking-tight">Delhi ward data is not readable yet.</h1>
-        <p className="mt-3">{message}</p>
-      </Card>
-    </main>
   );
 }

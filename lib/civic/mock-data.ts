@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+
 import type { FeatureCollection, MultiPolygon } from "geojson";
 
 import { wasteTypeLabels } from "@/lib/civic/constants";
@@ -8,10 +11,6 @@ import type {
   WasteTypeRecord,
   WardBoundary,
 } from "@/lib/civic/types";
-import mlasGeojson from "@/data/civic/mlas.geojson";
-import mpsGeojson from "@/data/civic/mps.geojson";
-import reportsJson from "@/data/civic/reports.json";
-import wardsGeojson from "@/data/civic/wards.geojson";
 
 type OfficialFeatureCollection = FeatureCollection<
   MultiPolygon,
@@ -38,7 +37,33 @@ type WardFeatureCollection = FeatureCollection<
   }
 >;
 
-type SeedReport = typeof reportsJson;
+type SeedReport = Array<{
+  id: string;
+  title: string;
+  address: string;
+  landmark: string | null;
+  lat: number;
+  lng: number;
+  severity: string;
+  status: string;
+  reporter_count: number;
+  photo_url: string;
+  verification_photo_url: string | null;
+  created_at: string;
+  updated_at: string;
+  resolved_at: string | null;
+}>;
+
+function readCivicJson<T>(filename: string): T {
+  return JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "data", "civic", filename), "utf8"),
+  ) as T;
+}
+
+const wardsGeojson = readCivicJson<WardFeatureCollection>("wards.geojson");
+const mlasGeojson = readCivicJson<OfficialFeatureCollection>("mlas.geojson");
+const mpsGeojson = readCivicJson<OfficialFeatureCollection>("mps.geojson");
+const reportsJson = readCivicJson<SeedReport>("reports.json");
 
 export const mockWasteTypes: WasteTypeRecord[] = Object.entries(wasteTypeLabels).map(([key, label], index) => ({
   id: `00000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
@@ -47,7 +72,7 @@ export const mockWasteTypes: WasteTypeRecord[] = Object.entries(wasteTypeLabels)
   description: null,
 }));
 
-export const mockWards: WardBoundary[] = (wardsGeojson as WardFeatureCollection).features.map((feature) => ({
+export const mockWards: WardBoundary[] = wardsGeojson.features.map((feature) => ({
   id: feature.properties.id,
   number: feature.properties.number,
   name: feature.properties.name,
@@ -79,12 +104,12 @@ function mapOfficialCollection(collection: OfficialFeatureCollection): OfficialB
   }));
 }
 
-export const mockMlas = mapOfficialCollection(mlasGeojson as OfficialFeatureCollection);
-export const mockMps = mapOfficialCollection(mpsGeojson as OfficialFeatureCollection);
+export const mockMlas = mapOfficialCollection(mlasGeojson);
+export const mockMps = mapOfficialCollection(mpsGeojson);
 
 const wasteTypesById = new Map(mockWasteTypes.map((item) => [item.id, item]));
 
-export const mockReports: ReportRecord[] = (reportsJson as SeedReport).map((report, index) => ({
+export const mockReports: ReportRecord[] = reportsJson.map((report, index) => ({
   id: report.id,
   reporterId: null,
   wardId: mockWards[index]?.id ?? mockWards[0].id,

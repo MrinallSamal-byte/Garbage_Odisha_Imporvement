@@ -20,7 +20,7 @@ export default function GlobalError({
           <div className="space-y-4">
             <div className="section-label">Temporary service issue</div>
             <h1 className="text-4xl font-extrabold tracking-tight text-ink md:text-5xl">
-              Delhi Garbage Watch could not load this page.
+              Namma Odia could not load this page.
             </h1>
             <p className="mx-auto max-w-2xl text-sm leading-7 text-slateblue-700 md:text-base">
               A server-side dependency may be unavailable right now. The app can usually recover after

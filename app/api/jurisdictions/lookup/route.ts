@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import { lookupDelhiJurisdictionsByPoint } from "@/lib/delhi/repository";
+import { getCivicRepository } from "@/lib/civic/repository";
 import { fail, ok } from "@/lib/utils/http";
 
 export const dynamic = "force-dynamic";
@@ -14,8 +14,12 @@ export async function GET(request: NextRequest) {
       return ok({ error: "lat and lng query parameters are required." }, { status: 400 });
     }
 
-    const result = await lookupDelhiJurisdictionsByPoint(lat, lng);
-    return ok(result);
+    const result = await getCivicRepository().lookupByPoint(lat, lng);
+
+    return ok({
+      ...result,
+      warnings: result.ward ? [] : ["No Bhubaneswar ward matched this point."],
+    });
   } catch (error) {
     return fail(error);
   }

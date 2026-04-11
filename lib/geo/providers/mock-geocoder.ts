@@ -4,9 +4,9 @@ import type { ReverseGeocoder } from "@/lib/geo/reverse-geocoder";
 
 export class MockReverseGeocoder implements ReverseGeocoder {
   async reverseGeocode(lat: number, lng: number): Promise<ReverseGeocodeResult> {
-    const locality = `Approximate Delhi location ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-    const district = "Delhi";
-    const addressLine = `${locality}, Delhi, India`;
+    const locality = `Approximate Bhubaneswar location ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    const district = "Khordha";
+    const addressLine = `${locality}, Bhubaneswar, Odisha, India`;
 
     return {
       addressLine,
@@ -14,7 +14,7 @@ export class MockReverseGeocoder implements ReverseGeocoder {
       wardName: null,
       blockName: null,
       districtName: district,
-      stateName: "Delhi",
+      stateName: "Odisha",
       countryName: "India",
       postalCode: null,
       formattedLabel: `${addressLine} (mock reverse geocoder)`,

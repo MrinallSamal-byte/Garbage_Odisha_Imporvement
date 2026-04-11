@@ -31,31 +31,31 @@ function getMetadataBase() {
 export const metadata: Metadata = {
   metadataBase: getMetadataBase(),
   title: {
-    default: "Delhi Garbage Watch",
-    template: "%s | Delhi Garbage Watch",
+    default: "Namma Odia",
+    template: "%s | Namma Odia",
   },
   description:
-    "Delhi-wide civic garbage reporting with GPS capture, public map/list views, and GIS-based civic authority, ward, MLA, and MP mapping.",
-  applicationName: "Delhi Garbage Watch",
+    "Bhubaneswar civic garbage reporting with GPS capture, public map/list views, and GIS-based BMC ward, MLA, and MP mapping.",
+  applicationName: "Namma Odia",
   manifest: "/manifest.webmanifest",
   keywords: [
-    "Delhi civic reporting",
-    "garbage complaint Delhi",
-    "Delhi ward map",
-    "MLA lookup Delhi",
-    "MP lookup Delhi",
+    "Bhubaneswar civic reporting",
+    "garbage complaint Bhubaneswar",
+    "BMC ward map",
+    "MLA lookup Bhubaneswar",
+    "MP lookup Bhubaneswar",
   ],
   openGraph: {
-    title: "Delhi Garbage Watch",
+    title: "Namma Odia",
     description:
-      "Photograph roadside garbage in Delhi, map it to the correct civic authority and elected representatives, and track public cleanup progress.",
-    siteName: "Delhi Garbage Watch",
+      "Photograph roadside garbage in Bhubaneswar, map it to the correct BMC ward and elected representatives, and track public cleanup progress.",
+    siteName: "Namma Odia",
     type: "website",
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Delhi Garbage Watch",
+    title: "Namma Odia",
   },
   icons: {
     icon: [

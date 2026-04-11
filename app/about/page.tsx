@@ -12,9 +12,9 @@ const pillars = [
     icon: Trash2,
   },
   {
-    title: "Delhi jurisdiction mapping",
+    title: "Bhubaneswar ward mapping",
     description:
-      "Each point should resolve to the right civic authority, ward or equivalent, assembly constituency, and parliamentary constituency.",
+      "Each point should resolve to the right BMC ward, assembly constituency, and parliamentary constituency.",
     icon: MapPinned,
   },
   {
@@ -31,12 +31,12 @@ export default function AboutPage() {
       <div className="max-w-3xl space-y-5">
         <div className="section-label">How it works</div>
         <h1 className="text-4xl font-black tracking-tight text-ink md:text-5xl">
-          Delhi-wide garbage reporting with jurisdiction-aware public routing.
+          Bhubaneswar garbage reporting with ward-aware public routing.
         </h1>
         <p className="text-base leading-8 text-slateblue-700">
-          This platform is being upgraded into a Delhi-wide civic reporting app that maps every
-          complaint to the correct civic authority, ward or equivalent, MLA, and MP using GIS
-          boundaries stored in the primary DigitalOcean PostgreSQL database.
+          This platform maps each complaint to the correct Bhubaneswar ward, MLA, and MP using
+          civic GIS boundaries. The current BMC ward file can be replaced by official GeoJSON
+          without changing the reporting experience.
         </p>
       </div>
 

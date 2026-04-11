@@ -1,7 +1,7 @@
 {
-  "name": "Delhi Garbage Watch",
-  "short_name": "DGW",
-  "description": "Mobile-first civic garbage reporting for Delhi with GIS-based civic authority, ward, MLA, and MP mapping.",
+  "name": "Namma Odia",
+  "short_name": "Namma Odia",
+  "description": "Mobile-first civic garbage reporting for Bhubaneswar with GIS-based BMC ward, MLA, and MP mapping.",
   "start_url": "/?source=pwa",
   "display": "standalone",
   "background_color": "#f7fbfa",

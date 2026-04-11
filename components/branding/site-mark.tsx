@@ -1,5 +1,3 @@
-import { MapPinned } from "lucide-react";
-
 import { cn } from "@/lib/utils/cn";
 
 type SiteMarkProps = {
@@ -11,23 +9,25 @@ type SiteMarkProps = {
 
 export function SiteMark({
   className,
-  eyebrow = "Delhi civic reporting",
+  eyebrow = "Bhubaneswar civic reporting",
   tagline = "Crowdsourced garbage reporting with GIS accountability.",
   iconOnly = false,
 }: SiteMarkProps) {
   return (
     <div className={cn("flex items-center gap-3", className)}>
-      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-ink text-white shadow-card">
-        <MapPinned className="h-5 w-5" />
-      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/namma-odia-logo.png"
+        alt="Namma Odia"
+        className={cn(
+          "h-11 w-auto rounded-md object-contain shadow-sm",
+          iconOnly && "h-12 max-w-36",
+        )}
+      />
       {!iconOnly ? (
-        <div className="space-y-0.5">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.24em] text-civic-700">
-            {eyebrow}
-          </div>
-          <div className="text-lg font-extrabold tracking-tight text-ink">Delhi Garbage Watch</div>
-          <div className="text-xs text-slateblue-600">{tagline}</div>
-        </div>
+        <span className="sr-only">
+          Namma Odia. {eyebrow}. {tagline}
+        </span>
       ) : null}
     </div>
   );
