@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import { Camera, CheckCircle2, LoaderCircle, LocateFixed, RotateCcw, X } from "lucide-react";
 
 import { LazyBhubaneswarMap } from "@/components/civic/lazy-bhubaneswar-map";
+import {
+  PoliticalRepresentativeSummary,
+  lookupPoliticalRepresentativesByCoordinates,
+} from "@/components/civic/political-location-detector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -18,6 +22,7 @@ import {
 } from "@/lib/civic/constants";
 import type { ReportSeverity, WasteTypeKey } from "@/lib/civic/types";
 import type { CivicMapReport, CivicMapWard, WardOption } from "@/lib/civic/map-view";
+import type { PoliticalLookupApiResponse } from "@/lib/political/types";
 import { cn } from "@/lib/utils/cn";
 
 type LocationState = {
@@ -82,6 +87,8 @@ export function ReportGarbageSheet({
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [politicalLookup, setPoliticalLookup] = useState<PoliticalLookupApiResponse | null>(null);
+  const [politicalLookupError, setPoliticalLookupError] = useState<string | null>(null);
 
   useEffect(() => {
     return () => {
@@ -100,14 +107,27 @@ export function ReportGarbageSheet({
   }
 
   async function lookupLocation(latitude: number, longitude: number) {
-    const [reverseResult, wardResult] = await Promise.allSettled([
+    const [reverseResult, wardResult, politicalResult] = await Promise.allSettled([
       fetch(`/api/geocode/reverse?lat=${latitude}&lng=${longitude}`),
       fetch(`/api/jurisdictions/lookup?lat=${latitude}&lng=${longitude}`),
+      lookupPoliticalRepresentativesByCoordinates(latitude, longitude),
     ]);
 
     if (reverseResult.status === "fulfilled" && reverseResult.value.ok) {
       const reverse = (await reverseResult.value.json()) as { addressLine?: string; formattedLabel?: string };
       setAddressText((current) => current || reverse.addressLine || reverse.formattedLabel || "");
+    }
+
+    if (politicalResult.status === "fulfilled") {
+      setPoliticalLookup(politicalResult.value);
+      setPoliticalLookupError(null);
+    } else {
+      setPoliticalLookup(null);
+      setPoliticalLookupError(
+        politicalResult.reason instanceof Error
+          ? politicalResult.reason.message
+          : "Representative lookup failed.",
+      );
     }
 
     if (wardResult.status !== "fulfilled") {
@@ -129,6 +149,8 @@ export function ReportGarbageSheet({
 
   async function handleCurrentLocation() {
     setError(null);
+    setPoliticalLookup(null);
+    setPoliticalLookupError(null);
     setLoadingLocation(true);
 
     if (!navigator.geolocation) {
@@ -312,6 +334,16 @@ export function ReportGarbageSheet({
               {location ? (
                 <div className="mt-2 rounded-md border border-emerald-100 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">
                   GPS locked - {Math.round(location.accuracy)} m accuracy
+                </div>
+              ) : null}
+              {politicalLookup ? (
+                <div className="mt-3">
+                  <PoliticalRepresentativeSummary result={politicalLookup} compact />
+                </div>
+              ) : null}
+              {politicalLookupError ? (
+                <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold leading-5 text-amber-800">
+                  {politicalLookupError}
                 </div>
               ) : null}
             </div>

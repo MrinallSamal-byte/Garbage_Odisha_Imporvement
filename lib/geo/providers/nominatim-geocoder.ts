@@ -8,11 +8,13 @@ type NominatimResponse = {
   address?: {
     suburb?: string;
     neighbourhood?: string;
+    quarter?: string;
     village?: string;
     road?: string;
     city?: string;
     town?: string;
     municipality?: string;
+    city_district?: string;
     county?: string;
     state?: string;
     country?: string;
@@ -40,10 +42,14 @@ export class NominatimReverseGeocoder implements ReverseGeocoder {
     }
 
     const payload = (await response.json()) as NominatimResponse;
+    const suburb = payload.address?.suburb ?? null;
+    const neighbourhood = payload.address?.neighbourhood ?? payload.address?.quarter ?? null;
+    const village = payload.address?.village ?? null;
+    const city = payload.address?.city ?? payload.address?.town ?? null;
     const locality =
-      payload.address?.suburb ??
-      payload.address?.neighbourhood ??
-      payload.address?.village ??
+      suburb ??
+      neighbourhood ??
+      village ??
       payload.address?.town ??
       payload.address?.city ??
       null;
@@ -54,9 +60,15 @@ export class NominatimReverseGeocoder implements ReverseGeocoder {
           ? `${payload.address.road}, ${locality}, ${payload.address?.county ?? ""}`.replace(/,\s*,/g, ",")
           : payload.display_name ?? "Unknown address",
       locality,
+      suburb,
+      neighbourhood,
+      village,
+      city,
       wardName: null,
-      blockName: payload.address?.municipality ?? null,
-      districtName: payload.address?.county ?? null,
+      wardNumber: null,
+      gramPanchayat: village,
+      blockName: payload.address?.municipality ?? payload.address?.city_district ?? null,
+      districtName: payload.address?.county ?? payload.address?.city_district ?? null,
       stateName: payload.address?.state ?? null,
       countryName: payload.address?.country ?? null,
       postalCode: payload.address?.postcode ?? null,

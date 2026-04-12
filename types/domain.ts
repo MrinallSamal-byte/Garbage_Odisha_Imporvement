@@ -243,7 +243,13 @@ export interface OdishaBoundaryRecord {
 export interface ReverseGeocodeResult {
   addressLine: string;
   locality: string | null;
+  suburb?: string | null;
+  neighbourhood?: string | null;
+  village?: string | null;
+  city?: string | null;
   wardName: string | null;
+  wardNumber?: number | null;
+  gramPanchayat?: string | null;
   blockName: string | null;
   districtName: string | null;
   stateName: string | null;

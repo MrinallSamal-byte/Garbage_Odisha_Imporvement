@@ -20,6 +20,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "seed:mock": "tsx scripts/seed-mock.ts",
     "seed:representatives": "tsx scripts/seed-representatives.ts",
+    "seed:political-mapping": "tsx scripts/seed-political-area-mapping.ts",
     "db:health": "tsx -e \"import { healthCheckDb } from './lib/db/health'; healthCheckDb().then((result) => { console.log(JSON.stringify(result, null, 2)); process.exit(result.ok ? 0 : 1); });\"",
     "import:delhi:boundaries": "tsx scripts/import-delhi-boundaries.ts",
     "import:delhi:parties": "tsx scripts/import-delhi-parties.ts",

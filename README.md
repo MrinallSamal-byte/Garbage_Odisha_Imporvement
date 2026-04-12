@@ -163,6 +163,26 @@ Use `APP_MODE=real` when PostgreSQL + PostGIS are available. In this mode:
 - Representative profile page with area-linked reports
 - Admin login, moderation queue, representative management, and import notes
 
+## Bhubaneswar MP/MLA lookup
+
+The Bhubaneswar representative detector is available at `/representatives/by-location` and is also shown inside the report form after GPS capture. The browser only sends latitude and longitude to `POST /api/political-representatives/by-location`; the backend reverse geocodes the point, loads the active `political_area_mappings` JSONB row, and then resolves representatives in this order:
+
+1. constituency polygon contains the GPS point
+2. reverse-geocoded BMC ward number
+3. reverse-geocoded gram panchayat or village
+4. normalized locality keyword score
+5. ambiguous/manual review fallback
+
+GPS alone is not enough when the available political data is keyword based. A raw coordinate must be converted into administrative or locality evidence before it can be matched to the JSON. When polygon data is missing, the response is explicitly marked as an approximate fallback with `matched_by`, `confidence_score`, and notes.
+
+Seed or refresh the active mapping:
+
+```bash
+npm run seed:political-mapping
+```
+
+Accuracy improves when ward shapefiles and assembly/Lok Sabha GeoJSON are loaded into PostGIS, because polygon containment can return `matched_by: "polygon"` with high confidence before keyword fallback runs.
+
 ## Folder structure
 
 ```text

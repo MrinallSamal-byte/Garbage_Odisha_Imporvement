@@ -319,3 +319,18 @@ model OdishaBoundary {
 
   @@map("odisha_boundary")
 }
+
+model PoliticalAreaMapping {
+  id        String   @id @default(uuid()) @db.Uuid
+  city      String
+  state     String
+  dataJson  Json     @map("data_json")
+  version   String
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([city, state, version])
+  @@index([city, state, isActive])
+  @@map("political_area_mappings")
+}
