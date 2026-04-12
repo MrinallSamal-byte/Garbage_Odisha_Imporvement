@@ -1,4 +1,4 @@
-import { PoliticalLocationDetector } from "@/components/civic/political-location-detector";
+import { PoliticalLocationDetector } from "@/features/political-representatives/components/political-location-detector";
 
 export const dynamic = "force-dynamic";
 

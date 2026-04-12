@@ -3,7 +3,7 @@ import {
   extractWardNumber,
   normalizeLocationText,
   uniqueNormalizedValues,
-} from "@/lib/political/normalization";
+} from "@/features/political-representatives/shared/normalization";
 import type {
   AmbiguousPoliticalKeyword,
   KeywordScore,
@@ -11,7 +11,7 @@ import type {
   PoliticalAreaMapping,
   PoliticalAreaRecord,
   PoliticalReverseGeocodeResult,
-} from "@/lib/political/types";
+} from "@/features/political-representatives/shared/types";
 
 function getRecordGramPanchayats(record: PoliticalAreaRecord) {
   return [
@@ -74,13 +74,7 @@ export function findGpMatchFromAddress(
   mapping: PoliticalAreaMapping,
   address: PoliticalReverseGeocodeResult,
 ) {
-  const gpCandidates = [
-    address.gramPanchayat,
-    address.village,
-    address.locality,
-    address.suburb,
-    address.neighbourhood,
-  ];
+  const gpCandidates = [address.gramPanchayat, address.village];
 
   for (const candidate of gpCandidates) {
     const match = findGpMatch(mapping, candidate);

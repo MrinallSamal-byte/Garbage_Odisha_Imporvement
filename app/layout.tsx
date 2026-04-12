@@ -1,22 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Manrope } from "next/font/google";
+import { DM_Mono, DM_Sans } from "next/font/google";
 
 import { FirstVisitWelcome } from "@/components/civic/first-visit-welcome";
-import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
-import { MobilePrimaryCta } from "@/components/layout/mobile-primary-cta";
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register";
 import { env } from "@/lib/env";
 
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
+const dmMono = DM_Mono({
+  variable: "--font-dm-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
 });
@@ -79,15 +77,12 @@ export default function RootLayout({
   return (
     <html lang="en-IN" suppressHydrationWarning>
       <body
-        className={`${manrope.variable} ${ibmPlexMono.variable} bg-transparent font-sans antialiased`}
+        className={`${dmSans.variable} ${dmMono.variable} bg-white font-sans antialiased`}
       >
         <ServiceWorkerRegister />
-        <div className="relative flex min-h-screen flex-col pb-24 md:pb-0">
-          <div className="absolute inset-0 -z-10 bg-civic-grid bg-grid-sm opacity-50" />
+        <div className="relative flex min-h-screen flex-col bg-white">
           <SiteHeader />
           <main className="flex-1">{children}</main>
-          <SiteFooter />
-          <MobilePrimaryCta />
         </div>
         <FirstVisitWelcome />
       </body>

@@ -1,10 +1,10 @@
 import { NextRequest } from "next/server";
 
-import { politicalByLocationSchema } from "@/lib/validation/schemas";
+import { politicalByLocationSchema } from "@/features/political-representatives/shared/validation";
 import { AppError } from "@/lib/utils/errors";
 import { fail, ok } from "@/lib/utils/http";
 import { assertSameOrigin } from "@/lib/utils/request";
-import { findRepresentativesByLocation } from "@/server/services/political-representatives-service";
+import { findRepresentativesByLocation } from "@/features/political-representatives/server/service";
 
 export const dynamic = "force-dynamic";
 

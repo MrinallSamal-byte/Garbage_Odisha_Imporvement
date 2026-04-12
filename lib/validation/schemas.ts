@@ -51,11 +51,6 @@ export const byPointSchema = z.object({
   lng: z.coerce.number().min(81).max(88),
 });
 
-export const politicalByLocationSchema = z.object({
-  latitude: z.coerce.number().min(17).max(23),
-  longitude: z.coerce.number().min(81).max(88),
-});
-
 export const adminLoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),

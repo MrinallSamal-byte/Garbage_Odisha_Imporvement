@@ -1,4 +1,5 @@
-import { disconnectImporter, seedPoliticalAreaMapping } from "@/scripts/import-lib";
+import { seedPoliticalAreaMapping } from "@/features/political-representatives/server/seed";
+import { disconnectImporter } from "@/scripts/import-lib";
 
 seedPoliticalAreaMapping()
   .catch((error) => {

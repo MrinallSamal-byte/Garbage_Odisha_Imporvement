@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { PoliticalLocationDetector } from "@/components/civic/political-location-detector";
+import { PoliticalLocationDetector } from "@/features/political-representatives/components/political-location-detector";
 
 function mockGeolocationSuccess() {
   Object.defineProperty(navigator, "geolocation", {
@@ -131,6 +131,31 @@ describe("PoliticalLocationDetector", () => {
 
     expect(await screen.findByText(/could not be mapped confidently/i)).toBeTruthy();
     expect(screen.getByText(/Bhubaneswar Central \(Madhya\), Ekamra-Bhubaneswar/)).toBeTruthy();
+  });
+
+  it("renders no-match lookup states", async () => {
+    mockGeolocationSuccess();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        new Response(
+          JSON.stringify({
+            success: false,
+            status: "not_found",
+            error_code: "NO_MATCH_FOUND",
+            message: "No matching constituency found for the detected location.",
+            matched_by: "none",
+          }),
+          { status: 200, headers: { "content-type": "application/json" } },
+        ),
+      ),
+    );
+
+    render(<PoliticalLocationDetector />);
+    await userEvent.click(screen.getByRole("button", { name: /detect my location/i }));
+
+    expect(await screen.findByText(/no matching constituency found/i)).toBeTruthy();
+    expect(screen.getByText(/matched by: none/i)).toBeTruthy();
   });
 
   it("renders backend failures", async () => {

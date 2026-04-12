@@ -8,8 +8,8 @@ import { Camera, CheckCircle2, LoaderCircle, LocateFixed, RotateCcw, X } from "l
 import { LazyBhubaneswarMap } from "@/components/civic/lazy-bhubaneswar-map";
 import {
   PoliticalRepresentativeSummary,
-  lookupPoliticalRepresentativesByCoordinates,
-} from "@/components/civic/political-location-detector";
+} from "@/features/political-representatives/components/political-location-detector";
+import { lookupPoliticalRepresentativesByCoordinates } from "@/features/political-representatives/client/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -22,7 +22,7 @@ import {
 } from "@/lib/civic/constants";
 import type { ReportSeverity, WasteTypeKey } from "@/lib/civic/types";
 import type { CivicMapReport, CivicMapWard, WardOption } from "@/lib/civic/map-view";
-import type { PoliticalLookupApiResponse } from "@/lib/political/types";
+import type { PoliticalLookupApiResponse } from "@/features/political-representatives/shared/types";
 import { cn } from "@/lib/utils/cn";
 
 type LocationState = {

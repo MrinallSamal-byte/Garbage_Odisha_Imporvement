@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 
 import { resetMockState } from "@/lib/mock/runtime-store";
@@ -7,6 +7,10 @@ import { POST as lookupByLocation } from "@/app/api/political-representatives/by
 describe("political representatives by-location API", () => {
   beforeEach(async () => {
     await resetMockState();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("returns representative details for valid Bhubaneswar coordinates", async () => {
@@ -57,5 +61,23 @@ describe("political representatives by-location API", () => {
     expect(payload.debug).toBeTruthy();
     expect(payload.debug.normalized_candidates).toEqual(expect.any(Array));
     expect(payload.debug.polygon_lookup_notes).toEqual(expect.any(Array));
+  });
+
+  it("omits debug metadata in production", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+
+    const response = await lookupByLocation(
+      new NextRequest("http://localhost:3000/api/political-representatives/by-location", {
+        method: "POST",
+        body: JSON.stringify({ latitude: 20.2963, longitude: 85.8192 }),
+        headers: { "content-type": "application/json" },
+      }),
+    );
+
+    const payload = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(payload.success).toBe(true);
+    expect(payload.debug).toBeUndefined();
   });
 });

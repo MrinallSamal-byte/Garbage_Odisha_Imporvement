@@ -1,9 +1,8 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-import { Activity, BarChart3, List, Map as MapIcon, Plus } from "lucide-react";
+import { BarChart3, Plus } from "lucide-react";
 
+import { HomeFilterControls } from "@/components/civic/home-filter-controls";
 import { LazyBhubaneswarMap } from "@/components/civic/lazy-bhubaneswar-map";
-import { reportSeverities, reportStatuses, severityLabels, statusLabels } from "@/lib/civic/constants";
 import { getCivicRepository } from "@/lib/civic/repository";
 import { buildHomeQuery, parseHomeFilters } from "@/lib/civic/search-params";
 import type { HomeFilters, ReportListItem } from "@/lib/civic/types";
@@ -59,50 +58,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const worstWards = buildWorstWards(allReports);
 
   return (
-    <div className="bg-white">
-      <div className="border-b border-slate-200 bg-white">
-        <div className="flex flex-col gap-3 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
-          <form className="flex flex-wrap items-center gap-2" action="/">
-            <input type="hidden" name="view" value={filters.view} />
-            <FilterSelect name="severity" label="Severity" value={filters.severity}>
-              <option value="all">All Severity</option>
-              {reportSeverities.map((severity) => (
-                <option key={severity} value={severity}>
-                  {severityLabels[severity]}
-                </option>
-              ))}
-            </FilterSelect>
-            <FilterSelect name="status" label="Status" value={filters.status}>
-              <option value="all">All Status</option>
-              {reportStatuses.map((status) => (
-                <option key={status} value={status}>
-                  {statusLabels[status]}
-                </option>
-              ))}
-            </FilterSelect>
-            <button
-              type="submit"
-              className="h-9 rounded-md border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
-            >
-              Apply
-            </button>
-          </form>
-
-          <div className="flex items-center justify-between gap-3 sm:justify-end">
-            <div className="hidden items-center gap-1 text-[11px] font-bold text-slate-400 sm:flex">
-              <Activity className="h-3.5 w-3.5" />
-              Bhubaneswar
-            </div>
-            <ViewToggle filters={filters} />
-          </div>
-        </div>
+    <div className="flex h-[calc(100svh-57px)] flex-col overflow-hidden bg-white text-gray-900">
+      <div className="shrink-0 border-b border-gray-50 bg-white px-4 py-1.5">
+        <HomeFilterControls filters={filters} />
       </div>
 
-      <section className="relative min-h-[calc(100svh-150px)] overflow-hidden bg-slate-100">
+      <section className="relative flex-1 overflow-hidden bg-gray-100">
         {filters.view === "map" ? (
           <>
-            <LazyBhubaneswarMap reports={mapReports} wards={mapWards} height="calc(100svh - 150px)" />
-            <div className="pointer-events-none absolute left-3 top-3 z-[500] flex overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm">
+            <LazyBhubaneswarMap reports={mapReports} wards={mapWards} height="100%" />
+            <div className="pointer-events-none absolute left-3 top-3 z-[500] flex overflow-hidden rounded-xl border border-gray-100 bg-white/95 shadow-sm">
               <StatPill value={activeReports.length} label="Active" tone="red" />
               <StatPill value={allReports.length} label="Reports" tone="orange" />
             </div>
@@ -113,77 +78,36 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </div>
         )}
 
-        <WorstWardsPanel wards={worstWards} />
+        {filters.statsOpen ? <WorstWardsPanel wards={worstWards} /> : null}
 
-        <div className="fixed bottom-4 left-3 right-3 z-40 grid gap-2 sm:grid-cols-[1fr_320px]">
+        <div className="bottom-bar fixed inset-x-0 bottom-0 z-40 border-t border-gray-100 bg-white px-4 pt-2.5">
+          <div className="flex gap-2.5">
           <Link
             href="/report/new"
-            className="inline-flex h-12 items-center justify-center rounded-md bg-[#e60023] px-5 text-sm font-black text-white shadow-[0_10px_30px_rgba(230,0,35,0.25)] transition hover:bg-[#c9001f]"
+            className="inline-flex h-12 flex-[3] items-center justify-center rounded-xl bg-red-600 px-5 text-[15px] font-bold text-white shadow-[0_4px_16px_rgba(220,38,38,0.3)] transition-transform active:scale-[0.98]"
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="mr-2 h-[18px] w-[18px]" />
             Report Garbage
           </Link>
           <Link
-            href="/stats"
-            className="hidden h-12 items-center justify-center rounded-md border border-slate-200 bg-white px-5 text-sm font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 sm:inline-flex"
+            href={buildHref(filters, { statsOpen: !filters.statsOpen })}
+            className="inline-flex h-12 flex-[1] flex-col items-center justify-center gap-0.5 rounded-xl border px-5 text-sm font-bold transition-transform active:scale-[0.98]"
+            style={{
+              background: filters.statsOpen ? "#fef2f2" : "#f9fafb",
+              borderColor: filters.statsOpen ? "#fecaca" : "#e5e7eb",
+            }}
+            aria-label={filters.statsOpen ? "Hide ward leaderboard" : "Show ward leaderboard"}
           >
-            <BarChart3 className="mr-2 h-4 w-4" />
-            Bhubaneswar Stats
+            <BarChart3 className={cn("h-[18px] w-[18px]", filters.statsOpen ? "text-red-500" : "text-gray-400")} />
+            {activeReports.length > 0 ? (
+              <span className={cn("text-[9px] font-bold", filters.statsOpen ? "text-red-600" : "text-gray-400")}>
+                {activeReports.length}
+              </span>
+            ) : null}
           </Link>
+          </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-function FilterSelect({
-  name,
-  label,
-  value,
-  children,
-}: {
-  name: string;
-  label: string;
-  value: string;
-  children: ReactNode;
-}) {
-  return (
-    <label>
-      <span className="sr-only">{label}</span>
-      <select
-        name={name}
-        defaultValue={value}
-        className="h-9 rounded-md border border-slate-200 bg-white px-3 pr-8 text-xs font-bold text-slate-700 shadow-sm outline-none transition focus:border-[#e60023] focus:ring-2 focus:ring-red-100"
-      >
-        {children}
-      </select>
-    </label>
-  );
-}
-
-function ViewToggle({ filters }: { filters: HomeFilters }) {
-  return (
-    <div className="inline-flex rounded-md bg-slate-100 p-1">
-      <Link
-        href={buildHref(filters, { view: "map" })}
-        className={cn(
-          "inline-flex h-8 items-center rounded-md px-3 text-xs font-bold transition",
-          filters.view === "map" ? "bg-white text-ink shadow-sm" : "text-slate-500 hover:text-slate-800",
-        )}
-      >
-        <MapIcon className="mr-1.5 h-3.5 w-3.5" />
-        Map
-      </Link>
-      <Link
-        href={buildHref(filters, { view: "list" })}
-        className={cn(
-          "inline-flex h-8 items-center rounded-md px-3 text-xs font-bold transition",
-          filters.view === "list" ? "bg-white text-ink shadow-sm" : "text-slate-500 hover:text-slate-800",
-        )}
-      >
-        <List className="mr-1.5 h-3.5 w-3.5" />
-        List
-      </Link>
     </div>
   );
 }
@@ -199,10 +123,10 @@ function StatPill({
 }) {
   return (
     <div className="min-w-20 px-4 py-3">
-      <div className={cn("text-lg font-black leading-none", tone === "red" ? "text-[#e60023]" : "text-[#f97316]")}>
+      <div className={cn("font-mono text-lg font-extrabold leading-none", tone === "red" ? "text-red-600" : "text-orange-500")}>
         {value}
       </div>
-      <div className="mt-1 text-[11px] font-semibold text-slate-500">{label}</div>
+      <div className="mt-1 text-[11px] font-semibold text-gray-500">{label}</div>
     </div>
   );
 }
@@ -213,8 +137,9 @@ function WorstWardsPanel({ wards }: { wards: WorstWard[] }) {
   const max = Math.max(...wards.map((ward) => ward.count));
 
   return (
-    <div className="absolute inset-x-0 bottom-[5.25rem] z-[450] rounded-t-md bg-white px-4 pb-5 pt-4 shadow-[0_-10px_24px_rgba(15,23,42,0.08)]">
-      <div className="mb-3 text-[11px] font-black uppercase tracking-[0.22em] text-slate-400">
+    <div className="absolute inset-x-0 bottom-[4.9rem] z-[450] rounded-t-2xl bg-white px-4 pb-5 pt-4 shadow-[0_-4px_24px_rgba(0,0,0,0.1)]">
+      <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-200" />
+      <div className="mb-3 text-[11px] font-bold uppercase tracking-wider text-gray-400">
         Worst wards by reports
       </div>
       <div className="grid gap-2">

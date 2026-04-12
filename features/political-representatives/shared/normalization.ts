@@ -1,4 +1,4 @@
-import type { NormalizedCandidate, PoliticalReverseGeocodeResult } from "@/lib/political/types";
+import type { NormalizedCandidate, PoliticalReverseGeocodeResult } from "@/features/political-representatives/shared/types";
 
 const synonymPairs = [
   ["bhubaneshwar", "bhubaneswar"],

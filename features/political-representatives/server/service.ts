@@ -9,11 +9,11 @@ import {
   getTopKeywordMatch,
   inferAmbiguousCandidates,
   scoreKeywordMatches,
-} from "@/lib/political/matcher";
+} from "@/features/political-representatives/shared/matcher";
 import {
   buildNormalizedLocationCandidates,
   formatDetectedLocation,
-} from "@/lib/political/normalization";
+} from "@/features/political-representatives/shared/normalization";
 import type {
   KeywordScore,
   PoliticalAreaMapping,
@@ -22,12 +22,12 @@ import type {
   PoliticalLookupDebug,
   PoliticalMatchSource,
   PoliticalReverseGeocodeResult,
-} from "@/lib/political/types";
+} from "@/features/political-representatives/shared/types";
 import { AppError } from "@/lib/utils/errors";
 import {
   getPoliticalAreaMappingRepository,
   type PoliticalAreaMappingRepository,
-} from "@/server/repositories/political-area-mapping-repository";
+} from "@/features/political-representatives/server/mapping-repository";
 import { lookupRepresentativesByPoint } from "@/server/services/spatial-lookup-service";
 
 type PoliticalLookupDependencies = {
@@ -283,23 +283,6 @@ export async function findRepresentativesByLocation(
   const { top, second, accepted, close } = getTopKeywordMatch(keywordScores);
   const ambiguousMatches = findAmbiguousKeywordMatches(mapping, candidates);
 
-  if (accepted && top) {
-    return buildSuccessResponse({
-      latitude,
-      longitude,
-      address,
-      mapping,
-      record: top.record,
-      matchedBy: "keyword",
-      confidenceScore: confidenceFromKeywordScore(top.score),
-      notes: [
-        `Matched through normalized locality keyword: ${top.matchedKeywords.join(", ")}`,
-        ...approximateFallbackNotes(polygonLookupNotes),
-      ],
-      debug: baseDebug(top.matchedKeywords),
-    });
-  }
-
   if (ambiguousMatches.length || close) {
     const candidatesForReview = inferAmbiguousCandidates(
       mapping,
@@ -330,6 +313,23 @@ export async function findRepresentativesByLocation(
         candidatesForReview,
       ),
     );
+  }
+
+  if (accepted && top) {
+    return buildSuccessResponse({
+      latitude,
+      longitude,
+      address,
+      mapping,
+      record: top.record,
+      matchedBy: "keyword",
+      confidenceScore: confidenceFromKeywordScore(top.score),
+      notes: [
+        `Matched through normalized locality keyword: ${top.matchedKeywords.join(", ")}`,
+        ...approximateFallbackNotes(polygonLookupNotes),
+      ],
+      debug: baseDebug(top.matchedKeywords),
+    });
   }
 
   return buildFailureResponse(

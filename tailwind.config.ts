@@ -4,6 +4,7 @@ const config: Config = {
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
+    "./features/**/*.{ts,tsx}",
     "./lib/**/*.{ts,tsx}",
     "./server/**/*.{ts,tsx}",
   ],
@@ -64,8 +65,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-manrope)", "sans-serif"],
-        mono: ["var(--font-ibm-plex-mono)", "monospace"],
+        sans: ["var(--font-dm-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        mono: ["var(--font-dm-mono)", "SF Mono", "Fira Code", "monospace"],
       },
       keyframes: {
         "page-enter": {

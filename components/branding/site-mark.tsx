@@ -21,7 +21,7 @@ export function SiteMark({
         alt="Namma Odia"
         className={cn(
           "h-11 w-auto rounded-md object-contain shadow-sm",
-          iconOnly && "h-12 max-w-36",
+          iconOnly && "h-6 max-w-36 rounded-none shadow-none",
         )}
       />
       {!iconOnly ? (

@@ -2,10 +2,10 @@ import "server-only";
 
 import { Prisma } from "@prisma/client";
 
-import seedMapping from "@/data/civic/bhubaneswar-political-area-mapping.seed.json";
+import seedMapping from "@/features/political-representatives/data/bhubaneswar-political-area-mapping.seed.json";
 import { prisma } from "@/lib/db/prisma";
 import { env } from "@/lib/env";
-import type { PoliticalAreaMapping } from "@/lib/political/types";
+import type { PoliticalAreaMapping } from "@/features/political-representatives/shared/types";
 
 export interface PoliticalAreaMappingRepository {
   getActiveMapping(city: string, state: string): Promise<PoliticalAreaMapping | null>;

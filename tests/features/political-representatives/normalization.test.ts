@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { normalizeLocationText } from "@/lib/political/normalization";
+import { normalizeLocationText } from "@/features/political-representatives/shared/normalization";
 
 describe("political location normalization", () => {
   it("normalizes Bhubaneswar spelling and punctuation variants", () => {

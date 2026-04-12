@@ -5,10 +5,29 @@
 @tailwind utilities;
 
 :root {
-  --background: #f7fbfa;
-  --foreground: #16324f;
-  --surface: rgba(255, 255, 255, 0.82);
-  --border: rgba(22, 50, 79, 0.1);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-overlay: rgba(255, 255, 255, 0.92);
+  --border: #e5e7eb;
+  --border-subtle: #f1f3f5;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --text-dim: #d1d5db;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --orange: #ea580c;
+  --yellow: #d97706;
+  --green: #16a34a;
+  --green-light: #f0fdf4;
+  --indigo: #6366f1;
+  --indigo-light: #eef2ff;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-sheet: 0 -4px 24px rgba(0, 0, 0, 0.1);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ── Base ───────────────────────────────────────────────────────────────── */
@@ -21,11 +40,9 @@ html {
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(33, 140, 128, 0.08), transparent 38%),
-    radial-gradient(circle at top right, rgba(253, 116, 20, 0.08), transparent 30%),
-    var(--background);
-  color: var(--foreground);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overscroll-behavior: none;
 }
 
 ::selection {
@@ -40,11 +57,11 @@ main {
 
 /* ── Shared components ──────────────────────────────────────────────────── */
 .surface-card {
-  @apply rounded-3xl border border-white/60 bg-white/85 shadow-card backdrop-blur;
+  @apply rounded-xl border border-gray-100 bg-white shadow-sm;
 }
 
 .section-label {
-  @apply inline-flex items-center rounded-full border border-civic-200 bg-civic-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-civic-700;
+  @apply inline-flex items-center rounded-lg border border-gray-100 bg-gray-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400;
 }
 
 .gradient-border {
@@ -81,8 +98,20 @@ button {
 
 /* ── Leaflet ────────────────────────────────────────────────────────────── */
 .leaflet-container {
-  @apply z-0 rounded-[1.5rem];
+  @apply z-0 rounded-none;
   min-height: 240px;
+}
+
+.safe-top {
+  padding-top: max(var(--safe-top), 8px);
+}
+
+.safe-bottom {
+  padding-bottom: var(--safe-bottom);
+}
+
+.bottom-bar {
+  padding-bottom: max(env(safe-area-inset-bottom, 8px), 8px);
 }
 
 /* ── Keyframes ──────────────────────────────────────────────────────────── */
